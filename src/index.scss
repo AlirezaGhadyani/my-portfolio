@@ -1,3 +1,9 @@
+// VARIABLES
+$backgroundColor: #ecf0f3;
+$primaryColor: #3c3e41;
+$secoundartColor: #ff014f;
+
+// IMPORT FONTS
 @font-face {
   font-family: "faFont";
   src: url(./Assets/Fonts/Gandom.ttf);
@@ -7,7 +13,7 @@
   font-family: "enFont";
   src: url(./Assets/Fonts/Poppins.ttf);
 }
-
+// RESET STYLES
 * {
   list-style: none;
   text-decoration: none;
@@ -17,13 +23,11 @@
 *,
 ::after,
 ::before {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
   font-family: "faFont", "enFont";
-  background: #ecf0f3;
-  color: #3c3e41;
+  background: $backgroundColor;
+  color: $primaryColor;
 }
-/*# sourceMappingURL=index.css.map */
