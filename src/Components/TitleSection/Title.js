@@ -9,24 +9,24 @@ const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: ${(props) => (props.align ? props.align : "center")};
   .title__subtitle {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: #ff014f;
     margin: 0;
     margin-bottom: 0.4em;
   }
   .title__title {
-    font-size: 2rem;
+    font-size: 2.6rem;
     font-weight: 900;
     margin: 0;
   }
 `;
 
-const Title = ({ subtitle, title }) => {
+const Title = ({ subtitle, title, align }) => {
   return (
-    <TitleWrapper>
+    <TitleWrapper align={align}>
       <h3 className="title__subtitle">{subtitle}</h3>
       <h2 className="title__title">{title}</h2>
     </TitleWrapper>
