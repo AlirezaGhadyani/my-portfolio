@@ -51,7 +51,7 @@ const ContactMeBtn = styled.button`
 
 const ContactMe = () => {
   return (
-    <ContactMeContainer>
+    <ContactMeContainer className="contact-me-icons">
       <ContactMeTitle>با من در ارتباط باشید</ContactMeTitle>
       <ContactMeWrapper>
         <ContactMeBtn>

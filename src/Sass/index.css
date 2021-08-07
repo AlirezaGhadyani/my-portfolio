@@ -9,8 +9,8 @@
 }
 
 @font-face {
-  font-family: "faTitleFont";
-  src: url(../Assets/Fonts/Dastnevis.otf);
+  font-family: "enTitleFont";
+  src: url(../Assets/Fonts/Lobster-Regular.ttf);
 }
 
 * {

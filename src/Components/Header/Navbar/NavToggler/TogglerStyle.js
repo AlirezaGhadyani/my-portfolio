@@ -11,6 +11,9 @@ const TogglerButton = styled.button`
   padding: 0;
   cursor: pointer;
   transition: transform 0.6s ease;
+  @media (min-width: 992px) {
+    display: none;
+  }
   .navbar-toggler__line {
     width: 100%;
     height: 4px;

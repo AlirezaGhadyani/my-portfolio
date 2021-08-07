@@ -16,6 +16,17 @@ export const NavbarNavContainer = styled.nav`
   &.open {
     transform: translateX(0%);
   }
+  @media (min-width: 992px) {
+    position: relative;
+    width: fit-content;
+    height: auto;
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+    .contact-me-icons {
+      display: none;
+    }
+  }
 `;
 
 export const CloseToggler = styled.button`
@@ -29,6 +40,9 @@ export const CloseToggler = styled.button`
   margin: 1em;
   border-radius: 50%;
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
+  @media (min-width: 992px) {
+    display: none;
+  }
   svg {
     color: #ff014f;
     font-size: 1.4rem;
