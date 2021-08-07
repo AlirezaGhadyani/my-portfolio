@@ -36,15 +36,18 @@ const navItems = [
   },
 ];
 
-const Nav = () => {
+const Nav = ({ open, setCloseNav }) => {
+  // CLOSE NAVBAR
+  const handleCloseNav = () => setCloseNav(false);
+
   return (
-    <NavbarNavContainer>
-      <CloseToggler>
+    <NavbarNavContainer className={open ? "open" : ""}>
+      <CloseToggler onClick={handleCloseNav}>
         <FaTimes />
       </CloseToggler>
       <ul className="navbar-list">
         {navItems.map((item) => (
-          <li className="nav-item">
+          <li className="nav-item" key={item.id}>
             <a href={item.path} className="nav-link">
               {item.title}
             </a>

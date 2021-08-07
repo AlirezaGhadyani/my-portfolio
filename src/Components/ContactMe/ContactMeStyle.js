@@ -29,15 +29,15 @@ const ContactMeBtn = styled.button`
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
   padding: 0.9em;
-  margin: 0 0.2em;
+  margin: 0 0.4em;
   border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 1s ease;
+  transition: all 0.8s ease;
   :hover {
     background: linear-gradient(145deg, #ff014f, #d11414);
-    transform: translateY(-0.4rem);
+    transform: translateY(-0.3rem);
     svg {
       color: #fff;
     }

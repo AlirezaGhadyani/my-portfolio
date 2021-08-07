@@ -46,9 +46,12 @@ const TogglerButton = styled.button`
   }
 `;
 
-const NavbarToggler = () => {
+const NavbarToggler = ({ setOpenNav }) => {
+  // OPEN NAVBAR
+  const handleOpenNav = () => setOpenNav(true);
+
   return (
-    <TogglerButton>
+    <TogglerButton onClick={handleOpenNav}>
       <div className="navbar-toggler__line"></div>
       <div className="navbar-toggler__line"></div>
       <div className="navbar-toggler__line"></div>

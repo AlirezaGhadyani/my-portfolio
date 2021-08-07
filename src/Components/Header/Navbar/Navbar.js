@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 import NavbarToggler from "./NavToggler/TogglerStyle";
 import Nav from "./NavbarNav/Nav";
 
 const Navbar = () => {
+  const [navbarOpen, setNavbarOpen] = useState(false);
   return (
     <div className="navbar-Wrapper">
-      <NavbarToggler />
-      <Nav />
+      <NavbarToggler setOpenNav={setNavbarOpen} />
+      <Nav open={navbarOpen} setCloseNav={setNavbarOpen} />
+      <h1 className="navbar-title">
+        <a href="#">علیرضا قدیانی</a>
+      </h1>
     </div>
   );
 };
