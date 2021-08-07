@@ -2,6 +2,16 @@ import React from "react";
 import "./AboutMe.css";
 import ContactMe from "../../../Components/ContactMe/ContactMeStyle";
 import HeadImg from "../../../Assets/Images/my-picture.jpg";
+import Typical from "react-typical";
+
+const typicalSteps = [
+  "برنامه نویس فرانت اند",
+  2000,
+  "برنامه نویس ریکت",
+  2000,
+  "برنامه نویس جاوااسکریپت",
+  2000,
+];
 
 const AboutMe = () => {
   return (
@@ -14,7 +24,10 @@ const AboutMe = () => {
           <h1 className="about-cuntent__title">
             سلام من <span>علیرضا قدیانی</span>
             <br />
-            هستم <span>برنامه نویس فرانت اند</span>
+            هستم{" "}
+            <span>
+              <Typical loop={Infinity} wrapper="span" steps={typicalSteps} />
+            </span>
           </h1>
           <p className="about-cuntent__txt">
             18 ساله متولد 25 آذر 1381 , ساکن تهران علاقه مند به برنامه نویسی و
