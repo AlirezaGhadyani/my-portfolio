@@ -69,7 +69,7 @@ const Nav = ({ open, setCloseNav }) => {
           </li>
         ))}
       </ul>
-      <ContactMe />
+      <ContactMe gutterSide />
     </NavbarNavContainer>
   );
 };

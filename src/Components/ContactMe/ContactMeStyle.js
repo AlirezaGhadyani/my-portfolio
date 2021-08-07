@@ -7,7 +7,7 @@ const ContactMeContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 0 1em;
+  padding: ${(props) => (props.gutterSide ? "0 1em" : "")};
 `;
 
 const ContactMeTitle = styled.h2`
@@ -35,7 +35,8 @@ const ContactMeBtn = styled.button`
   justify-content: center;
   align-items: center;
   transition: all 0.8s ease;
-  :hover {
+  :hover,
+  :focus {
     background: linear-gradient(145deg, #ff014f, #d11414);
     transform: translateY(-0.3rem);
     svg {
@@ -49,9 +50,9 @@ const ContactMeBtn = styled.button`
   }
 `;
 
-const ContactMe = () => {
+const ContactMe = ({ gutterSide }) => {
   return (
-    <ContactMeContainer className="contact-me-icons">
+    <ContactMeContainer className="contact-me-icons" gutterSide={gutterSide}>
       <ContactMeTitle>با من در ارتباط باشید</ContactMeTitle>
       <ContactMeWrapper>
         <ContactMeBtn>

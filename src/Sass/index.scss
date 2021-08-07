@@ -1,4 +1,5 @@
 @import "./_Variables.scss";
+@import "./_Mixins";
 
 // IMPORT FONTS
 @font-face {
@@ -34,25 +35,34 @@ body {
   background: $backgroundColor;
   color: $primaryColor;
 }
+// GLOBAL CLASSES
+.container {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 // MEDIA QUERIES
 @media (min-width: 576px) {
-  .navbar-Wrapper {
+  .navbar-Wrapper,
+  .container {
     max-width: 540px;
   }
 }
 @media (min-width: 768px) {
-  .navbar-Wrapper {
+  .navbar-Wrapper,
+  .container {
     max-width: 720px;
   }
 }
 @media (min-width: 992px) {
-  .navbar-Wrapper {
+  .navbar-Wrapper,
+  .container {
     max-width: 960px;
   }
 }
 @media (min-width: 1200px) {
-  .navbar-Wrapper {
+  .navbar-Wrapper,
+  .container {
     max-width: 1310px;
   }
 }
