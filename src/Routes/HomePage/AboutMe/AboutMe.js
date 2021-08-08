@@ -18,7 +18,7 @@ const AboutMe = () => {
     <section className="container about-me__container">
       <div className="about-me__wrapper">
         <div className="about-me__img">
-          <img src={HeadImg} alt="my picture" />
+          <img src={HeadImg} alt="admins" />
         </div>
         <div className="about-me__about-cuntent">
           <h1 className="about-cuntent__title">

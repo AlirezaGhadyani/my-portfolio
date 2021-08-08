@@ -1,3 +1,6 @@
+@import "../../../Sass/_Mixins";
+@import "../../../Sass/_Variables";
+
 .resume__container {
   padding: 4em 0;
   border-top: 1px solid #dce1e4;
@@ -6,4 +9,32 @@
 .resume__wrapper {
   width: 100%;
   padding: 0 1.2em;
+}
+
+.resume-cuntent__box {
+  @include flex(column, center, flex-start);
+  background: $gradiant-box3;
+  box-shadow: $shadow-white3;
+  border-radius: 1rem;
+  padding: 2em 1em;
+  margin-top: 3em;
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 600;
+    margin: 0.5em 0;
+  }
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2.6rem;
+    color: $bodyColor;
+    margin: 0;
+  }
+}
+
+.skills-box {
+  @include flex(column, center, center);
+  background: transparent;
+  box-shadow: none;
 }

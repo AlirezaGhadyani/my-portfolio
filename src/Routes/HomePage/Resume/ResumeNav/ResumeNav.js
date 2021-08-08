@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ResumeNavItems } from "../ResumeData/ResumeData";
 
 const ResumeNavWrapper = styled.ul`
   width: 100%;
@@ -33,29 +34,6 @@ const ResumeNavWrapper = styled.ul`
     box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
   }
 `;
-
-const ResumeNavItems = [
-  {
-    title: "تحصیلات",
-    name: "education",
-    id: 1,
-  },
-  {
-    title: "مهارت ها",
-    name: "skills",
-    id: 2,
-  },
-  {
-    title: "خلاصه توانایی ها",
-    name: "skills-ex",
-    id: 3,
-  },
-  {
-    title: "تجربه کاری",
-    name: "experience",
-    id: 4,
-  },
-];
 
 const ResumeNav = ({ activeIndex, setActive }) => {
   const handleSetActive = (id) => setActive(id);
