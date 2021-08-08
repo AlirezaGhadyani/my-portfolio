@@ -2,7 +2,7 @@ import React from "react";
 import "./Portfolio.css";
 import Title from "../../../Components/TitleSection/Title";
 import portfolioData from "./PortfolioData/PortfolioData";
-import PortfolioCard from "./PortfolioCard/PortfolioCard";
+import Card from "../../../Components/Card/Card";
 
 const Portfolio = () => {
   return (
@@ -11,7 +11,7 @@ const Portfolio = () => {
         <Title subtitle="نمونه کارهای بیشتر در گیت هاب" title="نمونه کارها" />
         <div className="portfolio-card__wrapper">
           {portfolioData.map((item) => (
-            <PortfolioCard data={item} key={item.id} />
+            <Card data={item} key={item.id} />
           ))}
         </div>
       </div>

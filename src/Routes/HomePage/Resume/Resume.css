@@ -3,11 +3,6 @@
   border-top: 1px solid #dce1e4;
 }
 
-.resume__wrapper {
-  width: 100%;
-  padding: 0 1.2em;
-}
-
 .resume-cuntent__box {
   display: -webkit-box;
   display: -ms-flexbox;

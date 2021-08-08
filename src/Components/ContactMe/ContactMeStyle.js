@@ -11,7 +11,7 @@ const ContactMeContainer = styled.div`
 `;
 
 const ContactMeTitle = styled.h2`
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: 900;
   margin: 1em 0.4em;
 `;
@@ -28,7 +28,7 @@ const ContactMeBtn = styled.button`
   cursor: pointer;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
-  padding: 0.9em;
+  padding: 1.4em;
   margin: 0 0.4em;
   border-radius: 6px;
   display: flex;
@@ -44,7 +44,7 @@ const ContactMeBtn = styled.button`
     }
   }
   svg {
-    font-size: 1.6rem;
+    font-size: 2rem;
     color: #3c3e41;
     stroke-width: 0.4rem;
   }

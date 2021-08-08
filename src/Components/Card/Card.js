@@ -66,7 +66,7 @@ const CardWrapper = styled.div`
   }
 `;
 
-const PortfolioCard = ({ data }) => {
+const Card = ({ data }) => {
   const { img, category, title } = data;
   return (
     <CardWrapper>
@@ -83,4 +83,4 @@ const PortfolioCard = ({ data }) => {
   );
 };
 
-export default PortfolioCard;
+export default Card;

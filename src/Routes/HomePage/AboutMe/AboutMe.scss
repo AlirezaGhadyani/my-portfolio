@@ -2,12 +2,10 @@
 @import "../../../Sass/_Mixins.scss";
 
 .about-me__container {
-  padding-bottom: 3em;
+  padding-bottom: 4em;
 }
 
 .about-me__wrapper {
-  width: 100%;
-  padding: 1.2em;
   @include flex(column, space-between, center);
 }
 

@@ -16,6 +16,7 @@ const TitleWrapper = styled.div`
     color: #ff014f;
     margin: 0;
     margin-bottom: 0.4em;
+    text-align: center;
   }
   .title__title {
     font-size: 2.6rem;

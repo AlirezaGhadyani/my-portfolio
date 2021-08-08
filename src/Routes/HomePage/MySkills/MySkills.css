@@ -3,11 +3,6 @@
   border-top: 1px solid #dce1e4;
 }
 
-.my-skills__wrapper {
-  width: 100%;
-  padding: 0 1.2em;
-}
-
 .my-skills__card-wrapper {
   width: 100%;
   display: -ms-grid;
