@@ -24,6 +24,14 @@ const ResumeCuntent = ({ data }) => {
               key={skill.id}
             />
           ))}
+        {data.id === 3 && <p>{data.desc}</p>}
+        {data.id === 4 && (
+          <>
+            <p>{data.desc}</p>
+            <a href="http://www.studiosabagh.ir/">{data.link}</a>
+            <span>{data.ps}</span>
+          </>
+        )}
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const ProgressBarProgress = styled.div`
   border-radius: 10rem;
   background: linear-gradient(145deg, #fff 0%, #ff014f 100%);
   opacity: 0;
-  transition: all 0.5s ease;
+  transition: all 2s linear;
   &.animate {
     width: ${(props) => props.width + `%`};
     opacity: 1;

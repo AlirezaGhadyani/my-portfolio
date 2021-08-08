@@ -31,6 +31,17 @@
     color: $bodyColor;
     margin: 0;
   }
+  a {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $secoundaryColor;
+    margin: 0.3em 0 0.8em 0;
+  }
+  span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $bodyColor;
+  }
 }
 
 .skills-box {
