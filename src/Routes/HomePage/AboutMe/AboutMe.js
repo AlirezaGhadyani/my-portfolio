@@ -15,7 +15,7 @@ const typicalSteps = [
 
 const AboutMe = () => {
   return (
-    <section className="container about-me__container">
+    <section className="container about-me__container" id="about-me">
       <div className="about-me__wrapper">
         <div className="about-me__img">
           <img src={HeadImg} alt="admins" />

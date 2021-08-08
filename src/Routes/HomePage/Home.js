@@ -9,7 +9,7 @@ import Contact from "./Contact/Contact";
 
 const Home = () => {
   return (
-    <main>
+    <main id="home">
       <AboutMe />
       <MySkills />
       <Portfolio />

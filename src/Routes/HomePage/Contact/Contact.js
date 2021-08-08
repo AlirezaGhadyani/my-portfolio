@@ -58,7 +58,7 @@ const ContactCard = styled.div`
 
 const Contact = () => {
   return (
-    <section className="container contact__container">
+    <section className="container contact__container" id="contact-me">
       <Title subtitle="ارتباط" title="ارتباط با من" />
       <div className="contact__wrapper">
         <ContactCard>
@@ -70,11 +70,13 @@ const Contact = () => {
           </p>
           <p className="contact__way">
             <span>ایمیل : </span>
-            <a href="">alirezaghadyani16@gmail.com</a>
+            <a href="mailto:alirezaghadyani16@gmail.com">
+              alirezaghadyani16@gmail.com
+            </a>
           </p>
           <p className="contact__way">
             <span>شماره تلفن : </span>
-            <a href="">09300574570</a>
+            <a href="tel:09300574570">09300574570</a>
           </p>
           <br />
           <br />

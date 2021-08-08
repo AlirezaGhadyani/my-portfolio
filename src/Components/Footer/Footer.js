@@ -14,6 +14,7 @@ const FooterWrapper = styled.footer`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   ::after {
     content: "";
     position: absolute;
@@ -34,6 +35,7 @@ const FooterWrapper = styled.footer`
   .fa__right-txt {
     font-size: 1.5rem;
     font-weight: 700;
+    line-height: 2.4rem;
     color: #ecf0f3;
   }
   .right-year {

@@ -10,7 +10,7 @@ const Navbar = () => {
       <NavbarToggler setOpenNav={setNavbarOpen} />
       <Nav open={navbarOpen} setCloseNav={setNavbarOpen} />
       <h1 className="navbar-title">
-        <a href="#">ghadyani</a>
+        <a href="#home">ghadyani</a>
       </h1>
     </div>
   );

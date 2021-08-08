@@ -28,7 +28,7 @@ const ContactMeBtn = styled.button`
   cursor: pointer;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
-  padding: 1.4em;
+  padding: ${(props) => (props.smallversion ? "0.9em" : "1.4em")};
   margin: 0 0.4em;
   border-radius: 6px;
   display: flex;
@@ -44,25 +44,25 @@ const ContactMeBtn = styled.button`
     }
   }
   svg {
-    font-size: 2rem;
+    font-size: ${(props) => (props.smallversion ? "1.6rem" : "2rem")};
     color: #3c3e41;
     stroke-width: 0.4rem;
   }
 `;
 
-const ContactMe = ({ gutterSide }) => {
+const ContactMe = ({ gutterSide, smallversion }) => {
   return (
     <ContactMeContainer className="contact-me-icons" gutterSide={gutterSide}>
       <ContactMeTitle>با من در ارتباط باشید</ContactMeTitle>
       <ContactMeWrapper>
-        <ContactMeBtn>
-          <FaGithub />
+        <ContactMeBtn smallversion={smallversion}>
+          <FaGithub smallversion={smallversion} />
         </ContactMeBtn>
-        <ContactMeBtn>
-          <FaWhatsapp />
+        <ContactMeBtn smallversion={smallversion}>
+          <FaWhatsapp smallversion={smallversion} />
         </ContactMeBtn>
-        <ContactMeBtn>
-          <FaInstagram />
+        <ContactMeBtn smallversion={smallversion}>
+          <FaInstagram smallversion={smallversion} />
         </ContactMeBtn>
       </ContactMeWrapper>
     </ContactMeContainer>

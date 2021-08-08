@@ -9,7 +9,7 @@ const Resume = () => {
   const [resumeIndex, setResumeIndex] = useState(1);
 
   return (
-    <section className="container resume__container">
+    <section className="container resume__container" id="resume">
       <div className="resume__wrapper">
         <Title subtitle="جونیور فرانت اند دولوپر" title="رزومه من" />
         <ResumeNav activeIndex={resumeIndex} setActive={setResumeIndex} />

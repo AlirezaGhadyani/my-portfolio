@@ -7,37 +7,37 @@ const navItems = [
   {
     title: "خانه",
     name: "home",
-    path: "#",
+    path: "#about-me",
     id: 1,
   },
   {
     title: "تخصص من",
     name: "my-skills",
-    path: "#",
+    path: "#my-skills",
     id: 2,
   },
   {
     title: "نمونه کارهام",
     name: "portfolio",
-    path: "#",
+    path: "#portfolio",
     id: 3,
   },
   {
     title: "رزومه من",
     name: "resume",
-    path: "#",
+    path: "#resume",
     id: 4,
   },
   {
     title: "بلاگ",
     name: "blog",
-    path: "#",
+    path: "#blog",
     id: 5,
   },
   {
     title: "ارتباط بامن",
     name: "contact-me",
-    path: "#",
+    path: "#contact-me",
     id: 6,
   },
 ];
@@ -69,7 +69,7 @@ const Nav = ({ open, setCloseNav }) => {
           </li>
         ))}
       </ul>
-      <ContactMe gutterSide />
+      <ContactMe gutterSide smallversion="true" />
     </NavbarNavContainer>
   );
 };
