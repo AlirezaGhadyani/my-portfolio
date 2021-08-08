@@ -44,6 +44,17 @@ const FooterWrapper = styled.footer`
     font-weight: 700;
     color: #ff014f;
   }
+  @media (min-width: 576px) {
+    img {
+      width: 14rem;
+    }
+    .fa__right-txt {
+      font-size: 2rem;
+    }
+    .right-year {
+      font-size: 1.8rem;
+    }
+  }
 `;
 
 const Footer = () => {

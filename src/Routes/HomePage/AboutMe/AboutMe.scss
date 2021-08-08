@@ -66,3 +66,68 @@
     font-size: 1.3rem;
   }
 }
+
+@media (min-width: 576px) {
+  .about-cuntent__title {
+    font-size: 2.4rem;
+    line-height: 3.8rem;
+  }
+  .about-cuntent__txt {
+    font-size: 1.8rem;
+    line-height: 2.7rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .about-me__container {
+    padding-top: 6em;
+  }
+  .about-me__wrapper {
+    @include flex(row, space-between, center);
+  }
+  .about-me__img {
+    width: 39%;
+  }
+  .about-me__about-cuntent {
+    width: 55%;
+    margin: 0;
+  }
+  .about-cuntent__title {
+    font-size: 2.4rem;
+    margin: 0;
+  }
+  .about-cuntent__txt {
+    font-size: 1.5rem;
+    margin-bottom: 1em;
+  }
+}
+
+@media (min-width: 1200px) {
+  .about-me__container {
+    padding-top: 3em;
+  }
+  .about-me__wrapper {
+    @include flex(row, space-between, center);
+  }
+  .about-me__img {
+    width: 30%;
+  }
+  .about-me__about-cuntent {
+    width: 65%;
+  }
+  .about-cuntent__title {
+    font-size: 3rem;
+    line-height: 5rem;
+  }
+}
+@media (min-width: 1365px) {
+  .about-cuntent__title {
+    font-size: 3.8rem;
+    line-height: 5.4rem;
+    margin-bottom: 0.3em;
+  }
+  .about-cuntent__txt {
+    font-size: 1.8rem;
+    margin-bottom: 1em;
+  }
+}

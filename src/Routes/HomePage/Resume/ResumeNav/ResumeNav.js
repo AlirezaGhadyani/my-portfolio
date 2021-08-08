@@ -38,6 +38,14 @@ const ResumeNavWrapper = styled.ul`
       font-size: 1.5rem;
     }
   }
+  @media (min-width: 576px) {
+    .resume-nav-item {
+      font-size: 1.9rem;
+    }
+  }
+  @media (min-width: 992px) {
+    flex-direction: row;
+  }
 `;
 
 const ResumeNav = ({ activeIndex, setActive }) => {

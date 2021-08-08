@@ -14,6 +14,24 @@
   padding: 1.4rem 0;
 }
 
+@media (min-width: 576px) {
+  .navbar-Wrapper {
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1024px) {
+  .navbar-Wrapper {
+    padding: 1.2em 1.4rem;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1366px) {
+  .navbar-Wrapper {
+    padding: 1.2em 1.4rem;
+  }
+}
+
 .navbar-title {
   font-family: "enTitleFont";
   font-size: 2.4rem;

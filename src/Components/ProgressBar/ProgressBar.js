@@ -16,6 +16,12 @@ const ProgressBarWrapper = styled.div`
     text-transform: capitalize;
     margin: 0;
     margin-bottom: 1em;
+    @media (min-width: 576px) {
+      font-size: 2.2rem;
+    }
+    @media (min-width: 992px) {
+      font-size: 1.7rem;
+    }
   }
   .progressbar__progress-wrapper {
     position: relative;
@@ -46,6 +52,16 @@ const ProgressBarProgress = styled.div`
     position: absolute;
     bottom: 1.4em;
     right: -1em;
+  }
+  @media (min-width: 576px) {
+    ::before {
+      font-size: 1.6rem;
+    }
+  }
+  @media (min-width: 992px) {
+    ::before {
+      font-size: 1.4rem;
+    }
   }
 `;
 

@@ -19,4 +19,17 @@
         grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   }
 }
+
+@media (min-width: 576px) {
+  .my-skills__card-wrapper {
+    -ms-grid-columns: (minmax(22rem, 1fr))[auto-fit];
+        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  }
+}
+
+@media (min-width: 992px) {
+  .my-skills__card-wrapper {
+    grid-gap: 2.4em;
+  }
+}
 /*# sourceMappingURL=MySkills.css.map */

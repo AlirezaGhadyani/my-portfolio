@@ -43,6 +43,11 @@ body {
   background: $backgroundColor;
   color: $primaryColor;
 }
+
+main {
+  position: relative;
+  width: 100%;
+}
 // GLOBAL CLASSES
 .container {
   margin-left: auto;

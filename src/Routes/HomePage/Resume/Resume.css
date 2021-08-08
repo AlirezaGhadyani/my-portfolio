@@ -86,4 +86,20 @@
     font-size: 1.2rem;
   }
 }
+
+@media (min-width: 992px) {
+  .resume-cuntent__box h2 {
+    font-size: 1.8rem;
+  }
+  .resume-cuntent__box p {
+    font-size: 1.6rem;
+    line-height: 3rem;
+  }
+  .resume-cuntent__box a {
+    font-size: 1.6rem;
+  }
+  .resume-cuntent__box span {
+    font-size: 1.6rem;
+  }
+}
 /*# sourceMappingURL=Resume.css.map */

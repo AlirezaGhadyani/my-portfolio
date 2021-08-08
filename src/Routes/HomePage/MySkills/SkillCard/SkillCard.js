@@ -20,12 +20,6 @@ const SkillCardWrapper = styled.div`
       font-size: 3rem;
       color: #ff014f;
     }
-    .arrow-icon {
-      opacity: 0;
-      transform: translateY(0.5rem);
-      transition: all 0.5s ease;
-      display: none;
-    }
     h1 {
       font-size: 1.2rem;
       text-transform: capitalize;
@@ -43,6 +37,40 @@ const SkillCardWrapper = styled.div`
       }
       P {
         font-size: 1.2rem;
+      }
+    }
+    @media (min-width: 576px) {
+      svg {
+        font-size: 3.8rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      P {
+        font-size: 1.5rem;
+        line-height: 2.6rem;
+      }
+    }
+    @media (min-width: 576px) {
+      svg {
+        font-size: 3.6rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      P {
+        font-size: 1.2rem;
+      }
+    }
+    @media (min-width: 1200px) {
+      svg {
+        font-size: 3.2rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      P {
+        font-size: 1.1rem;
       }
     }
   }
@@ -68,10 +96,6 @@ const SkillCardWrapper = styled.div`
       svg {
         color: #fff;
       }
-      .arrow-icon {
-        opacity: 1;
-        transform: translateY(0);
-      }
       h1 {
         color: #fff;
       }
@@ -90,7 +114,6 @@ const SkillCard = ({ data }) => {
         {icon}
         <h1>{title}</h1>
         <p>{desc}</p>
-        <IoIosArrowRoundBack className="arrow-icon" />
       </div>
     </SkillCardWrapper>
   );

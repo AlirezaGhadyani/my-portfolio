@@ -17,6 +17,9 @@ const ContactCard = styled.div`
   border-radius: 0.8rem;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
+  @media (min-width: 992px) {
+    padding: 2em;
+  }
   .contact-img__wrapper {
     position: relative;
     overflow: hidden;
@@ -53,6 +56,16 @@ const ContactCard = styled.div`
     }
     span {
       color: #ff014f;
+    }
+  }
+  @media (min-width: 576px) {
+    .contact__txt {
+      font-size: 2.2rem;
+      line-height: 3.4rem;
+    }
+    .contact__way {
+      font-size: 2rem;
+      line-height: 3.6rem;
     }
   }
 `;

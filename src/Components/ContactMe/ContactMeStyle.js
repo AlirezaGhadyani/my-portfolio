@@ -14,6 +14,9 @@ const ContactMeTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: 900;
   margin: 1em 0.4em;
+  @media (min-width: 576px) {
+    font-size: 1.6rem;
+  }
 `;
 
 const ContactMeWrapper = styled.div`
@@ -47,6 +50,12 @@ const ContactMeBtn = styled.button`
     font-size: ${(props) => (props.smallversion ? "1.6rem" : "2rem")};
     color: #3c3e41;
     stroke-width: 0.4rem;
+  }
+  @media (min-width: 576px) {
+    padding: 2em;
+    svg {
+      font-size: 2.4rem;
+    }
   }
 `;
 

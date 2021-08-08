@@ -62,3 +62,21 @@
     }
   }
 }
+
+@media (min-width: 992px) {
+  .resume-cuntent__box {
+    h2 {
+      font-size: 1.8rem;
+    }
+    p {
+      font-size: 1.6rem;
+      line-height: 3rem;
+    }
+    a {
+      font-size: 1.6rem;
+    }
+    span {
+      font-size: 1.6rem;
+    }
+  }
+}

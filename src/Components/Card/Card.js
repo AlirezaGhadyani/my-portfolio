@@ -13,6 +13,9 @@ const CardWrapper = styled.div`
   border-radius: 0.8rem;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
+  @media (min-width: 992px) {
+    padding: 1.5em;
+  }
   .portfolio-card__img {
     position: relative;
     display: flex;
@@ -70,6 +73,24 @@ const CardWrapper = styled.div`
     }
     a {
       font-size: 1.5rem;
+    }
+  }
+  @media (min-width: 576px) {
+    span {
+      font-size: 1.6rem;
+    }
+    a {
+      font-size: 2rem;
+      line-height: 3rem;
+    }
+  }
+  @media (min-width: 992px) {
+    span {
+      font-size: 1.2rem;
+    }
+    a {
+      font-size: 1.4rem;
+      line-height: 3rem;
     }
   }
 `;
