@@ -82,4 +82,13 @@
   color: #878e99;
   margin-bottom: 2em;
 }
+
+@media (min-width: 375px) {
+  .about-cuntent__title {
+    font-size: 1.6rem;
+  }
+  .about-cuntent__txt {
+    font-size: 1.3rem;
+  }
+}
 /*# sourceMappingURL=AboutMe.css.map */

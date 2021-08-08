@@ -24,6 +24,14 @@ const TitleWrapper = styled.div`
     font-weight: 900;
     margin: 0;
   }
+  @media (min-width: 375px) {
+    .title__subtitle {
+      font-size: 1.6rem;
+    }
+    .title__title {
+      font-size: 2.4rem;
+    }
+  }
 `;
 
 const Title = ({ subtitle, title, align }) => {

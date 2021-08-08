@@ -45,3 +45,20 @@
   background: transparent;
   box-shadow: none;
 }
+
+@media (min-width: 375px) {
+  .resume-cuntent__box {
+    h2 {
+      font-size: 1.7rem;
+    }
+    p {
+      font-size: 1.4rem;
+    }
+    a {
+      font-size: 1.3rem;
+    }
+    span {
+      font-size: 1.2rem;
+    }
+  }
+}

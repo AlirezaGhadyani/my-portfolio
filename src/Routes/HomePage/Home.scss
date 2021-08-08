@@ -21,3 +21,10 @@
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   grid-gap: 1.2em;
 }
+
+@media (min-width: 375px) {
+  .portfolio-card__wrapper,
+  .blog-card__wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}

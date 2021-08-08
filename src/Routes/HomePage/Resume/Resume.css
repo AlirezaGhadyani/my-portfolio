@@ -71,4 +71,19 @@
   -webkit-box-shadow: none;
           box-shadow: none;
 }
+
+@media (min-width: 375px) {
+  .resume-cuntent__box h2 {
+    font-size: 1.7rem;
+  }
+  .resume-cuntent__box p {
+    font-size: 1.4rem;
+  }
+  .resume-cuntent__box a {
+    font-size: 1.3rem;
+  }
+  .resume-cuntent__box span {
+    font-size: 1.2rem;
+  }
+}
 /*# sourceMappingURL=Resume.css.map */

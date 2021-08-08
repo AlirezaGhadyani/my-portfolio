@@ -12,4 +12,11 @@
   grid-gap: 1.2em;
   margin-top: 4em;
 }
+
+@media (min-width: 375px) {
+  .my-skills__card-wrapper {
+    -ms-grid-columns: (minmax(20rem, 1fr))[auto-fit];
+        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}
 /*# sourceMappingURL=MySkills.css.map */

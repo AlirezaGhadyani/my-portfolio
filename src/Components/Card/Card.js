@@ -64,6 +64,14 @@ const CardWrapper = styled.div`
       font-size: 2rem;
     }
   }
+  @media (min-width: 375px) {
+    span {
+      font-size: 1.3rem;
+    }
+    a {
+      font-size: 1.5rem;
+    }
+  }
 `;
 
 const Card = ({ data }) => {

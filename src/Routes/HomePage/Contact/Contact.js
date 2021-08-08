@@ -83,7 +83,7 @@ const Contact = () => {
           </p>
           <br />
           <br />
-          <ContactMe smallversion />
+          <ContactMe smallversion="true" />
         </ContactCard>
       </div>
     </section>

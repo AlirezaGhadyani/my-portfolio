@@ -37,6 +37,14 @@ const SkillCardWrapper = styled.div`
       color: #878e99;
       margin-bottom: 0;
     }
+    @media (min-width: 375px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      P {
+        font-size: 1.2rem;
+      }
+    }
   }
   ::before {
     content: "";
