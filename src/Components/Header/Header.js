@@ -5,12 +5,15 @@ import Navbar from "./Navbar/Navbar";
 // STYLES
 const HeaderContainer = styled.header`
   width: 100%;
+  max-width: 100%;
   position: relative;
   background: #ecf0f3;
   transition: all 0.5s ease;
   z-index: 1000;
   &.fixed-header {
     position: fixed;
+    top: 0;
+    right: 0;
     box-shadow: 10px 10px 19px rgb(0 0 0 / 10%);
   }
 `;

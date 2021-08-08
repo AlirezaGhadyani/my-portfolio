@@ -1,5 +1,4 @@
 import React from "react";
-import "./Portfolio.css";
 import Title from "../../../Components/TitleSection/Title";
 import portfolioData from "./PortfolioData/PortfolioData";
 import Card from "../../../Components/Card/Card";

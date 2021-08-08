@@ -25,7 +25,7 @@ export const ResumeCuntents = [
   {
     subtitle: "1400 - 1388",
     title: "تحصیلات من",
-    cuntentTitle: "فراغ التحصیل",
+    cuntentTitle: "فارغ التحصیل",
     desc: "رشته شبکه و نرم افزار از هنرستان فنی و حرفه ای جواد موفقیان با معدل 18.20",
     id: 1,
   },

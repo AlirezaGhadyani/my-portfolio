@@ -12,9 +12,9 @@ const ContactCard = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 1.6em;
+  padding: 1em;
   padding-bottom: 3em;
-  border-radius: 1.1rem;
+  border-radius: 0.8rem;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
   .contact-img__wrapper {
@@ -24,11 +24,11 @@ const ContactCard = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    border-radius: 1.1rem;
+    border-radius: 0.8rem;
     cursor: pointer;
     img {
       width: 100%;
-      border-radius: 1.1rem;
+      border-radius: 0.8rem;
       transition: transform 0.8s ease;
     }
     :hover {
@@ -38,13 +38,14 @@ const ContactCard = styled.div`
     }
   }
   .contact__txt {
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     font-weight: 500;
-    line-height: 2.4rem;
+    line-height: 2.1rem;
   }
   .contact__way {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
+    line-height: 2.2rem;
     margin: 0.5em 0;
     a {
       font-family: "enFont";
@@ -69,18 +70,20 @@ const Contact = () => {
             برای ارتباط با من می توانید از راه های زیر با من تماس بگیرید.
           </p>
           <p className="contact__way">
-            <span>ایمیل : </span>
+            <span>ایمیل</span>
+            <br />
             <a href="mailto:alirezaghadyani16@gmail.com">
-              alirezaghadyani16@gmail.com
+              alirezaghadyani16@gmail
             </a>
           </p>
           <p className="contact__way">
-            <span>شماره تلفن : </span>
+            <span>شماره تلفن</span>
+            <br />
             <a href="tel:09300574570">09300574570</a>
           </p>
           <br />
           <br />
-          <ContactMe />
+          <ContactMe smallversion />
         </ContactCard>
       </div>
     </section>

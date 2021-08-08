@@ -31,6 +31,10 @@ html {
   scroll-behavior: smooth;
 }
 
+#root {
+  overflow: hidden;
+}
+
 body {
   font-family: "faFont", "enFont";
   background: #ecf0f3;

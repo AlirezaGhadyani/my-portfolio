@@ -42,7 +42,7 @@ const ProgressBarProgress = styled.div`
   ::before {
     content: "${(props) => props.width}%";
     font-family: "enFont";
-    font-size: 1.4rem;
+    font-size: 1rem;
     position: absolute;
     bottom: 1.4em;
     right: -1em;

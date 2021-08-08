@@ -10,8 +10,9 @@ const TitleWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: ${(props) => (props.align ? props.align : "center")};
+  text-align: center;
   .title__subtitle {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: #ff014f;
     margin: 0;
@@ -19,7 +20,7 @@ const TitleWrapper = styled.div`
     text-align: center;
   }
   .title__title {
-    font-size: 2.6rem;
+    font-size: 2rem;
     font-weight: 900;
     margin: 0;
   }

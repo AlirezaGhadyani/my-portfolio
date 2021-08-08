@@ -26,29 +26,30 @@
 }
 
 .resume-cuntent__box h2 {
-  font-size: 1.9rem;
+  font-size: 1.4rem;
   font-weight: 600;
   margin: 0.5em 0;
 }
 
 .resume-cuntent__box p {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  line-height: 2.6rem;
+  line-height: 2.1rem;
   color: #878e99;
   margin: 0;
 }
 
 .resume-cuntent__box a {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #ff014f;
   margin: 0.3em 0 0.8em 0;
 }
 
 .resume-cuntent__box span {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
+  line-height: 1.5rem;
   color: #878e99;
 }
 

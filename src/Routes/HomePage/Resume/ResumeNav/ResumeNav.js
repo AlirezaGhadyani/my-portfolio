@@ -16,7 +16,7 @@ const ResumeNavWrapper = styled.ul`
   .resume-nav-item {
     width: 100%;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     font-weight: 600;
     padding: 0.8em 0;
     border-radius: 0.625rem;

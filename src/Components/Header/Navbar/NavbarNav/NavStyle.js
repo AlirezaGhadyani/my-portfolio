@@ -4,7 +4,10 @@ export const NavbarNavContainer = styled.nav`
   position: fixed;
   right: 0;
   top: 0;
+  bottom: 0;
+  left: auto;
   overflow: hidden;
+  will-change: transform;
   width: 240px;
   max-width: 100%;
   height: 100vh;

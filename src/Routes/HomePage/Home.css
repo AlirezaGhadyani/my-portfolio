@@ -1,5 +1,6 @@
 .contact__container,
-.blog__container {
+.blog__container,
+.portfolio__container {
   padding: 4em 0;
   border-top: 1px solid #dce1e4;
 }
@@ -18,8 +19,8 @@
 .blog-card__wrapper {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (minmax(22rem, 1fr))[auto-fit];
-      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  -ms-grid-columns: (minmax(16rem, 1fr))[auto-fit];
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   grid-gap: 1.2em;
 }
 /*# sourceMappingURL=Home.css.map */

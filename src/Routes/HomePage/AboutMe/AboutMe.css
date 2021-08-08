@@ -65,7 +65,8 @@
 }
 
 .about-cuntent__title {
-  font-size: 1.8rem;
+  width: 100%;
+  font-size: 1.2rem;
   font-weight: 900;
   line-height: 2.4rem;
 }
@@ -75,7 +76,7 @@
 }
 
 .about-cuntent__txt {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.8rem;
   font-weight: 600;
   color: #878e99;

@@ -5,13 +5,12 @@ import { FiArrowUpLeft } from "react-icons/fi";
 // STYLES
 const CardWrapper = styled.div`
   position: relative;
-  padding: 1.6em;
-  padding-bottom: 2em;
+  padding: 1em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  border-radius: 1.1rem;
+  border-radius: 0.8rem;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
   .portfolio-card__img {
@@ -20,7 +19,7 @@ const CardWrapper = styled.div`
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    border-radius: 1.1rem;
+    border-radius: 0.8rem;
     img {
       width: 100%;
       transition: transform 0.8s ease;
@@ -32,7 +31,7 @@ const CardWrapper = styled.div`
     }
   }
   span {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     margin: 1em 0;
     margin-top: 1.6em;
@@ -40,8 +39,9 @@ const CardWrapper = styled.div`
   }
   a {
     color: #3c3e41;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
+    line-height: 2.1rem;
     margin: 0;
     transition: all 0.3s ease;
     cursor: pointer;

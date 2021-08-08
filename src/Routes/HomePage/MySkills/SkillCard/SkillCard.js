@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { BsArrowLeftShort } from "react-icons/bs";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 // STYLES
 const SkillCardWrapper = styled.div`
   position: relative;
-  padding: 3em 1.2em 1em 1.2em;
+  padding: 2em 1.2em;
   border-radius: 1rem;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
@@ -22,16 +22,16 @@ const SkillCardWrapper = styled.div`
     }
     .arrow-icon {
       opacity: 0;
-      margin-top: 0.5em;
-      transform: translateY(1rem);
+      transform: translateY(0.5rem);
       transition: all 0.5s ease;
+      display: none;
     }
     h1 {
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       text-transform: capitalize;
     }
     P {
-      font-size: 1rem;
+      font-size: 0.8rem;
       line-height: 1.8rem;
       font-weight: 700;
       color: #878e99;
@@ -82,7 +82,7 @@ const SkillCard = ({ data }) => {
         {icon}
         <h1>{title}</h1>
         <p>{desc}</p>
-        <BsArrowLeftShort className="arrow-icon" />
+        <IoIosArrowRoundBack className="arrow-icon" />
       </div>
     </SkillCardWrapper>
   );
