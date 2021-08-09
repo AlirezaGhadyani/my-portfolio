@@ -17,7 +17,7 @@ const HeaderContainer = styled.header`
   }
 `;
 
-const Header = () => {
+const Header = ({ currentPage }) => {
   const [fixedHeader, setFixedHeader] = useState(false);
 
   // SET HEADER FIXED
@@ -29,7 +29,7 @@ const Header = () => {
 
   return (
     <HeaderContainer className={fixedHeader ? "fixed-header" : ""}>
-      <Navbar />
+      <Navbar currentPage={currentPage} />
     </HeaderContainer>
   );
 };

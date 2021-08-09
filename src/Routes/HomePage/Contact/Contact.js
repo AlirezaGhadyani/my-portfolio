@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Title from "../../../Components/TitleSection/Title";
 import ContactMePic from "../../../Assets/Images/contact-with-me.png";
@@ -70,9 +70,22 @@ const ContactCard = styled.div`
   }
 `;
 
-const Contact = () => {
+const Contact = ({ setCurrentPage }) => {
+  const sectionRef = useRef();
+  // SET CURRENT PAGE FOR NAV
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset >= sectionRef.current.offsetTop)
+        setCurrentPage("contact-me");
+    });
+  }, [setCurrentPage]);
+
   return (
-    <section className="container contact__container" id="contact-me">
+    <section
+      className="container contact__container"
+      id="contact-me"
+      ref={sectionRef}
+    >
       <Title subtitle="ارتباط" title="ارتباط با من" />
       <div className="contact__wrapper">
         <ContactCard>

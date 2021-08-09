@@ -42,8 +42,7 @@ const navItems = [
   },
 ];
 
-const Nav = ({ open, setCloseNav }) => {
-  const [currentPage, setCurrentPage] = useState("home");
+const Nav = ({ open, setCloseNav, currentPage }) => {
   // CLOSE NAVBAR
   const handleCloseNav = () => setCloseNav(false);
   // SET CURRENT PAGE

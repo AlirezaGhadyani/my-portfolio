@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./AboutMe.css";
 import ContactMe from "../../../Components/ContactMe/ContactMeStyle";
 import HeadImg from "../../../Assets/Images/my-picture.jpg";
@@ -13,9 +13,21 @@ const typicalSteps = [
   2000,
 ];
 
-const AboutMe = () => {
+const AboutMe = ({ setCurrentPage }) => {
+  const sectionRef = useRef();
+  // SET CURRENT PAGE FOR NAV
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset >= sectionRef.current.offsetTop)
+        setCurrentPage("home");
+    });
+  }, [setCurrentPage]);
   return (
-    <section className="container about-me__container" id="about-me">
+    <section
+      className="container about-me__container"
+      id="about-me"
+      ref={sectionRef}
+    >
       <div className="about-me__wrapper">
         <div className="about-me__img">
           <img src={HeadImg} alt="admins" />

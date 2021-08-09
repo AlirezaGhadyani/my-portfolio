@@ -3,12 +3,16 @@ import "./Navbar.css";
 import NavbarToggler from "./NavToggler/TogglerStyle";
 import Nav from "./NavbarNav/Nav";
 
-const Navbar = () => {
+const Navbar = ({ currentPage }) => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
     <div className="navbar-Wrapper">
       <NavbarToggler setOpenNav={setNavbarOpen} />
-      <Nav open={navbarOpen} setCloseNav={setNavbarOpen} />
+      <Nav
+        open={navbarOpen}
+        setCloseNav={setNavbarOpen}
+        currentPage={currentPage}
+      />
       <h1 className="navbar-title">
         <a href="#home">ghadyani</a>
       </h1>
