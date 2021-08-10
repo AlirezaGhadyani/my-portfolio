@@ -9,7 +9,7 @@ const Blog = ({ setCurrentPage }) => {
   // SET CURRENT PAGE FOR NAV
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      if (window.pageYOffset >= sectionRef.current.offsetTop)
+      if (window.pageYOffset >= sectionRef.current.offsetTop - 50)
         setCurrentPage("blog");
     });
   }, [setCurrentPage]);

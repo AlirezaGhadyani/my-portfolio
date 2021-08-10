@@ -26,8 +26,7 @@ const ContactMeWrapper = styled.div`
   align-items: center;
 `;
 
-const ContactMeBtn = styled.button`
-  border: 0;
+const ContactMeBtn = styled.a`
   cursor: pointer;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
@@ -52,10 +51,7 @@ const ContactMeBtn = styled.button`
     stroke-width: 0.4rem;
   }
   @media (min-width: 576px) {
-    padding: 2em;
-    svg {
-      font-size: 2.4rem;
-    }
+    padding: ${(props) => (props.smallversion ? "0.9em" : "1.6em")};
   }
 `;
 
@@ -64,13 +60,22 @@ const ContactMe = ({ gutterSide, smallversion }) => {
     <ContactMeContainer className="contact-me-icons" gutterSide={gutterSide}>
       <ContactMeTitle>با من در ارتباط باشید</ContactMeTitle>
       <ContactMeWrapper>
-        <ContactMeBtn smallversion={smallversion}>
+        <ContactMeBtn
+          smallversion={smallversion}
+          href="https://github.com/AlirezaGhadyani"
+        >
           <FaGithub smallversion={smallversion} />
         </ContactMeBtn>
-        <ContactMeBtn smallversion={smallversion}>
+        <ContactMeBtn
+          smallversion={smallversion}
+          href="https://wa.me/09300574570"
+        >
           <FaWhatsapp smallversion={smallversion} />
         </ContactMeBtn>
-        <ContactMeBtn smallversion={smallversion}>
+        <ContactMeBtn
+          smallversion={smallversion}
+          href="https://www.instagram.com/allireza_ghadyani/"
+        >
           <FaInstagram smallversion={smallversion} />
         </ContactMeBtn>
       </ContactMeWrapper>

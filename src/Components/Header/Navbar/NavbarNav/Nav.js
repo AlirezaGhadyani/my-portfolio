@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavbarNavContainer, CloseToggler } from "./NavStyle";
 import { FaTimes } from "react-icons/fa";
 import ContactMe from "../../../ContactMe/ContactMeStyle";

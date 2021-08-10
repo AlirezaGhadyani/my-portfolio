@@ -8,13 +8,15 @@ const CardWrapper = styled.div`
   padding: 1em;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   border-radius: 0.8rem;
   background: linear-gradient(145deg, #e2e8ec, #ffffff);
   box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
+  height: fit-content;
   @media (min-width: 992px) {
     padding: 1.5em;
+    height: 100%;
   }
   .portfolio-card__img {
     position: relative;
@@ -96,14 +98,14 @@ const CardWrapper = styled.div`
 `;
 
 const Card = ({ data }) => {
-  const { img, category, title } = data;
+  const { img, category, title, path } = data;
   return (
     <CardWrapper>
       <div className="portfolio-card__img">
         <img src={img} alt={title} />
       </div>
       <span>{category}</span>
-      <a href="#">
+      <a href={path ? path : "#"}>
         {title}
         <br />
         <FiArrowUpLeft />

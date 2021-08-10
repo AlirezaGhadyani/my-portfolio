@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Title from "../../../Components/TitleSection/Title";
-import ContactMePic from "../../../Assets/Images/contact-with-me.png";
+import ContactMePic from "../../../Assets/Images/contact-with-me.jpg";
 import ContactMe from "../../../Components/ContactMe/ContactMeStyle";
 
 // STYLES
@@ -75,7 +75,7 @@ const Contact = ({ setCurrentPage }) => {
   // SET CURRENT PAGE FOR NAV
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      if (window.pageYOffset >= sectionRef.current.offsetTop)
+      if (window.pageYOffset >= sectionRef.current.offsetTop - 50)
         setCurrentPage("contact-me");
     });
   }, [setCurrentPage]);

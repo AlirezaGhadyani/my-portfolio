@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { IoIosArrowRoundBack } from "react-icons/io";
 
 // STYLES
 const SkillCardWrapper = styled.div`

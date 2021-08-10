@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 // STYLES
 const TitleWrapper = styled.div`
@@ -43,8 +45,10 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = ({ subtitle, title, align }) => {
+  // AOS ANIM ON SCROLL
+  useEffect(() => Aos.init({ duration: 1500 }), []);
   return (
-    <TitleWrapper align={align}>
+    <TitleWrapper data-aos="fade-up" align={align}>
       <h3 className="title__subtitle">{subtitle}</h3>
       <h2 className="title__title">{title}</h2>
     </TitleWrapper>
