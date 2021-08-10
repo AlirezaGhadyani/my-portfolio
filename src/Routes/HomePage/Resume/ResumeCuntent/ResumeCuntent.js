@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../Resume.css";
 import Title from "../../../../Components/TitleSection/Title";
 import ProgressBar from "../../../../Components/ProgressBar/ProgressBar";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 const ResumeCuntent = ({ data }) => {
+  // AOS ANIM ON SCROLL
+  useEffect(() => Aos.init({ duration: 2000 }), []);
+
   return (
-    <div className="resume-cuntent__wrapper">
+    <div className="resume-cuntent__wrapper" data-aos="zoom-out">
       <Title subtitle={data.subtitle} title={data.title} align="flex-start" />
       <div
         className={`resume-cuntent__box ${data.id === 2 ? "skills-box" : ""}`}

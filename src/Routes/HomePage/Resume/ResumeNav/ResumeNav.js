@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { ResumeNavItems } from "../ResumeData/ResumeData";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 const ResumeNavWrapper = styled.ul`
   width: 100%;
@@ -51,8 +53,11 @@ const ResumeNavWrapper = styled.ul`
 const ResumeNav = ({ activeIndex, setActive }) => {
   const handleSetActive = (id) => setActive(id);
 
+  // AOS ANIM ON SCROLL
+  useEffect(() => Aos.init({ duration: 2000 }), []);
+
   return (
-    <ResumeNavWrapper>
+    <ResumeNavWrapper data-aos="zoom-in-up">
       {ResumeNavItems.map((item) => (
         <li
           className={`resume-nav-item ${

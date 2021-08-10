@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { FiArrowUpLeft } from "react-icons/fi";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 // STYLES
 const CardWrapper = styled.div`
@@ -99,8 +101,12 @@ const CardWrapper = styled.div`
 
 const Card = ({ data }) => {
   const { img, category, title, path } = data;
+
+  // AOS ANIM ON SCROLL
+  useEffect(() => Aos.init({ duration: 2500 }), []);
+
   return (
-    <CardWrapper>
+    <CardWrapper data-aos="flip-down">
       <div className="portfolio-card__img">
         <img src={img} alt={title} />
       </div>

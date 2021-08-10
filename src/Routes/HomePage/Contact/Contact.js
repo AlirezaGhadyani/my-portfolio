@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Title from "../../../Components/TitleSection/Title";
 import ContactMePic from "../../../Assets/Images/contact-with-me.jpg";
 import ContactMe from "../../../Components/ContactMe/ContactMeStyle";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 // STYLES
 const ContactCard = styled.div`
@@ -80,6 +82,9 @@ const Contact = ({ setCurrentPage }) => {
     });
   }, [setCurrentPage]);
 
+  // AOS ANIM ON SCROLL
+  useEffect(() => Aos.init({ duration: 2500 }), []);
+
   return (
     <section
       className="container contact__container"
@@ -95,14 +100,14 @@ const Contact = ({ setCurrentPage }) => {
           <p className="contact__txt">
             برای ارتباط با من می توانید از راه های زیر با من تماس بگیرید.
           </p>
-          <p className="contact__way">
+          <p className="contact__way" data-aos="fade-right">
             <span>ایمیل</span>
             <br />
             <a href="mailto:alirezaghadyani16@gmail.com">
               alirezaghadyani16@gmail
             </a>
           </p>
-          <p className="contact__way">
+          <p className="contact__way" data-aos="fade-right">
             <span>شماره تلفن</span>
             <br />
             <a href="tel:09300574570">09300574570</a>

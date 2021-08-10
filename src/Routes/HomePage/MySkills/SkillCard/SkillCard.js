@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 // STYLES
 const SkillCardWrapper = styled.div`
@@ -107,8 +109,12 @@ const SkillCardWrapper = styled.div`
 
 const SkillCard = ({ data }) => {
   const { title, icon, desc } = data;
+
+  // AOS ANIM ON SCROLL
+  useEffect(() => Aos.init({ duration: 2000 }), []);
+
   return (
-    <SkillCardWrapper>
+    <SkillCardWrapper data-aos="flip-left">
       <div>
         {icon}
         <h1>{title}</h1>
