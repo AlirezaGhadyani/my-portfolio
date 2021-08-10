@@ -60,6 +60,7 @@ const Nav = ({ open, setCloseNav, currentPage }) => {
         {navItems.map((item) => (
           <li
             className={`nav-item ${handleSetCurrentPage(item.name)}`}
+            onClick={handleCloseNav}
             key={item.id}
           >
             <a href={item.path} className="nav-link">
