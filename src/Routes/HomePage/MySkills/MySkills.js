@@ -32,4 +32,4 @@ const MySkills = ({ setCurrentPage }) => {
   );
 };
 
-export default MySkills;
+export default React.memo(MySkills);
