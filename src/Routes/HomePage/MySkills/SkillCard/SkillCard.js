@@ -111,7 +111,7 @@ const SkillCard = ({ data }) => {
   const { title, icon, desc } = data;
 
   // AOS ANIM ON SCROLL
-  useEffect(() => Aos.init({ duration: 2000 }), []);
+  useEffect(() => Aos.init({ duration: 1200 }), []);
 
   return (
     <SkillCardWrapper data-aos="flip-left">

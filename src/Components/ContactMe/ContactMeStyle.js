@@ -15,7 +15,7 @@ const ContactMeTitle = styled.h2`
   font-weight: 900;
   margin: 1em 0.4em;
   @media (min-width: 576px) {
-    font-size: 1.6rem;
+    font-size: ${(props) => (props.smallversion ? "1.2em" : "1.6em")};
   }
 `;
 
@@ -58,7 +58,9 @@ const ContactMeBtn = styled.a`
 const ContactMe = ({ gutterSide, smallversion }) => {
   return (
     <ContactMeContainer className="contact-me-icons" gutterSide={gutterSide}>
-      <ContactMeTitle>با من در ارتباط باشید</ContactMeTitle>
+      <ContactMeTitle smallversion={smallversion}>
+        با من در ارتباط باشید
+      </ContactMeTitle>
       <ContactMeWrapper>
         <ContactMeBtn
           smallversion={smallversion}

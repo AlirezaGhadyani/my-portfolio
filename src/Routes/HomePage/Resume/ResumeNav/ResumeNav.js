@@ -54,7 +54,7 @@ const ResumeNav = ({ activeIndex, setActive }) => {
   const handleSetActive = (id) => setActive(id);
 
   // AOS ANIM ON SCROLL
-  useEffect(() => Aos.init({ duration: 2000 }), []);
+  useEffect(() => Aos.init({ duration: 1500 }), []);
 
   return (
     <ResumeNavWrapper data-aos="zoom-in-up">

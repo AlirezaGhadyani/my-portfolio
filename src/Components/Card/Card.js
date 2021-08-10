@@ -29,7 +29,7 @@ const CardWrapper = styled.div`
     border-radius: 0.8rem;
     img {
       width: 100%;
-      transition: transform 0.8s ease;
+      transition: transform 1.5s ease;
     }
     :hover {
       img {
@@ -103,7 +103,7 @@ const Card = ({ data }) => {
   const { img, category, title, path } = data;
 
   // AOS ANIM ON SCROLL
-  useEffect(() => Aos.init({ duration: 2500 }), []);
+  useEffect(() => Aos.init({ duration: 1500 }), []);
 
   return (
     <CardWrapper data-aos="flip-down">

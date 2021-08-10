@@ -7,7 +7,7 @@ import "aos/dist/aos.css";
 
 const ResumeCuntent = ({ data }) => {
   // AOS ANIM ON SCROLL
-  useEffect(() => Aos.init({ duration: 2000 }), []);
+  useEffect(() => Aos.init({ duration: 1500 }), []);
 
   return (
     <div className="resume-cuntent__wrapper" data-aos="zoom-out">

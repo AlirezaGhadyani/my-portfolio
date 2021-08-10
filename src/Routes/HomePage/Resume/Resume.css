@@ -72,6 +72,14 @@
           box-shadow: none;
 }
 
+.resume__pdf-link {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 5rem;
+  margin-right: 1em;
+  color: #ff014f;
+}
+
 @media (min-width: 375px) {
   .resume-cuntent__box h2 {
     font-size: 1.7rem;

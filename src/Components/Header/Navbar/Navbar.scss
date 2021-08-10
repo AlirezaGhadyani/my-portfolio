@@ -7,7 +7,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.4rem 0;
+  padding: 1.8rem 0;
 }
 
 @media (min-width: 576px) {
@@ -29,13 +29,11 @@
 }
 
 .navbar-title {
-  font-family: "enTitleFont";
-  font-size: 2.4rem;
-  font-weight: 400;
-  margin: 0;
-  margin-bottom: 0.3em;
-  a {
-    color: #ff014f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 100%;
   }
 }
 
@@ -57,7 +55,7 @@
 }
 
 .nav-link {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 500;
   color: #1e2125;
   transition: all 0.5s ease;

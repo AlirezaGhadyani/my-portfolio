@@ -33,6 +33,12 @@ const Resume = ({ setCurrentPage }) => {
               )
           )}
         </div>
+        <a
+          href="https://drive.google.com/file/d/1mHapcbxxpXruHKWNjQFwzdATD55-RllZ/view?usp=sharing"
+          className="resume__pdf-link"
+        >
+          برای مشاهده فایل رزومه من کلیک کنید
+        </a>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Navbar.css";
+import MainLogo from "../../../Assets/Images/main-logo.png";
 import NavbarToggler from "./NavToggler/TogglerStyle";
 import Nav from "./NavbarNav/Nav";
 
@@ -13,9 +14,9 @@ const Navbar = ({ currentPage }) => {
         setCloseNav={setNavbarOpen}
         currentPage={currentPage}
       />
-      <h1 className="navbar-title">
-        <a href="#home">ghadyani</a>
-      </h1>
+      <a href="#home" className="navbar-title">
+        <img src={MainLogo} alt="main logo" />
+      </a>
     </div>
   );
 };

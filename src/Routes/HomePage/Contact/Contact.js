@@ -55,6 +55,12 @@ const ContactCard = styled.div`
     a {
       font-family: "enFont";
       color: #3c3e41;
+      mark {
+        padding: 0.1em;
+        border-radius: 1rem;
+        background: transparent;
+        color: #ff014f;
+      }
     }
     span {
       color: #ff014f;
@@ -83,7 +89,7 @@ const Contact = ({ setCurrentPage }) => {
   }, [setCurrentPage]);
 
   // AOS ANIM ON SCROLL
-  useEffect(() => Aos.init({ duration: 2500 }), []);
+  useEffect(() => Aos.init({ duration: 1500 }), []);
 
   return (
     <section
@@ -111,6 +117,13 @@ const Contact = ({ setCurrentPage }) => {
             <span>شماره تلفن</span>
             <br />
             <a href="tel:09300574570">09300574570</a>
+          </p>
+          <p className="contact__way" data-aos="fade-right">
+            <span>مشاهده فایل رزومه من</span>
+            <br />
+            <a href="https://drive.google.com/file/d/1mHapcbxxpXruHKWNjQFwzdATD55-RllZ/view?usp=sharing">
+              برای مشاهده <mark>کلیک</mark> کنید
+            </a>
           </p>
           <br />
           <br />
