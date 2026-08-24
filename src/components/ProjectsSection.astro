@@ -16,6 +16,8 @@ const featured = [...projects]
 		(a, b) => orderRank[a.tier] - orderRank[b.tier] || a.title.localeCompare(b.title),
 	)
 	.slice(0, 6);
+const flagship = featured.find((project) => project.tier === 'flagship') ?? featured[0];
+const supporting = featured.filter((project) => project !== flagship).slice(0, 2);
 ---
 
 <section id="projects" aria-labelledby="projects-title" class="projects-section">
@@ -32,8 +34,11 @@ const featured = [...projects]
 			</svg>
 		</a>
 	</div>
-	<div class="projects-grid">
-		{featured.map((project) => <ProjectCard project={project} />)}
+	<div class="projects-layout">
+		{flagship && <div class="project-feature"><ProjectCard project={flagship} featured /></div>}
+		<div class="projects-grid">
+			{supporting.map((project) => <ProjectCard project={project} />)}
+		</div>
 	</div>
 </section>
 
@@ -108,12 +113,12 @@ const featured = [...projects]
 	.projects-grid {
 		display: grid;
 		gap: 1.75rem;
-		grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
+	.projects-layout { display: grid; gap: 1.75rem; }
+	.project-feature :global(.project-card) { min-height: 25rem; }
 
 	@media (max-width: 32rem) {
-		.projects-grid {
-			grid-template-columns: 1fr;
-		}
+		.projects-grid { grid-template-columns: 1fr; }
 	}
 </style>

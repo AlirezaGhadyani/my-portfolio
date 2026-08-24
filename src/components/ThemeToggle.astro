@@ -39,6 +39,7 @@
 				const current = root.getAttribute('data-theme') || 'dark';
 				const next = current === 'dark' ? 'light' : 'dark';
 				root.setAttribute('data-theme', next);
+				themeButton.setAttribute('aria-label', `Switch to ${next === 'dark' ? 'dark' : 'light'} color theme`);
 				try {
 					localStorage.setItem('theme', next);
 				} catch (error) {

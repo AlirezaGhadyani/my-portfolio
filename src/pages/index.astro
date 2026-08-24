@@ -12,7 +12,8 @@ const { identity, summary, experience, skills, education, certifications, projec
 
 const websiteUrl = identity.website.replace(/\/+$/, '');
 const sameAs = identity.links.map((link) => link.url);
-const editorFilename = `${identity.name.toLowerCase().replace(/\s+/g, '-')}.ts`;
+const featuredProject = projects.find((project) => project.tier === 'flagship') ?? projects[0];
+const proofMetrics = featuredProject.impactMetrics ?? [];
 
 const personSchema = {
 	'@type': 'Person',
@@ -50,16 +51,13 @@ const ldJson = {
 
 <Layout>
 	<section class="hero" aria-labelledby="hero-title">
+		<div class="hero-kicker"><span>Portfolio / 2026</span><span class="kicker-rule" aria-hidden="true"></span><span>Independent engineering practice</span></div>
 		<div class="hero-copy">
 		<div class="hero-eyebrow">
 			<span class="live-status-dot" aria-hidden="true"></span>
 			<span>Available for thoughtful engineering work</span>
 		</div>
-		<h1 id="hero-title" class="hero-title">
-			<span>{identity.name.split(' ')[0]}</span>
-			<span>{identity.name.split(' ')[1]}</span>
-			<strong>{identity.title}</strong>
-		</h1>
+		<h1 id="hero-title" class="hero-title"><span>{identity.name}</span><strong>{identity.title}</strong></h1>
 		<div class="hero-role">
 			<span class="location-badge">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -97,25 +95,21 @@ const ldJson = {
 			</nav>
 		</div>
 		</div>
-		<div class="hero-visual" aria-label="A snapshot of the engineer's technical toolkit">
-			<div class="visual-coordinate">SYS / PROFILE_001 <span>01—05</span></div>
-			<div class="editor-window">
-				<div class="editor-bar"><span></span><span></span><span></span><b>{editorFilename}</b></div>
-				<div class="editor-body">
-					<div class="line-numbers" aria-hidden="true">01<br />02<br />03<br />04<br />05<br />06<br />07<br />08</div>
-					<pre><code><span class="code-muted">const</span> engineer = &#123;
-						<span class="code-key">name</span>: <span class="code-string">'{identity.name}'</span>,
-						<span class="code-key">focus</span>: <span class="code-string">'quality'</span>,
-						<span class="code-key">stack</span>: [
-							<span class="code-string">'{skills[0].skills[0].name}'</span>,
-							<span class="code-string">'{skills[1].skills[0].name}'</span>,
-							<span class="code-string">'{skills[2].skills[0].name}'</span>
-						]
-					&#125;;</code></pre>
-				</div>
-				<div class="editor-status"><span><i></i> systems nominal</span><span>UTF-8 · TypeScript</span></div>
+		<div class="hero-visual" aria-label={`Technical proof from ${featuredProject.title}`}>
+			<div class="proof-label"><span class="proof-index">01</span> Featured system</div>
+			<div class="code-panel">
+				<div class="code-panel-head"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-file">threat-signals.ts</span><span class="code-kind">TypeScript</span></div>
+				<pre aria-label={`Code excerpt for ${featuredProject.title}`}><code><span class="code-muted">const</span> <span class="code-name">signals</span> = <span class="code-muted">await</span> ingest(&#123;
+  source: <span class="code-string">'edge-stream'</span>,
+  batchSize: <span class="code-number">2_400_000</span>,
+&#125;);
+
+<span class="code-muted">return</span> detectThreats(signals)
+  .filter(<span class="code-name">isActionable</span>)
+  .publish(&#123; latency: <span class="code-string">'p95'</span> &#125;);</code></pre>
+				<div class="code-caption"><span>{featuredProject.title}</span><a href={featuredProject.hasCaseStudy ? `/projects/${featuredProject.slug}` : '#projects'}>Read the technical story <span aria-hidden="true">↗</span></a></div>
 			</div>
-			<div class="visual-note"><span class="visual-note-mark">+</span><span>Build with intention.<br />Ship with confidence.</span></div>
+			{proofMetrics.length > 0 && <ul class="proof-metrics">{proofMetrics.slice(0, 3).map((metric) => <li><strong>{metric}</strong><span>measured outcome</span></li>)}</ul>}
 		</div>
 	</section>
 
@@ -134,18 +128,22 @@ const ldJson = {
 	.main-sections {
 		display: flex;
 		flex-direction: column;
-		gap: clamp(6rem, 11vw, 10rem);
-		padding-bottom: 3rem;
+		gap: var(--section-space);
+		padding-bottom: 2rem;
 	}
 
 	.hero {
+		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1.05fr) minmax(20rem, .95fr);
 		align-items: center;
-		gap: clamp(3rem, 6vw, 6rem);
+		gap: clamp(2.5rem, 5vw, 5rem);
 		min-height: min(47rem, calc(100vh - 4.5rem));
-		padding-block: clamp(5rem, 10vw, 8.5rem) clamp(4rem, 7vw, 6rem);
+		padding-block: clamp(2.75rem, 6vw, 5.5rem) clamp(3.5rem, 6vw, 5rem);
 	}
+
+	.hero-kicker { grid-column: 1 / -1; display: flex; align-items: center; gap: .7rem; color: var(--text-subtle); font: 600 .72rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+	.kicker-rule { width: 2.5rem; height: 1px; background: var(--accent); }
 
 	.hero-copy { min-width: 0; }
 
@@ -176,28 +174,39 @@ const ldJson = {
 		display: flex;
 		flex-direction: column;
 		gap: .15em;
-		font-size: clamp(4rem, 8vw, 7rem);
+		font-size: clamp(3.5rem, 7vw, 6.8rem);
 		line-height: .88;
 		letter-spacing: -0.075em;
 		font-weight: 800;
 		color: var(--text);
 		text-wrap: balance;
-		margin: 1.6rem 0 0;
+		margin: 1.8rem 0 0;
 	}
 
-	.hero-title strong { color: var(--accent); font-size: .22em; line-height: 1.25; letter-spacing: .035em; font-weight: 650; text-transform: uppercase; margin-top: 1.25rem; }
-	.hero-visual { position: relative; min-width: 0; padding-top: 2rem; }
-	.visual-coordinate { position: absolute; top: 0; right: 0; color: var(--text-subtle); font: 10px var(--font-mono); letter-spacing: .08em; }
-	.visual-coordinate span { color: var(--accent); margin-left: 1rem; }
-	.editor-window { overflow: hidden; border: 1px solid hsl(217 50% 35% / .55); border-radius: 4px; background: #09111f; box-shadow: 0 30px 90px hsl(220 80% 3% / .55), 0 0 0 1px hsl(217 91% 60% / .06); transform: rotate(1.5deg); }
-	.editor-bar, .editor-status { display: flex; align-items: center; gap: .45rem; padding: .75rem 1rem; border-bottom: 1px solid hsl(217 30% 18%); color: #75839b; font: 11px var(--font-mono); }
-	.editor-bar b { margin-inline: auto; font-weight: 500; color: #a9b7cc; }
-	.editor-bar span { width: 7px; height: 7px; border-radius: 50%; background: #ef6c72; }.editor-bar span:nth-child(2) { background: #e6b45c; }.editor-bar span:nth-child(3) { background: #62c98b; }
-	.editor-body { display: flex; padding: 2rem 1.2rem; min-height: 22rem; }
-	.line-numbers { width: 2rem; flex: none; color: #3d4d64; text-align: right; font: 12px/2 var(--font-mono); user-select: none; }
-	.editor-body pre { margin: 0; padding-left: 1rem; overflow: auto; color: #d9e2f0; font: 12px/2 var(--font-mono); }.editor-body code { white-space: pre-line; }.code-muted { color: #c792ea; }.code-key { color: #82aaff; }.code-string { color: #c3e88d; }
-	.editor-status { justify-content: space-between; border: 0; border-top: 1px solid hsl(217 30% 18%); font-size: 10px; }.editor-status i { display: inline-block; width: 6px; height: 6px; margin-right: .3rem; border-radius: 50%; background: #62c98b; }
-	.visual-note { display: flex; gap: .7rem; align-items: flex-start; margin: 1.5rem 0 0 2rem; color: var(--text-muted); font: 12px/1.7 var(--font-mono); }.visual-note-mark { color: var(--accent); font-size: 1.5rem; line-height: 1; }
+	.hero-title strong { color: var(--accent); font-size: .22em; line-height: 1.25; letter-spacing: .035em; font-weight: 650; text-transform: uppercase; margin-top: 1.4rem; }
+	.hero-visual { position: relative; min-width: 0; padding-top: 1rem; }
+	.proof-label { display: flex; align-items: center; gap: .7rem; color: var(--accent); font: 600 .72rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+	.proof-index { color: var(--text-subtle); }
+	.code-panel { margin-top: 1rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-lg); }
+	.code-panel-head { display: flex; align-items: center; gap: .75rem; min-height: 2.7rem; padding: 0 .9rem; border-bottom: 1px solid var(--border-subtle); background: var(--surface-muted); color: var(--text-subtle); font: 600 .7rem/1 var(--font-mono); }
+	.window-dots { display: flex; gap: .3rem; }
+	.window-dots i { display: block; width: .45rem; height: .45rem; border-radius: 50%; background: var(--border); }
+	.window-dots i:first-child { background: var(--accent); }
+	.code-file { color: var(--text-muted); }
+	.code-kind { margin-left: auto; color: var(--text-subtle); }
+	.code-panel pre { overflow-x: auto; margin: 0; padding: clamp(1.25rem, 3vw, 1.8rem); color: var(--text-muted); font: .78rem/1.8 var(--font-mono); }
+	.code-muted { color: var(--text-subtle); }
+	.code-name { color: var(--accent); }
+	.code-string { color: hsl(145 48% 62%); }
+	.code-number { color: hsl(29 92% 70%); }
+	.code-caption { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 1.25rem; border-top: 1px solid var(--border-subtle); color: var(--text-muted); font-size: .78rem; }
+	.code-caption a { color: var(--accent); font-weight: 650; text-decoration: none; }
+	.proof-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; list-style: none; margin: 1.25rem 0 0; padding: 0; }
+	.proof-metrics li { display: flex; flex-direction: column; gap: .25rem; }
+	.proof-metrics strong { color: var(--text); font: 700 1.2rem/1.1 var(--font-mono); }
+	.proof-metrics span { color: var(--text-subtle); font-size: .75rem; }
+	.proof-link { color: var(--accent); font-weight: 650; text-decoration: none; }
+	.proof-link:hover { color: var(--accent-hover); }
 
 	.hero-role {
 		display: flex;
@@ -206,27 +215,24 @@ const ldJson = {
 		flex-wrap: wrap;
 	}
 
-	.role-badge {
-		font-size: 1.15rem;
-		font-weight: 600;
-		color: var(--accent);
-		letter-spacing: -0.01em;
-	}
-
 	.location-badge {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.35rem;
+		gap: .45rem;
 		color: var(--text-muted);
-		font-size: 0.95rem;
+		font: 600 .75rem/1 var(--font-mono);
+		letter-spacing: .03em;
+		text-transform: uppercase;
 	}
+
+	.location-badge svg { color: var(--accent); }
 
 	.hero-summary {
 		color: var(--text-muted);
 		font-size: clamp(1.05rem, 2.2vw, 1.2rem);
 		line-height: 1.7;
 		max-width: 62ch;
-		margin: 0;
+		margin: 1.25rem 0 0;
 	}
 
 	.hero-actions {
@@ -234,7 +240,7 @@ const ldJson = {
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.875rem;
-		margin-top: 0.75rem;
+		margin-top: 1.5rem;
 	}
 
 	.hero-links {
@@ -250,7 +256,7 @@ const ldJson = {
 		background: var(--accent);
 		border: 1px solid var(--accent);
 		color: #ffffff;
-		border-radius: var(--radius-sm);
+		border-radius: var(--radius-md);
 		padding: 0.7rem 1.25rem;
 		font-weight: 600;
 		font-size: 0.95rem;
@@ -273,7 +279,7 @@ const ldJson = {
 			font-size: 0.72rem;
 			background: rgba(255, 255, 255, 0.22);
 			padding: 0.2rem 0.45rem;
-			border-radius: 4px;
+			border-radius: var(--radius-sm);
 			font-family: var(--font-mono);
 			font-weight: 600;
 			letter-spacing: 0.02em;
@@ -285,7 +291,7 @@ const ldJson = {
 		align-items: center;
 		gap: 0.35rem;
 		border: 1px solid var(--border);
-		border-radius: var(--radius-sm);
+		border-radius: var(--radius-md);
 		padding: 0.7rem 1.1rem;
 		background: var(--surface);
 		color: var(--text);
@@ -319,16 +325,18 @@ const ldJson = {
 	}
 
 	@media (max-width: 48rem) {
-		.hero { grid-template-columns: 1fr; min-height: auto; gap: 3.5rem; }
+		.hero { grid-template-columns: 1fr; min-height: auto; gap: 2.75rem; }
 		.hero-visual { max-width: 38rem; width: 100%; margin-inline: auto; }
-		.editor-window { transform: none; }
 	}
 
 	@media (max-width: 30rem) {
 		.hero-title { font-size: clamp(3.25rem, 17vw, 5rem); }
 		.hero-actions, .hero-links { width: 100%; }
-		.btn-resume, .btn-secondary { justify-content: center; flex: 1; }
-		.editor-body { padding: 1rem .5rem; min-height: 17rem; }
-		.editor-body pre { padding-left: .6rem; font-size: 10px; }
+		.btn-resume, .btn-secondary { justify-content: center; width: 100%; }
+		.hero-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.hero-kicker { font-size: .65rem; }
+		.proof-metrics { gap: .75rem; }
+		.code-panel pre { font-size: .7rem; }
+		.code-caption { flex-direction: column; gap: .35rem; }
 	}
 </style>

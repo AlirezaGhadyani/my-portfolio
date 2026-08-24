@@ -12,32 +12,35 @@
 }
 
 :root {
-	--radius-sm: 5px;
-	--radius: 8px;
-	--radius-lg: 12px;
+	--radius-sm: 6px;
+	--radius-md: 9px;
+	--radius: 12px;
+	--radius-lg: 14px;
 	--radius-full: 9999px;
-	--transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-	--transition-fast: all 0.15s ease-out;
-	--content-width: 80rem;
+	--transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+	--transition-fast: all 0.18s ease-out;
+	--content-width: 76rem;
+	--gutter: clamp(1.1rem, 4vw, 3.25rem);
+	--section-space: clamp(4.5rem, 8vw, 7rem);
 }
 
 /* ---- Light theme ---- */
 :root,
 html[data-theme="light"] {
-	--bg: hsl(210 24% 98%);
+	--bg: hsl(42 30% 97%);
 	--surface: hsl(0 0% 100%);
-	--surface-muted: hsl(214 20% 95%);
+	--surface-muted: hsl(42 22% 93%);
 	--surface-elevated: hsl(0 0% 100%);
-	--border: hsl(215 16% 88%);
-	--border-subtle: hsl(215 16% 92%);
-	--border-active: hsl(221 83% 53%);
+	--border: hsl(30 13% 82%);
+	--border-subtle: hsl(30 13% 89%);
+	--border-active: hsl(13 68% 46%);
 	--text: hsl(222 47% 11%);
-	--text-muted: hsl(215 16% 42%);
-	--text-subtle: hsl(215 16% 60%);
-	--accent: hsl(221 83% 53%);
-	--accent-hover: hsl(221 83% 46%);
-	--accent-muted: hsl(221 90% 96%);
-	--accent-glow: hsl(221 83% 53% / 0.15);
+	--text-muted: hsl(28 12% 40%);
+	--text-subtle: hsl(28 10% 57%);
+	--accent: hsl(13 68% 46%);
+	--accent-hover: hsl(13 68% 38%);
+	--accent-muted: hsl(13 65% 93%);
+	--accent-glow: hsl(13 68% 46% / 0.15);
 	--shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.04);
 	--shadow-md: 0 4px 12px -2px hsl(220 25% 10% / 0.08), 0 2px 6px -1px hsl(220 25% 10% / 0.04);
 	--shadow-lg: 0 12px 28px -4px hsl(220 25% 10% / 0.10), 0 4px 12px -2px hsl(220 25% 10% / 0.05);
@@ -48,20 +51,20 @@ html[data-theme="light"] {
 
 /* ---- Dark theme ---- */
 html[data-theme="dark"] {
-	--bg: hsl(222 44% 5%);
-	--surface: hsl(222 35% 9%);
-	--surface-muted: hsl(222 29% 13%);
-	--surface-elevated: hsl(222 32% 16%);
-	--border: hsl(216 28% 22%);
-	--border-subtle: hsl(216 25% 15%);
-	--border-active: hsl(217 91% 60%);
-	--text: hsl(210 40% 98%);
-	--text-muted: hsl(215 20% 68%);
-	--text-subtle: hsl(215 18% 50%);
-	--accent: hsl(217 91% 60%);
-	--accent-hover: hsl(217 91% 68%);
-	--accent-muted: hsl(217 91% 60% / 0.15);
-	--accent-glow: hsl(217 91% 60% / 0.25);
+	--bg: hsl(222 28% 7%);
+	--surface: hsl(222 23% 11%);
+	--surface-muted: hsl(222 20% 15%);
+	--surface-elevated: hsl(222 19% 18%);
+	--border: hsl(218 16% 26%);
+	--border-subtle: hsl(218 16% 18%);
+	--border-active: hsl(33 85% 62%);
+	--text: hsl(38 32% 94%);
+	--text-muted: hsl(218 13% 70%);
+	--text-subtle: hsl(218 11% 51%);
+	--accent: hsl(33 85% 62%);
+	--accent-hover: hsl(33 90% 72%);
+	--accent-muted: hsl(33 85% 62% / 0.14);
+	--accent-glow: hsl(33 85% 62% / 0.22);
 	--shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
 	--shadow-md: 0 4px 14px -2px hsl(0 0% 0% / 0.4), 0 2px 6px -1px hsl(0 0% 0% / 0.2);
 	--shadow-lg: 0 14px 32px -4px hsl(0 0% 0% / 0.5), 0 4px 14px -2px hsl(0 0% 0% / 0.3);
@@ -84,10 +87,10 @@ html[data-theme="dark"] {
 
 	body {
 		background-color: var(--bg);
-		background-image: radial-gradient(circle at 82% -8%, hsl(217 91% 60% / .09), transparent 34rem), linear-gradient(180deg, hsl(222 44% 6%), var(--bg) 38rem);
+		background-image: radial-gradient(circle at 84% -10%, var(--accent-glow), transparent 30rem), linear-gradient(180deg, color-mix(in srgb, var(--bg) 90%, var(--surface)), var(--bg) 42rem);
 		color: var(--text);
 		font-family: var(--font-sans);
-		font-size: 15px;
+		font-size: 16px;
 		line-height: 1.6;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
@@ -102,8 +105,8 @@ html[data-theme="dark"] {
 		position: fixed;
 		inset: 0;
 		pointer-events: none;
-		background-image: linear-gradient(hsl(217 40% 55% / .035) 1px, transparent 1px), linear-gradient(90deg, hsl(217 40% 55% / .035) 1px, transparent 1px);
-		background-size: 4rem 4rem;
+		background-image: linear-gradient(var(--border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+		background-size: 5rem 5rem;
 		mask-image: linear-gradient(to bottom, black, transparent 75%);
 		z-index: -1;
 	}
@@ -125,21 +128,21 @@ html[data-theme="dark"] {
 	position: relative;
 	max-width: var(--content-width);
 	margin-inline: auto;
-	padding-inline: clamp(1.25rem, 5vw, 3.5rem);
+	padding-inline: var(--gutter);
 }
 
 .section-header {
 	position: relative;
-	padding-left: 4.5rem;
+	padding-left: clamp(2.75rem, 5vw, 4rem);
 }
 
 .section-header::before {
 	content: attr(data-section);
 	position: absolute;
 	left: 0;
-	top: -0.65rem;
-	color: hsl(217 91% 60% / .18);
-	font: 700 clamp(3rem, 7vw, 5.5rem)/1 var(--font-mono);
+	top: -0.45rem;
+	color: color-mix(in srgb, var(--accent) 22%, transparent);
+	font: 700 clamp(2.5rem, 6vw, 4.5rem)/1 var(--font-mono);
 	letter-spacing: -0.12em;
 }
 
@@ -148,7 +151,7 @@ html[data-theme="dark"] {
 	letter-spacing: .14em !important;
 }
 
-.content-shell::before {
+	.content-shell::before {
 	content: '';
 	position: absolute;
 	top: 0;
@@ -166,6 +169,10 @@ html[data-theme="dark"] {
 		transform: scale(1);
 		opacity: 1;
 		box-shadow: 0 0 0 0 var(--status-live-glow);
+	}
+
+	@media (max-width: 48rem) {
+		.content-shell::before { display: none; }
 	}
 	50% {
 		transform: scale(1.15);

@@ -146,19 +146,13 @@ const { education, certifications = [] } = Astro.props;
 
 	.edu-card,
 	.cert-card {
-		border: 1px solid var(--border);
-		border-radius: 3px;
-		background: var(--surface);
-		padding: 1.75rem;
-		background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, var(--accent)), var(--surface));
-		box-shadow: var(--shadow-sm);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius);
+		background: color-mix(in srgb, var(--surface) 58%, transparent);
+		padding: 1.25rem;
 		transition: var(--transition-fast);
 
-		&:hover {
-			border-color: var(--border-active);
-			box-shadow: var(--shadow-md);
-			transform: translateY(-2px);
-		}
+		&:hover .edu-institution, &:hover .cert-name { color: var(--accent); }
 	}
 
 	.edu-head,

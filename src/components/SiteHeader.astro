@@ -94,6 +94,9 @@ const nav = [
 				toggleButton.setAttribute('aria-expanded', 'true');
 				toggleButton.setAttribute('aria-label', 'Close primary navigation');
 				document.body.classList.add('menu-open');
+				toggleButton.setAttribute('aria-controls', 'nav-mobile');
+				const firstLink = mobileNav.querySelector('a');
+				if (firstLink) firstLink.focus();
 			};
 
 			toggleButton.addEventListener('click', () => {
@@ -112,10 +115,15 @@ const nav = [
 				});
 			});
 
-			document.addEventListener('keydown', (event) => {
+				document.addEventListener('keydown', (event) => {
 				if (event.key === 'Escape' && !mobileNav.hidden) {
 					close();
+					toggleButton.focus();
 				}
+			});
+
+			window.addEventListener('resize', () => {
+				if (window.innerWidth > 768 && !mobileNav.hidden) close();
 			});
 		}
 	})();
@@ -154,7 +162,7 @@ const nav = [
 		.brand-avatar {
 			width: 2.25rem;
 			height: 2.25rem;
-			border-radius: 2px;
+			border-radius: var(--radius-sm);
 			background: transparent;
 			border: 1px solid var(--accent);
 			color: #ffffff;
@@ -224,7 +232,7 @@ const nav = [
 		font-size: 0.6875rem;
 		font-weight: 600;
 		padding: 0.125rem 0.375rem;
-		border-radius: 4px;
+		border-radius: var(--radius-sm);
 		background: var(--accent-muted);
 		color: var(--accent);
 		line-height: 1;
@@ -313,7 +321,7 @@ const nav = [
 			align-items: center;
 			justify-content: space-between;
 			padding: 0.75rem 1rem;
-			border-radius: 2px;
+			border-radius: var(--radius-md);
 			color: var(--text);
 			text-decoration: none;
 			font-size: 1rem;

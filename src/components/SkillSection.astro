@@ -86,19 +86,13 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 	@media (max-width: 35rem) { .skills-grid { grid-template-columns: 1fr; } }
 
 	.skill-category {
-		border: 1px solid var(--border);
-		border-radius: 3px;
-		background: var(--surface);
-		padding: 1.75rem;
-		background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, var(--accent)), var(--surface));
-		box-shadow: var(--shadow-sm);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius);
+		background: color-mix(in srgb, var(--surface) 52%, transparent);
+		padding: 1.25rem 1.25rem 1.5rem;
 		transition: var(--transition-fast);
 
-		&:hover {
-			border-color: var(--border-active);
-			box-shadow: var(--shadow-md);
-			transform: translateY(-2px);
-		}
+		&:hover .skill-category-name { color: var(--accent); }
 
 		.category-header {
 			display: flex;
@@ -123,7 +117,7 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 			color: var(--text-muted);
 			background: var(--surface-muted);
 			padding: 0.1rem 0.4rem;
-			border-radius: 4px;
+			border-radius: var(--radius-sm);
 		}
 
 		.skill-list {
