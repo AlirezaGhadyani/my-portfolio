@@ -1,0 +1,54 @@
+---
+import { resumeData } from '../data/resume.ts';
+
+const { identity } = resumeData;
+---
+
+<footer class="site-footer">
+	<nav aria-label="Footer">
+		<ul>
+			{
+				identity.links.map(({ label, url }) => (
+					<li>
+						<a href={url} target="_blank" rel="noreferrer noopener">
+							{label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+	<p class="footer-meta">© {new Date().getFullYear()} {identity.name} · Built with Astro</p>
+</footer>
+
+<style>
+	.site-footer {
+		margin-top: auto;
+		border-top: 1px solid var(--border);
+		background: var(--surface);
+	}
+
+	.site-footer nav ul {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		list-style: none;
+		padding-block: 1.25rem;
+	}
+
+	.site-footer a {
+		color: var(--text-muted);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--accent);
+		}
+	}
+
+	.footer-meta {
+		text-align: center;
+		color: var(--text-muted);
+		font-size: 0.875rem;
+		padding-block: 0.5rem;
+	}
+</style>

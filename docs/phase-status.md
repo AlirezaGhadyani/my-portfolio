@@ -68,6 +68,39 @@
 
 ---
 
-## Phase 3 — Design System, Layout Primitives & Theme Toggle (Next)
+## Phase 3 — Design System, Shared Layout Shell & Theme Toggle
 
-Tasks tracked here when Phase 2 lands.
+**Objective:** Layout, design navigation, footer, theme switcher, and typography tokens.
+
+### Tasks
+
+- [x] Design tokens in `src/styles/global.css` (semantic color/white spacing/radius `@theme` + `[data-theme]` cascade)
+- [x] Zero-FOUC theme init script in `<head>` (`localStorage` + `prefers-color-scheme`)
+- [x] `prefers-reduced-motion` reduced-motion killswitch (`data-motion="reduced"`)
+- [x] Root layout (`src/layouts/Layout.astro`) with meta, skip-link, ARIA landmarks
+- [x] Responsive header (`SiteHeader.astro`) with desktop + mobile nav, Escape close
+- [x] Theme toggle button (`ThemeToggle.astro`, ARIA toggle)
+- [x] Footer (`SiteFooter.astro`) consuming `identity.links`
+- [x] Semantic home shell (`index.astro`) hero consuming `resumeData`
+
+### Acceptance
+
+- [x] `pnpm build` executes cleanly (1 page, 288ms)
+- [x] `pnpm check` executes cleanly (0 errors, 0 project warnings)
+- [x] `pnpm test` executes cleanly (19 tests passing)
+- [x] Zero theme flicker — init script runs in `<head>` before body paint
+- [x] Semantic HTML5 landmarks (`<header>`, `<nav>`, `<main>`, `<footer>`) with ARIA labels
+
+### Notes / Deviations
+
+- Kept name `src/layouts/Layout.astro` for the root layout (plan's `RootLayout`) to preserve
+  the existing page import.
+- `pnpm lint` only flags Astro-generated `.astro/types.d.ts` (needs a `.astro`/`dist` ignore in
+  `eslint.config.js`) — pre-existing Phase 1 residual, not Phase 3 source. Flagged, not fixed here.
+- Fonts reference Geist Sans/Mono; WOFF2 subsetting + preload deferred until fonts are vendored.
+
+---
+
+## Phase 4 — Core Presentation Components (Next)
+
+Tasks tracked here when Phase 3 lands.

@@ -1,5 +1,17 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title = 'Jordan Avery — Full-Stack Software Engineer', description } = Astro.props;
+const metaDescription =
+	description ??
+	'Portfolio and engineering resume of Jordan Avery: full-stack TypeScript, React, Astro, and edge hosting.';
 ---
 
 <!doctype html>
@@ -10,18 +22,65 @@ import '../styles/global.css';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="description" content={metaDescription} />
+		<meta name="color-scheme" content="light dark" />
+		<title>{title}</title>
+		<script is:inline>
+			(function () {
+				var root = document.documentElement;
+				if (
+					window.matchMedia &&
+					window.matchMedia('(prefers-reduced-motion: reduce)').matches
+				) {
+					root.setAttribute('data-motion', 'reduced');
+				}
+				var stored = null;
+				try {
+					stored = localStorage.getItem('theme');
+				} catch (error) {
+					stored = null;
+				}
+				var dark =
+					stored === 'dark' ||
+					(stored === null &&
+						window.matchMedia &&
+						window.matchMedia('(prefers-color-scheme: dark)').matches);
+				root.setAttribute('data-theme', dark ? 'dark' : 'light');
+			})();
+		</script>
 	</head>
 	<body>
-		<slot />
+		<a class="skip-link" href="#main-content">Skip to main content</a>
+		<SiteHeader />
+		<main id="main-content" class="content-shell">
+			<slot />
+		</main>
+		<SiteFooter />
 	</body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
+	.skip-link {
+		position: fixed;
+		inset-inline-start: 1rem;
+		top: 0.75rem;
+		z-index: 100;
+		padding: 0.75rem 1.25rem;
+		border-radius: 8px;
+		background: var(--accent);
+		color: #fff;
+		transform: translateY(-150%);
+		transition: transform 0.15s ease;
+
+		&:focus-visible {
+			transform: translateY(0);
+		}
+	}
+
+	.content-shell {
 		width: 100%;
-		height: 100%;
+		max-width: 76rem;
+		margin-inline: auto;
+		padding-inline: clamp(1.25rem, 5vw, 3rem);
 	}
 </style>

@@ -1,1 +1,81 @@
 @import "tailwindcss";
+
+/*
+  Design tokens — one source of truth for color, type, spacing, radius, shadow.
+  Theme is applied via `data-theme` attribute on <html>, set correctly (zero FOUC)
+  by the inline init script in the root layout before any paint.
+*/
+
+@theme default {
+	--font-sans: "Geist Sans", "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+:root {
+	--radius: 12px;
+}
+
+/* ---- Light theme ---- */
+:root,
+html[data-theme="light"] {
+	--bg: hsl(210 20% 98%);
+	--surface: hsl(0 0% 100%);
+	--surface-muted: hsl(220 20% 95%);
+	--border: hsl(215 15% 90%);
+	--text: hsl(220 25% 10%);
+	--text-muted: hsl(215 15% 40%);
+	--accent: hsl(220 85% 55%);
+	--accent-muted: hsl(220 90% 96%);
+	--shadow-color: hsl(220 25% 10% / 0.08);
+}
+
+/* ---- Dark theme ---- */
+html[data-theme="dark"] {
+	--bg: hsl(220 20% 7%);
+	--surface: hsl(220 18% 11%);
+	--surface-muted: hsl(220 18% 15%);
+	--border: hsl(220 15% 18%);
+	--text: hsl(210 20% 95%);
+	--text-muted: hsl(215 15% 65%);
+	--accent: hsl(215 90% 60%);
+	--accent-muted: hsl(215 90% 22%);
+	--shadow-color: hsl(210 20% 95% / 0.06);
+}
+
+@layer base {
+	html {
+		background: var(--bg);
+		-webkit-text-size-adjust: 100%;
+		text-rendering: optimizeLegibility;
+	}
+
+	body {
+		background-color: var(--bg);
+		color: var(--text);
+		font-family: var(--font-sans);
+		font-size: 16px;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	::selection {
+		background-color: var(--accent-muted);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+}
+
+/*
+  Prefers-reduced-motion killswitch: disables all CSS transitions for users who
+  request reduced motion. Structure-first, motion is decorative only.
+*/
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] {
+	transition-duration: 0s !important;
+	animation-duration: 0s !important;
+	scroll-behavior: auto !important;
+}
