@@ -7,4 +7,5 @@ export default tsesl.config(
   eslint.configs.recommended,
   prettier,
   ...tsesl.configs.recommended,
+  { ignores: ['**/.astro/**', '**/.kilo/**', 'dist/**', '**/.prettierrc.*'] },
 );

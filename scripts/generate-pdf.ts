@@ -34,7 +34,7 @@ function startStaticServer(baseDir: string): Promise<{ server: http.Server; port
 				reqPath += 'index.html';
 			}
 
-			const normalizedReqPath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '');
+			const normalizedReqPath = path.normalize(reqPath).replace(/^(\.\.[/\\])+/, '');
 			let filePath = path.resolve(resolvedBaseDir, `.${normalizedReqPath}`);
 
 			if (!filePath.startsWith(resolvedBaseDir)) {

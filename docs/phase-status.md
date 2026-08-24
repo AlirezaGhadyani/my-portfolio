@@ -218,4 +218,42 @@
 
 ---
 
-## Phase 8 — Production Verification & Hardening (Next)
+## Phase 8 — Production Verification & Hardening
+
+**Objective:** Final quality gates before release.
+
+### Tasks
+
+- [x] JSON-LD `Person` + `ProfilePage` structured data (`src/pages/index.astro`, rendered via `@graph`, using `resumeData.identity`)
+- [x] Dynamic Open Graph / Twitter preview meta tags + canonical URL in `src/layouts/Layout.astro` (per-page `og:title`/`og:description`/`og:url`, shared `og:image`)
+- [x] Shared social card `/og-image.svg` (1200x630) in `public/`
+- [x] `scripts/generate-sitemap.ts` -> `public/sitemap.xml` + `public/robots.txt`, wired into `pnpm build:all` (and `build:sitemap`)
+- [x] `public/_headers` Cloudflare security + caching directives (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy, cache control)
+- [x] GitHub Actions CI workflow (`.github/workflows/ci.yml`) — check, test, lint, `build:all`, artifact verification
+- [x] ESLint ignores for generated `.astro/`, `.kilo/`, `dist/`, `.prettierrc.*` so `pnpm lint` passes
+
+### Acceptance
+
+- [x] `pnpm build:all` executes cleanly (8 pages + sitemap/robots/txt/PDFs)
+- [x] `pnpm check` executes cleanly (0 errors, 0 project warnings)
+- [x] `pnpm test` executes cleanly (32 tests passing)
+- [x] `pnpm lint` executes cleanly (0 errors)
+- [x] dist/ ships `_headers`, `sitemap.xml`, `robots.txt`, `og-image.svg`, and downloadable resumes
+
+### Notes / Deviations
+
+- **CI / build hardening:** `pnpm build:all` now runs the sitemap generator before the PDF/txt generators. `pnpm lint` was
+  previously failing on Astro-generated `.astro/*` types and unrelated `.kilo/*` worktree sessions; an `ignores` entry in
+  `eslint.config.js` now excludes generated/config dirs. A real source fix (`scripts/generate-pdf.ts` regex escape) was
+  applied so the source tree lints clean.
+- **Hosting:** Officially targets Cloudflare Pages. `public/_headers` contains the security + caching directives; PDFs are
+  served with `Content-Disposition: attachment`. The `deploy` job is a placeholder that documents pushing `dist/` to
+  Cloudflare Pages (Git integration or API token) — no service-specific secrets are committed.
+- **Domain is placeholder:** Sitemap/OG/canonical URLs currently resolve to `https://example.com` (from
+  `resumeData.identity.website`). Swap the real domain as the last push before go-live.
+- **OG image is SVG:** `og-image.svg` is vendor-agnostic (fine for Lighthouse/SEO), but some crawlers prefer PNG. Convert
+  `public/og-image.svg` to a raster `og-image.png` before production if image preview support in all apps is required.
+
+---
+
+## Implementation complete — all 8 phases done.

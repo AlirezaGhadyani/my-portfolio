@@ -9,6 +9,42 @@ import { resumeData } from '../data/resume.ts';
 
 const { identity, summary, experience, skills, education, certifications, projects } =
 	resumeData;
+
+const websiteUrl = identity.website.replace(/\/+$/, '');
+const sameAs = identity.links.map((link) => link.url);
+
+const personSchema = {
+	'@type': 'Person',
+	'@id': `${websiteUrl}/#person`,
+	'name': identity.name,
+	'jobTitle': identity.title,
+	'description': summary.short,
+	'url': websiteUrl,
+	'email': `mailto:${identity.email}`,
+	...((identity.phone && { telephone: identity.phone }) ?? {}),
+	'address': { '@type': 'PostalAddress', 'addressLocality': identity.location },
+	'sameAs': sameAs,
+	'alumniOf': education.map((entry) => ({
+		'@type': 'CollegeOrUniversity',
+		'name': entry.institution,
+	})),
+	'knowsAbout': [...new Set(skills.flatMap((category) => category.skills.map((skill) => skill.name)))],
+};
+
+const ldJson = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'ProfilePage',
+			'@id': `${websiteUrl}/#profile`,
+			'name': identity.name,
+			'url': `${websiteUrl}/`,
+			'about': personSchema,
+			'mainEntity': { '@id': `${websiteUrl}/#person` },
+		},
+		{ ...personSchema, '@id': `${websiteUrl}/#person` },
+	],
+};
 ---
 
 <Layout>
@@ -42,6 +78,8 @@ const { identity, summary, experience, skills, education, certifications, projec
 		<EducationSection education={education} certifications={certifications} />
 		<ContactSection email={identity.email} />
 	</div>
+
+	<script type="application/ld+json" is:inline set:html={JSON.stringify(ldJson)} />
 </Layout>
 
 <style>
