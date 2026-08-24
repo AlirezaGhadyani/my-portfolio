@@ -193,4 +193,29 @@
 
 ---
 
-## Phase 7 — Cloudflare Edge Contact Form API (Next)
+## Phase 7 — Cloudflare Edge Contact Form API
+
+**Objective:** Serverless contact form handling with spam protection, rate-limiting, and accessible UI.
+
+### Tasks
+
+- [x] Create `functions/api/contact.ts` Cloudflare Pages Function endpoint with POST handler
+- [x] Schema validation for payload (`name`, `email`, `message`, `honeypot`, `turnstileToken`)
+- [x] Rate limiting implementation supporting in-memory and Cloudflare KV storage (3 reqs / 10 mins)
+- [x] Cloudflare Turnstile token verification with remote IP support
+- [x] Resend API transactional email dispatch integration
+- [x] Honeypot silent success handling for bot spam
+- [x] Accessible `ContactSection.astro` component with client validation, live error messages, character counter, status banner/toast, and Turnstile widget support
+- [x] Mounted `ContactSection` to `src/pages/index.astro` under `#contact` landmark
+- [x] Vitest suite `functions/api/contact.test.ts` covering schemas, HTTP methods, rate limits, Turnstile, and Resend API forwarding
+
+### Acceptance
+
+- [x] `pnpm build` executes cleanly (8 pages built)
+- [x] `pnpm check` executes cleanly (0 errors, 0 warnings)
+- [x] `pnpm test` executes cleanly (32 tests passing across 3 test files)
+- [x] Valid submissions send email via Resend; invalid/bot submissions are handled properly with HTTP 400/429
+
+---
+
+## Phase 8 — Production Verification & Hardening (Next)

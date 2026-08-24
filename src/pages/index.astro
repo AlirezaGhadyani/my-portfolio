@@ -4,6 +4,7 @@ import ExperienceSection from '../components/ExperienceSection.astro';
 import SkillSection from '../components/SkillSection.astro';
 import EducationSection from '../components/EducationSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
 import { resumeData } from '../data/resume.ts';
 
 const { identity, summary, experience, skills, education, certifications, projects } =
@@ -39,6 +40,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 		<ProjectsSection projects={projects} />
 		<SkillSection categories={skills} />
 		<EducationSection education={education} certifications={certifications} />
+		<ContactSection email={identity.email} />
 	</div>
 </Layout>
 

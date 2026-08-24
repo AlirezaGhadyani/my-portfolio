@@ -1,0 +1,481 @@
+---
+interface Props {
+	email?: string;
+	turnstileSiteKey?: string;
+}
+
+const {
+	email = 'jordan.avery@example.com',
+	turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '',
+} = Astro.props;
+---
+
+<section id="contact" class="contact-section" aria-labelledby="contact-title">
+	<div class="section-header">
+		<h2 id="contact-title" class="section-title">Get in Touch</h2>
+		<p class="section-subtitle">
+			Have an interesting project, question, or engineering opportunity? Drop a message
+			below or reach out directly at
+			<a href={`mailto:${email}`} class="direct-email">{email}</a>.
+		</p>
+	</div>
+
+	<div class="contact-card">
+		<form id="contact-form" class="contact-form" novalidate>
+			<!-- Honeypot Field (hidden from screen readers & humans) -->
+			<div class="hp-field" aria-hidden="true">
+				<label for="contact-hp">Leave this field blank</label>
+				<input
+					type="text"
+					id="contact-hp"
+					name="honeypot"
+					tabindex="-1"
+					autocomplete="off"
+				/>
+			</div>
+
+			<div class="form-grid">
+				<div class="form-group">
+					<label for="contact-name">
+						Name <span class="required" aria-hidden="true">*</span>
+					</label>
+					<input
+						type="text"
+						id="contact-name"
+						name="name"
+						required
+						minlength="2"
+						maxlength="100"
+						autocomplete="name"
+						placeholder="Jane Doe"
+						class="form-input"
+					/>
+					<span class="field-error" id="name-error" aria-live="polite"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="contact-email">
+						Email <span class="required" aria-hidden="true">*</span>
+					</label>
+					<input
+						type="email"
+						id="contact-email"
+						name="email"
+						required
+						maxlength="254"
+						autocomplete="email"
+						placeholder="jane@example.com"
+						class="form-input"
+					/>
+					<span class="field-error" id="email-error" aria-live="polite"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="contact-message">
+					Message <span class="required" aria-hidden="true">*</span>
+				</label>
+				<textarea
+					id="contact-message"
+					name="message"
+					required
+					minlength="10"
+					maxlength="2000"
+					rows="5"
+					placeholder="Tell me about your project, timeline, or open role..."
+					class="form-input form-textarea"></textarea>
+				<div class="field-meta">
+					<span class="field-error" id="message-error" aria-live="polite"></span>
+					<span class="char-count" id="message-count">0 / 2000</span>
+				</div>
+			</div>
+
+			{
+				turnstileSiteKey && (
+					<div
+						class="cf-turnstile"
+						data-sitekey={turnstileSiteKey}
+						data-theme="auto"
+						data-size="flexible"
+					/>
+				)
+			}
+
+			<div class="form-actions">
+				<button type="submit" id="submit-btn" class="btn-submit">
+					<span class="btn-text">Send Message</span>
+					<span class="btn-loading" aria-hidden="true">Sending...</span>
+				</button>
+			</div>
+
+			<!-- Status Announcement Banner / Toast -->
+			<div
+				id="form-status"
+				class="form-status"
+				role="status"
+				aria-live="polite"
+				hidden
+			>
+			</div>
+		</form>
+	</div>
+</section>
+
+{
+	turnstileSiteKey && (
+		<script
+			is:inline
+			src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+			async
+			defer
+		/>
+	)
+}
+
+<script is:inline>
+	(function () {
+		const form = document.getElementById('contact-form');
+		if (!form) return;
+
+		const nameInput = document.getElementById('contact-name');
+		const emailInput = document.getElementById('contact-email');
+		const messageInput = document.getElementById('contact-message');
+		const messageCount = document.getElementById('message-count');
+		const submitBtn = document.getElementById('submit-btn');
+		const formStatus = document.getElementById('form-status');
+		const nameError = document.getElementById('name-error');
+		const emailError = document.getElementById('email-error');
+		const messageError = document.getElementById('message-error');
+
+		if (messageInput && messageCount) {
+			messageInput.addEventListener('input', () => {
+				messageCount.textContent = `${messageInput.value.length} / 2000`;
+			});
+		}
+
+		function clearErrors() {
+			if (nameError) nameError.textContent = '';
+			if (emailError) emailError.textContent = '';
+			if (messageError) messageError.textContent = '';
+			if (formStatus) {
+				formStatus.hidden = true;
+				formStatus.className = 'form-status';
+				formStatus.textContent = '';
+			}
+		}
+
+		function showStatus(message, type) {
+			if (!formStatus) return;
+			formStatus.textContent = message;
+			formStatus.className = `form-status status-${type}`;
+			formStatus.hidden = false;
+		}
+
+		function validateClientSide() {
+			let isValid = true;
+			clearErrors();
+
+			if (!nameInput.value || nameInput.value.trim().length < 2) {
+				if (nameError) nameError.textContent = 'Please enter at least 2 characters.';
+				isValid = false;
+			}
+
+			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailInput.value || !emailPattern.test(emailInput.value.trim())) {
+				if (emailError) emailError.textContent = 'Please enter a valid email address.';
+				isValid = false;
+			}
+
+			if (!messageInput.value || messageInput.value.trim().length < 10) {
+				if (messageError)
+					messageError.textContent = 'Message must be at least 10 characters long.';
+				isValid = false;
+			}
+
+			return isValid;
+		}
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			if (!validateClientSide()) {
+				showStatus('Please fix the errors above before submitting.', 'error');
+				return;
+			}
+
+			const formData = new FormData(form);
+			const turnstileToken =
+				formData.get('cf-turnstile-response')?.toString() ||
+				formData.get('turnstileToken')?.toString();
+
+			const payload = {
+				name: formData.get('name')?.toString().trim() || '',
+				email: formData.get('email')?.toString().trim() || '',
+				message: formData.get('message')?.toString().trim() || '',
+				honeypot: formData.get('honeypot')?.toString() || '',
+				turnstileToken: turnstileToken || undefined,
+			};
+
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.classList.add('is-loading');
+			}
+
+			try {
+				const response = await fetch('/api/contact', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(payload),
+				});
+
+				const result = await response.json();
+
+				if (response.ok && result.success) {
+					showStatus(
+						result.message || 'Message sent successfully! I will get back to you soon.',
+						'success',
+					);
+					form.reset();
+					if (messageCount) messageCount.textContent = '0 / 2000';
+					if (window.turnstile) {
+						window.turnstile.reset();
+					}
+				} else {
+					showStatus(
+						result.error ||
+							'An error occurred while sending your message. Please try again.',
+						'error',
+					);
+				}
+			} catch (err) {
+				showStatus(
+					'Network error. Please check your connection or reach out via direct email.',
+					'error',
+				);
+			} finally {
+				if (submitBtn) {
+					submitBtn.disabled = false;
+					submitBtn.classList.remove('is-loading');
+				}
+			}
+		});
+	})();
+</script>
+
+<style>
+	.contact-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding-block: 2rem 5rem;
+	}
+
+	.section-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.section-title {
+		font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+		font-weight: 700;
+		color: var(--text);
+		letter-spacing: -0.025em;
+	}
+
+	.section-subtitle {
+		color: var(--text-muted);
+		font-size: 1.05rem;
+		max-width: 65ch;
+		line-height: 1.6;
+	}
+
+	.direct-email {
+		color: var(--accent);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+
+		&:hover {
+			opacity: 0.85;
+		}
+	}
+
+	.contact-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: clamp(1.5rem, 4vw, 2.5rem);
+		box-shadow: 0 4px 20px var(--shadow-color);
+	}
+
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.hp-field {
+		display: none !important;
+		visibility: hidden;
+		position: absolute;
+		left: -9999px;
+	}
+
+	.form-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.25rem;
+	}
+
+	@media (max-width: 42rem) {
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	label {
+		font-size: 0.9rem;
+		font-weight: 550;
+		color: var(--text);
+	}
+
+	.required {
+		color: #ef4444;
+	}
+
+	.form-input {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		background: var(--bg);
+		color: var(--text);
+		font-family: inherit;
+		font-size: 0.95rem;
+		transition:
+			border-color 0.15s ease,
+			box-shadow 0.15s ease;
+
+		&:focus {
+			outline: none;
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px var(--accent-muted);
+		}
+
+		&::placeholder {
+			color: var(--text-muted);
+			opacity: 0.7;
+		}
+	}
+
+	.form-textarea {
+		resize: vertical;
+		min-height: 120px;
+	}
+
+	.field-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 0.8rem;
+	}
+
+	.field-error {
+		color: #ef4444;
+		font-size: 0.82rem;
+		min-height: 1.2em;
+	}
+
+	.char-count {
+		color: var(--text-muted);
+		font-family: var(--font-mono);
+	}
+
+	.form-actions {
+		display: flex;
+		justify-content: flex-start;
+		margin-top: 0.5rem;
+	}
+
+	.btn-submit {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.875rem 2rem;
+		border-radius: 8px;
+		background: var(--accent);
+		color: #ffffff;
+		border: 1px solid var(--accent);
+		font-size: 1rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition:
+			opacity 0.15s ease,
+			transform 0.1s ease;
+
+		&:hover {
+			opacity: 0.92;
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+
+		&:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		.btn-loading {
+			display: none;
+		}
+
+		&.is-loading {
+			.btn-text {
+				display: none;
+			}
+			.btn-loading {
+				display: inline;
+			}
+		}
+	}
+
+	.form-status {
+		padding: 0.875rem 1.25rem;
+		border-radius: 8px;
+		font-size: 0.92rem;
+		line-height: 1.4;
+
+		&.status-success {
+			background: #10b98118;
+			border: 1px solid #10b98166;
+			color: #059669;
+		}
+
+		&.status-error {
+			background: #ef444418;
+			border: 1px solid #ef444466;
+			color: #dc2626;
+		}
+	}
+
+	html[data-theme='dark'] .form-status {
+		&.status-success {
+			color: #34d399;
+			border-color: #05966988;
+		}
+
+		&.status-error {
+			color: #f87171;
+			border-color: #dc262688;
+		}
+	}
+</style>
