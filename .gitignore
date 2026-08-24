@@ -20,5 +20,11 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# playwright / generated downloads
+public/downloads/
+
+# coverage output
+coverage/
+
 # jetbrains setting folder
 .idea/
