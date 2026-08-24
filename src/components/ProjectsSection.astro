@@ -1,0 +1,66 @@
+---
+import type { Project } from '../data/schema.ts';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+	projects: Project[];
+}
+
+const { projects } = Astro.props;
+
+const orderRank = { flagship: 0, notable: 1, experiment: 2 } as const;
+
+const featured = [...projects]
+	.filter((project) => project.featured)
+	.sort(
+		(a, b) => orderRank[a.tier] - orderRank[b.tier] || a.title.localeCompare(b.title),
+	)
+	.slice(0, 6);
+---
+
+<section id="projects" aria-labelledby="projects-title" class="projects">
+	<div class="projects-head">
+		<h2 id="projects-title" class="section-title">Selected Projects</h2>
+		<a class="projects-archive-link" href="/projects">View all projects</a>
+	</div>
+	<div class="projects-grid">
+		{featured.map((project) => <ProjectCard project={project} />)}
+	</div>
+</section>
+
+<style>
+	.projects {
+		scroll-margin-top: 5rem;
+	}
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 680;
+		letter-spacing: -0.02em;
+		color: var(--text);
+	}
+
+	.projects-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+
+		.projects-archive-link {
+			color: var(--accent);
+			font-size: 0.95rem;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.projects-grid {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+	}
+</style>

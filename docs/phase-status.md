@@ -132,6 +132,36 @@
 
 ---
 
-## Phase 5 — Projects & Case Studies (Next)
+## Phase 5 — Projects & Case Studies
 
-Tasks tracked here when Phase 4 lands.
+**Objective:** Showcase technical engineering depth with flagship cards and searchable case studies.
+
+### Tasks
+
+- [x] `ProjectCard.astro` — reusable card (title links to case study/live/code, role, description, impact metrics, tech badges, tier)
+- [x] `ProjectsSection.astro` — home `#projects` Featured subset (featured projects, ≤6, tier-ordered), wired into `index.astro` + `View all` link
+- [x] `/projects` archive page (`src/pages/projects/index.astro`) — full list with instant client-side technology tag filtering (~1kb vanilla TS, keyboard-accessible chips)
+- [x] Case studies via Astro 7 content collection (`src/content.config.ts`, glob loader) rendered as MDX
+- [x] `/projects/[slug]` case-study detail page (`getStaticPaths` + `render()`) with semantic header, metrics, and prose
+- [x] `src/content/case-studies/async-threat-platform.md` — flagship case study matching an existing `hasCaseStudy` project
+
+### Acceptance
+
+- [x] `pnpm build` executes cleanly (3 pages: `/`, `/projects`, `/projects/async-threat-platform`)
+- [x] `pnpm check` executes cleanly (0 errors, 0 project warnings)
+- [x] `pnpm test` executes cleanly (19 tests passing)
+- [x] Project links keyboard-navigable; case study pages render with fast LCP (0-runtime-JS shell)
+
+### Notes / Deviations
+
+- Astro 7 content collections: used `glob` loader from `astro/loaders` with a custom `generateId`
+  (basename slug, since the default id includes the full `src/content/...` path).
+- `type: 'content'` is legacy in Astro 7 and was omitted; the presence of a `loader` infers a content collection.
+- Dynamic route requires `getStaticPaths()`; schema uses `import { z } from 'astro/zod'` per Astro 7 docs.
+- Inline filter script uses `querySelectorAll<HTMLElement>` (no `as` assertions) to clear Astro's inline-script typecheck.
+- Only one case study exists (nominal). Add additional `src/content/case-studies/*.md` files; each
+  must match an existing project `slug` via `projectSlug` frontmatter.
+
+---
+
+## Phase 6 — Print & PDF Export Engine (Next)

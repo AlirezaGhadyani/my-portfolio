@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { resumeData } from '../../data/resume.ts';
+
+const { projects } = resumeData;
+
+const techs = [...new Set(projects.flatMap((project) => project.technologies))].sort();
+const slug = (value: string): string =>
+	value
+		.toLowerCase()
+		.replace(/&/g, 'and')
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+---
+
+<Layout title="Projects — Jordan Avery" description="Selected engineering work and case studies.">
+	<section class="projects-hero" aria-labelledby="projects-title">
+		<h1 id="projects-title" class="projects-title">Projects</h1>
+		<p class="projects-intro">
+			An archive of shipped work across platforms, design systems, and edge tooling.
+			Filter by technology.
+		</p>
+	</section>
+
+	<div class="projects-filter" aria-label="Filter projects by technology">
+		<span class="projects-filter-label" aria-hidden="true">Filter</span>
+		<div class="projects-chips" role="group" aria-label="Technology filters">
+			<button type="button" class="projects-chip projects-chip--active" data-filter="all">
+				All
+			</button>
+			{techs.map((tech) => (
+				<button
+					type="button"
+					class="projects-chip"
+					data-filter={slug(tech)}
+					aria-pressed="false"
+				>
+					{tech}
+				</button>
+			))}
+		</div>
+	</div>
+
+	<ul class="projects-list" data-projects-list id="projects-list">
+		{
+			projects.map((project) => (
+				<li
+					class="project-entry"
+					data-tech={project.technologies.map(slug).join(' ')}
+				>
+					<ProjectCard project={project} />
+				</li>
+			))
+		}
+	</ul>
+</Layout>
+
+<script is:inline>
+	const chips = Array.from(document.querySelectorAll<HTMLElement>('.projects-chip'));
+	const entries = Array.from(document.querySelectorAll<HTMLElement>('.project-entry'));
+	const list = document.getElementById('projects-list');
+
+	if (list && chips.length && entries.length) {
+		let active = 'all';
+		const apply = () => {
+			entries.forEach((entry) => {
+				const tags = (entry.dataset.tech ?? '').split(' ');
+				entry.hidden = !(active === 'all' || tags.includes(active));
+			});
+		};
+		chips.forEach((chip) => {
+			chip.addEventListener('click', () => {
+				active = chip.dataset.filter ?? 'all';
+				chips.forEach((other) => {
+					const selected = other === chip;
+					other.setAttribute('aria-pressed', String(selected));
+					other.classList.toggle('projects-chip--active', selected);
+				});
+				apply();
+			});
+		});
+		apply();
+	}
+</script>
+
+<style>
+	.projects-hero {
+		padding-block: 4rem 2rem;
+	}
+
+	.projects-title {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		line-height: 1.08;
+		letter-spacing: -0.03em;
+		font-weight: 680;
+		color: var(--text);
+	}
+
+	.projects-intro {
+		color: var(--text-muted);
+		font-size: 1.05rem;
+		line-height: 1.7;
+		max-width: 60ch;
+		margin-top: 1rem;
+	}
+
+	.projects-filter {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 2rem;
+
+		.projects-filter-label {
+			color: var(--text-muted);
+			font-size: 0.9rem;
+		}
+
+		.projects-chips {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+
+			.projects-chip {
+				border: 1px solid var(--border);
+				border-radius: 999px;
+				padding: 0.375rem 0.875rem;
+				background: var(--surface-muted);
+				color: var(--text);
+				font-size: 0.85rem;
+				cursor: pointer;
+			}
+
+			.projects-chip--active {
+				border-color: var(--accent);
+				background: var(--accent-muted);
+				color: var(--accent);
+			}
+		}
+	}
+
+	.projects-grid {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+		list-style: none;
+	}
+</style>

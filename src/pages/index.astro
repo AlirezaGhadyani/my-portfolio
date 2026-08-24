@@ -3,9 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import ExperienceSection from '../components/ExperienceSection.astro';
 import SkillSection from '../components/SkillSection.astro';
 import EducationSection from '../components/EducationSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
 import { resumeData } from '../data/resume.ts';
 
-const { identity, summary, experience, skills, education, certifications } = resumeData;
+const { identity, summary, experience, skills, education, certifications, projects } =
+	resumeData;
 ---
 
 <Layout>
@@ -30,6 +32,7 @@ const { identity, summary, experience, skills, education, certifications } = res
 
 	<div class="main-sections">
 		<ExperienceSection items={experience} />
+		<ProjectsSection projects={projects} />
 		<SkillSection categories={skills} />
 		<EducationSection education={education} certifications={certifications} />
 	</div>
