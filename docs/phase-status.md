@@ -101,6 +101,37 @@
 
 ---
 
-## Phase 4 — Core Presentation Components (Next)
+## Phase 4 — Core Presentation Components
 
-Tasks tracked here when Phase 3 lands.
+**Objective:** Build the interactive resume and portfolio home experience.
+
+### Tasks
+
+- [x] Hero section with title, value proposition, and quick links (existing Phase 3 hero retained)
+- [x] Experience timeline component (`ExperienceSection.astro`) rendering role, company, location, dates, summary, highlights; ordered by tier (primary first), then recency
+- [x] Interactive Skill Grid (`SkillSection.astro`) grouped by `SkillCategory`; highlights `highlighted:true`, renders `level` where present
+- [x] Education & Certifications section (`EducationSection.astro`) consuming `resumeData.education` + `resumeData.certifications`
+- [x] Wire Experience / Skills / Education sections into `src/pages/index.astro` with semantic `<section>` landmarks and ids (`#experience`, `#skills`, `#education`) matching header nav anchors that exist now
+
+### Acceptance
+
+- [x] `pnpm build` executes cleanly (1 page, 294ms)
+- [x] `pnpm check` executes cleanly (0 errors, 0 project warnings)
+- [x] `pnpm test` executes cleanly (19 tests passing)
+- [x] Home page renders Experience, Skills, and Education/Certifications sections driven by `resumeData`
+
+### Notes / Deviations
+
+- Scope limited to Experience, Skills, and Education/Certifications. `#projects` and `#contact` header anchors remain unwired (Phase 5/7), out of scope here.
+- Kept `#education` as the section id (not in header nav) for future cross-linking; `#experience` and `#skills`
+  match existing nav anchors exactly.
+- Components use plain `<style>` blocks (no Tailwind `@layer`/`@theme`) and consume the design tokens
+  (`--bg`, `--surface`, `--border`, `--text`, `--accent`, `--font-sans`/`--font-mono`) per Phase 3 convention.
+- Data consumed directly via `../data/resume.ts` from `index.astro` — single source of truth preserved;
+  `src/data/` untouched, no schema changes, no projects archive / case studies (Phase 5).
+
+---
+
+## Phase 5 — Projects & Case Studies (Next)
+
+Tasks tracked here when Phase 4 lands.

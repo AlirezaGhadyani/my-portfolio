@@ -1,0 +1,151 @@
+---
+import { formatMonthYear } from '../lib/formatDate.ts';
+import type { EducationItem, Certification } from '../data/schema.ts';
+
+interface Props {
+	education: EducationItem[];
+	certifications?: Certification[];
+}
+
+const { education, certifications = [] } = Astro.props;
+---
+
+<section id="education" aria-labelledby="education-title" class="education">
+	<h2 id="education-title" class="section-title">Education & Certifications</h2>
+
+	<div class="edu-blocks">
+		{
+			education.map((item) => (
+				<article class="edu-card">
+					<div class="edu-head">
+						<h3 class="edu-institution">{item.institution}</h3>
+						<p class="edu-dates">
+							{formatMonthYear(item.startDate)} — {formatMonthYear(item.endDate)}
+						</p>
+					</div>
+					<p class="edu-degree">
+						{item.degree} · {item.field}
+					</p>
+					{item.honors && <p class="edu-honors">{item.honors}</p>}
+				</article>
+			))
+		}
+	</div>
+
+	{certifications.length > 0 && (
+		<ul class="cert-list">
+			{
+				certifications.map((cert) => (
+					<li class="cert-item">
+						{cert.url ? (
+							<a href={cert.url} target="_blank" rel="noreferrer noopener">
+								{cert.name}
+							</a>
+						) : (
+							<span>{cert.name}</span>
+						)}
+						<p class="cert-meta">
+							{cert.issuer} · {formatMonthYear(cert.date)}
+						</p>
+					</li>
+				))
+			}
+		</ul>
+	)}
+</section>
+
+<style>
+	.education {
+		scroll-margin-top: 5rem;
+	}
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 680;
+		letter-spacing: -0.02em;
+		color: var(--text);
+	}
+
+	.edu-blocks {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.edu-card {
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		padding: 1.25rem;
+		box-shadow: 0 1px 2px var(--shadow-color);
+
+		.edu-head {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 1rem;
+			flex-wrap: wrap;
+
+			.edu-institution {
+				font-size: 1.125rem;
+				font-weight: 640;
+				color: var(--text);
+			}
+
+			.edu-dates {
+				color: var(--text-muted);
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
+				white-space: nowrap;
+			}
+		}
+
+		.edu-degree {
+			color: var(--text-muted);
+			margin-top: 0.5rem;
+		}
+
+		.edu-honors {
+			color: var(--accent);
+			font-size: 0.9rem;
+			margin-top: 0.5rem;
+		}
+	}
+
+	.cert-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		list-style: none;
+		margin-top: 1.5rem;
+
+		.cert-item {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 1rem;
+			flex-wrap: wrap;
+			padding: 0.875rem 1rem;
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			background: var(--surface);
+
+			a {
+				color: var(--accent);
+				font-weight: 600;
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+
+			.cert-meta {
+				color: var(--text-muted);
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
+				white-space: nowrap;
+			}
+		}
+	}
+</style>

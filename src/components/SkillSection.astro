@@ -1,0 +1,104 @@
+---
+import type { SkillCategory, Skill } from '../data/schema.ts';
+
+interface Props {
+	categories: SkillCategory[];
+}
+
+const { categories } = Astro.props;
+
+const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
+	level.charAt(0).toUpperCase() + level.slice(1);
+---
+
+<section id="skills" aria-labelledby="skills-title" class="skills">
+	<h2 id="skills-title" class="section-title">Skills</h2>
+	<div class="skills-grid">
+		{
+			categories.map((category) => (
+				<div class="skill-category">
+					<h3 class="skill-category-name">{category.name}</h3>
+					<ul class="skill-list">
+						{
+							category.skills.map((skill) => (
+								<li class={skill.highlighted ? 'skill-tag skill-tag--highlight' : 'skill-tag'}>
+									<span class="skill-name">{skill.name}</span>
+									{skill.level && (
+										<span class="skill-level" aria-hidden="true">
+											{levelLabel(skill.level)}
+										</span>
+									)}
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.skills {
+		scroll-margin-top: 5rem;
+	}
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 680;
+		letter-spacing: -0.02em;
+		color: var(--text);
+	}
+
+	.skills-grid {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+	}
+
+	.skill-category {
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		padding: 1.25rem;
+		box-shadow: 0 1px 2px var(--shadow-color);
+
+		.skill-category-name {
+			font-size: 1rem;
+			font-weight: 640;
+			color: var(--text);
+			margin-bottom: 0.75rem;
+		}
+
+		.skill-list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			list-style: none;
+
+			.skill-tag {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.375rem;
+				border: 1px solid var(--border);
+				border-radius: 999px;
+				padding: 0.375rem 0.75rem;
+				background: var(--surface-muted);
+				color: var(--text);
+				font-size: 0.875rem;
+
+				.skill-level {
+					color: var(--text-muted);
+					font-family: var(--font-mono);
+					font-size: 0.75rem;
+				}
+			}
+
+			.skill-tag--highlight {
+				border-color: var(--accent);
+				background: var(--accent-muted);
+				color: var(--accent);
+			}
+		}
+	}
+</style>

@@ -1,0 +1,124 @@
+---
+import { formatMonthYear } from '../lib/formatDate.ts';
+import type { ExperienceItem } from '../data/schema.ts';
+
+interface Props {
+	items: ExperienceItem[];
+}
+
+const { items } = Astro.props;
+
+const ordered = [...items].sort((a, b) => {
+	if (a.tier !== b.tier) return a.tier === 'primary' ? -1 : 1;
+	return b.startDate.localeCompare(a.startDate);
+});
+---
+
+<section id="experience" aria-labelledby="experience-title" class="experience">
+	<h2 id="experience-title" class="section-title">Experience</h2>
+	<ol class="experience-list">
+		{
+			ordered.map((item) => (
+				<li class="experience-row">
+					<article>
+						<div class="experience-head">
+							<div>
+								<h3 class="experience-role">{item.role}</h3>
+								<p class="experience-company">
+									{item.company} · {item.location}
+								</p>
+							</div>
+							<p class="experience-dates">
+{formatMonthYear(item.startDate)} —{' '}
+						{item.endDate ? formatMonthYear(item.endDate) : 'Present'}
+							</p>
+						</div>
+						<p class="experience-summary">{item.summary}</p>
+						{item.highlights.length > 0 && (
+							<ul class="experience-highlights">
+								{item.highlights.map((highlight) => <li>{highlight}</li>)}
+							</ul>
+						)}
+					</article>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.experience {
+		scroll-margin-top: 5rem;
+	}
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 680;
+		letter-spacing: -0.02em;
+		color: var(--text);
+	}
+
+	.experience-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		list-style: none;
+	}
+
+	.experience-row article {
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		padding: 1.5rem;
+		box-shadow: 0 1px 2px var(--shadow-color);
+	}
+
+	.experience-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+
+		.experience-role {
+			font-size: 1.125rem;
+			font-weight: 640;
+			color: var(--text);
+		}
+
+		.experience-company {
+			color: var(--text-muted);
+			font-size: 0.875rem;
+			margin-top: 0.25rem;
+		}
+
+		.experience-dates {
+			color: var(--text-muted);
+			font-family: var(--font-mono);
+			font-size: 0.85rem;
+			white-space: nowrap;
+		}
+	}
+
+	.experience-summary {
+		color: var(--text);
+		line-height: 1.7;
+		max-width: 70ch;
+		margin-top: 1rem;
+	}
+
+	.experience-highlights {
+		margin-top: 1rem;
+		padding-inline-start: 1.25rem;
+
+		li {
+			color: var(--text);
+			line-height: 1.6;
+			margin-bottom: 0.375rem;
+		}
+
+		li::marker {
+			color: var(--accent);
+		}
+	}
+</style>
