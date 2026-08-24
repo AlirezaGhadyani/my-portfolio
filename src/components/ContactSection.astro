@@ -307,7 +307,7 @@ const {
 	}
 
 	.section-title {
-		font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+		font-size: clamp(2rem, 4vw, 3rem);
 		font-weight: 750;
 		color: var(--text);
 		letter-spacing: -0.03em;
@@ -337,8 +337,10 @@ const {
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
-		padding: clamp(1.5rem, 4vw, 2.5rem);
-		box-shadow: var(--shadow-md);
+		padding: clamp(2rem, 5vw, 4rem);
+		border-radius: 14px;
+		box-shadow: 0 24px 70px hsl(220 50% 3% / .2);
+		background: linear-gradient(145deg, var(--surface), color-mix(in srgb, var(--surface) 85%, var(--bg)));
 	}
 
 	.contact-form {
@@ -390,7 +392,8 @@ const {
 		background: var(--bg);
 		color: var(--text);
 		font-family: inherit;
-		font-size: 0.95rem;
+		font-size: 1rem;
+		padding-block: .9rem;
 		transition: var(--transition-fast);
 
 		&:focus {

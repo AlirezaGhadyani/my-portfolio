@@ -69,7 +69,7 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 	}
 
 	.section-title {
-		font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+		font-size: clamp(2rem, 4vw, 3rem);
 		font-weight: 750;
 		letter-spacing: -0.03em;
 		color: var(--text);
@@ -79,14 +79,18 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 	.skills-grid {
 		display: grid;
 		gap: 1.5rem;
-		grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
+
+	@media (max-width: 52rem) { .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	@media (max-width: 35rem) { .skills-grid { grid-template-columns: 1fr; } }
 
 	.skill-category {
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		background: var(--surface);
-		padding: 1.5rem;
+		padding: 1.75rem;
+		background: linear-gradient(145deg, var(--surface), color-mix(in srgb, var(--surface) 78%, var(--bg)));
 		box-shadow: var(--shadow-sm);
 		transition: var(--transition-fast);
 
@@ -106,7 +110,7 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 		}
 
 		.skill-category-name {
-			font-size: 1.05rem;
+			font-size: 1.2rem;
 			font-weight: 700;
 			color: var(--text);
 			margin: 0;
@@ -135,7 +139,7 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 				align-items: center;
 				gap: 0.4rem;
 				border: 1px solid var(--border);
-				border-radius: var(--radius-full);
+				border-radius: 5px;
 				padding: 0.35rem 0.75rem;
 				background: var(--surface-muted);
 				color: var(--text);
