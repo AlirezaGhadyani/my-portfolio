@@ -14,111 +14,302 @@ const ordered = [...items].sort((a, b) => {
 });
 ---
 
-<section id="experience" aria-labelledby="experience-title" class="experience">
-	<h2 id="experience-title" class="section-title">Experience</h2>
-	<ol class="experience-list">
-		{
-			ordered.map((item) => (
-				<li class="experience-row">
-					<article>
-						<div class="experience-head">
-							<div>
-								<h3 class="experience-role">{item.role}</h3>
-								<p class="experience-company">
-									{item.company} · {item.location}
-								</p>
-							</div>
-							<p class="experience-dates">
-{formatMonthYear(item.startDate)} —{' '}
-						{item.endDate ? formatMonthYear(item.endDate) : 'Present'}
-							</p>
+<section id="experience" aria-labelledby="experience-title" class="experience-section">
+	<div class="section-header">
+		<div class="section-tag">Career History</div>
+		<h2 id="experience-title" class="section-title">Work Experience</h2>
+	</div>
+
+	<div class="timeline-container">
+		<ol class="timeline-list">
+			{
+				ordered.map((item) => (
+					<li class="timeline-item">
+						<div class="timeline-marker" aria-hidden="true">
+							<span class="marker-dot"></span>
 						</div>
-						<p class="experience-summary">{item.summary}</p>
-						{item.highlights.length > 0 && (
-							<ul class="experience-highlights">
-								{item.highlights.map((highlight) => <li>{highlight}</li>)}
-							</ul>
-						)}
-					</article>
-				</li>
-			))
-		}
-	</ol>
+						<article class="experience-card">
+							<div class="experience-head">
+								<div>
+									<h3 class="experience-role">{item.role}</h3>
+									<p class="experience-company">
+										<span class="company-name">{item.company}</span>
+										<span class="sep">•</span>
+										<span class="location">{item.location}</span>
+									</p>
+								</div>
+								<div class="date-badge">
+									<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+										<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+										<line x1="16" y1="2" x2="16" y2="6"></line>
+										<line x1="8" y1="2" x2="8" y2="6"></line>
+										<line x1="3" y1="10" x2="21" y2="10"></line>
+									</svg>
+									<span>{formatMonthYear(item.startDate)} — {item.endDate ? formatMonthYear(item.endDate) : 'Present'}</span>
+								</div>
+							</div>
+							
+							<p class="experience-summary">{item.summary}</p>
+							
+							{item.highlights.length > 0 && (
+								<ul class="experience-highlights">
+									{item.highlights.map((highlight) => (
+										<li>
+											<span class="bullet" aria-hidden="true">▹</span>
+											<span>{highlight}</span>
+										</li>
+									))}
+								</ul>
+							)}
+
+							{item.technologies && item.technologies.length > 0 && (
+								<div class="experience-tech">
+									<span class="tech-label">Stack:</span>
+									<ul class="tech-tags">
+										{item.technologies.map((tech) => (
+											<li class="tech-tag">{tech}</li>
+										))}
+									</ul>
+								</div>
+							)}
+						</article>
+					</li>
+				))
+			}
+		</ol>
+	</div>
 </section>
 
 <style>
-	.experience {
-		scroll-margin-top: 5rem;
+	.experience-section {
+		scroll-margin-top: 6rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.section-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.section-tag {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
 	}
 
 	.section-title {
-		font-size: 1.5rem;
-		font-weight: 680;
-		letter-spacing: -0.02em;
+		font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+		font-weight: 750;
+		letter-spacing: -0.03em;
 		color: var(--text);
+		margin: 0;
 	}
 
-	.experience-list {
+	.timeline-container {
+		position: relative;
+	}
+
+	.timeline-list {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 2rem;
 		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 1.5rem;
+			bottom: 1.5rem;
+			left: 0.625rem;
+			width: 2px;
+			background: var(--border);
+		}
 	}
 
-	.experience-row article {
+	.timeline-item {
+		position: relative;
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.timeline-marker {
+		position: relative;
+		z-index: 2;
+		display: flex;
+		align-items: flex-start;
+		padding-top: 1.35rem;
+		flex-shrink: 0;
+
+		.marker-dot {
+			width: 0.875rem;
+			height: 0.875rem;
+			border-radius: 999px;
+			background: var(--surface);
+			border: 2px solid var(--accent);
+			box-shadow: 0 0 0 3px var(--bg);
+			transition: transform 0.2s ease, background-color 0.2s ease;
+		}
+	}
+
+	.timeline-item:hover .marker-dot {
+		background: var(--accent);
+		transform: scale(1.25);
+	}
+
+	.experience-card {
+		flex: 1;
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		background: var(--surface);
-		padding: 1.5rem;
-		box-shadow: 0 1px 2px var(--shadow-color);
+		padding: clamp(1.25rem, 3vw, 1.75rem);
+		box-shadow: var(--shadow-sm);
+		transition: var(--transition-fast);
+
+		&:hover {
+			border-color: var(--border-active);
+			box-shadow: var(--shadow-md);
+			transform: translateY(-2px);
+		}
 	}
 
 	.experience-head {
 		display: flex;
-		align-items: baseline;
+		align-items: flex-start;
 		justify-content: space-between;
 		gap: 1rem;
 		flex-wrap: wrap;
 
 		.experience-role {
-			font-size: 1.125rem;
-			font-weight: 640;
+			font-size: 1.2rem;
+			font-weight: 700;
+			letter-spacing: -0.015em;
 			color: var(--text);
+			margin: 0;
 		}
 
 		.experience-company {
 			color: var(--text-muted);
-			font-size: 0.875rem;
+			font-size: 0.925rem;
 			margin-top: 0.25rem;
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			flex-wrap: wrap;
+
+			.company-name {
+				font-weight: 550;
+				color: var(--text);
+			}
+
+			.sep {
+				color: var(--border);
+			}
 		}
 
-		.experience-dates {
+		.date-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
 			color: var(--text-muted);
 			font-family: var(--font-mono);
-			font-size: 0.85rem;
+			font-size: 0.82rem;
+			background: var(--surface-muted);
+			border: 1px solid var(--border);
+			border-radius: var(--radius-sm);
+			padding: 0.3rem 0.6rem;
 			white-space: nowrap;
 		}
 	}
 
 	.experience-summary {
-		color: var(--text);
-		line-height: 1.7;
-		max-width: 70ch;
+		color: var(--text-muted);
+		line-height: 1.65;
+		font-size: 0.975rem;
 		margin-top: 1rem;
 	}
 
 	.experience-highlights {
 		margin-top: 1rem;
-		padding-inline-start: 1.25rem;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 
 		li {
 			color: var(--text);
-			line-height: 1.6;
-			margin-bottom: 0.375rem;
+			line-height: 1.55;
+			font-size: 0.925rem;
+			display: flex;
+			align-items: flex-start;
+			gap: 0.5rem;
+
+			.bullet {
+				color: var(--accent);
+				font-size: 0.85rem;
+				line-height: 1.5;
+				flex-shrink: 0;
+			}
+		}
+	}
+
+	.experience-tech {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+		margin-top: 1.25rem;
+		padding-top: 0.875rem;
+		border-top: 1px solid var(--border);
+
+		.tech-label {
+			font-family: var(--font-mono);
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: var(--text-muted);
+			text-transform: uppercase;
 		}
 
-		li::marker {
-			color: var(--accent);
+		.tech-tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.35rem;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.tech-tag {
+			font-family: var(--font-mono);
+			font-size: 0.75rem;
+			padding: 0.15rem 0.5rem;
+			border-radius: 4px;
+			background: var(--surface-muted);
+			color: var(--text-muted);
+			border: 1px solid var(--border);
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.timeline-list::before {
+			display: none;
+		}
+
+		.timeline-marker {
+			display: none;
+		}
+
+		.timeline-item {
+			gap: 0;
 		}
 	}
 </style>

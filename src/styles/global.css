@@ -7,46 +7,78 @@
 */
 
 @theme default {
-	--font-sans: "Geist Sans", "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-	--font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+	--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--font-mono: "JetBrains Mono", "Fira Code", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
 }
 
 :root {
+	--radius-sm: 6px;
 	--radius: 12px;
+	--radius-lg: 16px;
+	--radius-full: 9999px;
+	--transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	--transition-fast: all 0.15s ease-out;
 }
 
 /* ---- Light theme ---- */
 :root,
 html[data-theme="light"] {
-	--bg: hsl(210 20% 98%);
+	--bg: hsl(210 24% 98%);
 	--surface: hsl(0 0% 100%);
-	--surface-muted: hsl(220 20% 95%);
-	--border: hsl(215 15% 90%);
-	--text: hsl(220 25% 10%);
-	--text-muted: hsl(215 15% 40%);
-	--accent: hsl(220 85% 55%);
-	--accent-muted: hsl(220 90% 96%);
-	--shadow-color: hsl(220 25% 10% / 0.08);
+	--surface-muted: hsl(214 20% 95%);
+	--surface-elevated: hsl(0 0% 100%);
+	--border: hsl(215 16% 88%);
+	--border-subtle: hsl(215 16% 92%);
+	--border-active: hsl(221 83% 53%);
+	--text: hsl(222 47% 11%);
+	--text-muted: hsl(215 16% 42%);
+	--text-subtle: hsl(215 16% 60%);
+	--accent: hsl(221 83% 53%);
+	--accent-hover: hsl(221 83% 46%);
+	--accent-muted: hsl(221 90% 96%);
+	--accent-glow: hsl(221 83% 53% / 0.15);
+	--shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.04);
+	--shadow-md: 0 4px 12px -2px hsl(220 25% 10% / 0.08), 0 2px 6px -1px hsl(220 25% 10% / 0.04);
+	--shadow-lg: 0 12px 28px -4px hsl(220 25% 10% / 0.10), 0 4px 12px -2px hsl(220 25% 10% / 0.05);
+	--shadow-color: hsl(220 25% 10% / 0.06);
+	--status-live: hsl(142 71% 45%);
+	--status-live-glow: hsl(142 71% 45% / 0.35);
 }
 
 /* ---- Dark theme ---- */
 html[data-theme="dark"] {
-	--bg: hsl(220 20% 7%);
-	--surface: hsl(220 18% 11%);
-	--surface-muted: hsl(220 18% 15%);
-	--border: hsl(220 15% 18%);
-	--text: hsl(210 20% 95%);
-	--text-muted: hsl(215 15% 65%);
-	--accent: hsl(215 90% 60%);
-	--accent-muted: hsl(215 90% 22%);
-	--shadow-color: hsl(210 20% 95% / 0.06);
+	--bg: hsl(222 47% 7%);
+	--surface: hsl(222 40% 11%);
+	--surface-muted: hsl(222 35% 15%);
+	--surface-elevated: hsl(222 38% 14%);
+	--border: hsl(217 28% 19%);
+	--border-subtle: hsl(217 28% 15%);
+	--border-active: hsl(217 91% 60%);
+	--text: hsl(210 40% 98%);
+	--text-muted: hsl(215 20% 68%);
+	--text-subtle: hsl(215 18% 50%);
+	--accent: hsl(217 91% 60%);
+	--accent-hover: hsl(217 91% 68%);
+	--accent-muted: hsl(217 91% 60% / 0.15);
+	--accent-glow: hsl(217 91% 60% / 0.25);
+	--shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+	--shadow-md: 0 4px 14px -2px hsl(0 0% 0% / 0.4), 0 2px 6px -1px hsl(0 0% 0% / 0.2);
+	--shadow-lg: 0 14px 32px -4px hsl(0 0% 0% / 0.5), 0 4px 14px -2px hsl(0 0% 0% / 0.3);
+	--shadow-color: hsl(0 0% 0% / 0.35);
+	--status-live: hsl(142 71% 50%);
+	--status-live-glow: hsl(142 71% 50% / 0.45);
 }
 
 @layer base {
+	*, *::before, *::after {
+		box-sizing: border-box;
+	}
+
 	html {
 		background: var(--bg);
 		-webkit-text-size-adjust: 100%;
 		text-rendering: optimizeLegibility;
+		scroll-behavior: smooth;
 	}
 
 	body {
@@ -56,11 +88,16 @@ html[data-theme="dark"] {
 		font-size: 16px;
 		line-height: 1.6;
 		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 		text-rendering: optimizeLegibility;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
 	}
 
 	::selection {
-		background-color: var(--accent-muted);
+		background-color: var(--accent);
+		color: #ffffff;
 	}
 
 	:focus-visible {
@@ -69,12 +106,53 @@ html[data-theme="dark"] {
 	}
 }
 
+/* Animations */
+@keyframes pulse-dot {
+	0%, 100% {
+		transform: scale(1);
+		opacity: 1;
+		box-shadow: 0 0 0 0 var(--status-live-glow);
+	}
+	50% {
+		transform: scale(1.15);
+		opacity: 0.85;
+		box-shadow: 0 0 0 6px transparent;
+	}
+}
+
+@keyframes fade-in-up {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-fade-in {
+	animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /*
   Prefers-reduced-motion killswitch: disables all CSS transitions for users who
   request reduced motion. Structure-first, motion is decorative only.
 */
+@media (prefers-reduced-motion: reduce) {
+	html *,
+	html *::before,
+	html *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
 html[data-motion="reduced"] *,
-html[data-motion="reduced"] {
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
 	transition-duration: 0s !important;
 	animation-duration: 0s !important;
 	scroll-behavior: auto !important;

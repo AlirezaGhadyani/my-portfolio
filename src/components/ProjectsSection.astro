@@ -18,10 +18,19 @@ const featured = [...projects]
 	.slice(0, 6);
 ---
 
-<section id="projects" aria-labelledby="projects-title" class="projects">
+<section id="projects" aria-labelledby="projects-title" class="projects-section">
 	<div class="projects-head">
-		<h2 id="projects-title" class="section-title">Selected Projects</h2>
-		<a class="projects-archive-link" href="/projects">View all projects</a>
+		<div class="head-text">
+			<div class="section-tag">Featured Work</div>
+			<h2 id="projects-title" class="section-title">Selected Projects</h2>
+		</div>
+		<a class="projects-archive-link" href="/projects">
+			<span>View all projects</span>
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<line x1="5" y1="12" x2="19" y2="12"></line>
+				<polyline points="12 5 19 12 12 19"></polyline>
+			</svg>
+		</a>
 	</div>
 	<div class="projects-grid">
 		{featured.map((project) => <ProjectCard project={project} />)}
@@ -29,31 +38,69 @@ const featured = [...projects]
 </section>
 
 <style>
-	.projects {
-		scroll-margin-top: 5rem;
-	}
-
-	.section-title {
-		font-size: 1.5rem;
-		font-weight: 680;
-		letter-spacing: -0.02em;
-		color: var(--text);
+	.projects-section {
+		scroll-margin-top: 6rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
 	}
 
 	.projects-head {
 		display: flex;
-		align-items: baseline;
+		align-items: flex-end;
 		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 1.5rem;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+
+		.head-text {
+			display: flex;
+			flex-direction: column;
+			gap: 0.35rem;
+		}
+
+		.section-tag {
+			font-family: var(--font-mono);
+			font-size: 0.8rem;
+			font-weight: 600;
+			color: var(--accent);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+		}
+
+		.section-title {
+			font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+			font-weight: 750;
+			letter-spacing: -0.03em;
+			color: var(--text);
+			margin: 0;
+		}
 
 		.projects-archive-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
 			color: var(--accent);
 			font-size: 0.95rem;
+			font-weight: 600;
 			text-decoration: none;
+			padding: 0.4rem 0.75rem;
+			border-radius: var(--radius-sm);
+			background: var(--surface-muted);
+			border: 1px solid var(--border);
+			transition: var(--transition-fast);
+
+			svg {
+				transition: transform 0.2s ease;
+			}
 
 			&:hover {
-				text-decoration: underline;
+				background: var(--surface);
+				border-color: var(--accent);
+				transform: translateY(-1px);
+
+				svg {
+					transform: translateX(3px);
+				}
 			}
 		}
 	}
@@ -61,6 +108,12 @@ const featured = [...projects]
 	.projects-grid {
 		display: grid;
 		gap: 1.5rem;
-		grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr));
+	}
+
+	@media (max-width: 32rem) {
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

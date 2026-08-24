@@ -10,142 +10,231 @@ interface Props {
 const { education, certifications = [] } = Astro.props;
 ---
 
-<section id="education" aria-labelledby="education-title" class="education">
-	<h2 id="education-title" class="section-title">Education & Certifications</h2>
-
-	<div class="edu-blocks">
-		{
-			education.map((item) => (
-				<article class="edu-card">
-					<div class="edu-head">
-						<h3 class="edu-institution">{item.institution}</h3>
-						<p class="edu-dates">
-							{formatMonthYear(item.startDate)} — {formatMonthYear(item.endDate)}
-						</p>
-					</div>
-					<p class="edu-degree">
-						{item.degree} · {item.field}
-					</p>
-					{item.honors && <p class="edu-honors">{item.honors}</p>}
-				</article>
-			))
-		}
+<section id="education" aria-labelledby="education-title" class="education-section">
+	<div class="section-header">
+		<div class="section-tag">Credentials & Learning</div>
+		<h2 id="education-title" class="section-title">Education & Certifications</h2>
 	</div>
 
-	{certifications.length > 0 && (
-		<ul class="cert-list">
-			{
-				certifications.map((cert) => (
-					<li class="cert-item">
-						{cert.url ? (
-							<a href={cert.url} target="_blank" rel="noreferrer noopener">
-								{cert.name}
-							</a>
-						) : (
-							<span>{cert.name}</span>
-						)}
-						<p class="cert-meta">
-							{cert.issuer} · {formatMonthYear(cert.date)}
-						</p>
-					</li>
-				))
-			}
-		</ul>
-	)}
+	<div class="edu-grid">
+		<!-- Degrees -->
+		<div class="edu-column">
+			<h3 class="column-subtitle">Academic Background</h3>
+			<div class="edu-blocks">
+				{
+					education.map((item) => (
+						<article class="edu-card">
+							<div class="edu-head">
+								<div>
+									<h4 class="edu-institution">{item.institution}</h4>
+									<p class="edu-degree">
+										{item.degree} in {item.field}
+									</p>
+								</div>
+								<span class="edu-dates">
+									{item.startDate} — {item.endDate}
+								</span>
+							</div>
+							{item.honors && (
+								<p class="edu-honors">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+										<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+									</svg>
+									<span>{item.honors}</span>
+								</p>
+							)}
+						</article>
+					))
+				}
+			</div>
+		</div>
+
+		<!-- Certifications -->
+		{certifications.length > 0 && (
+			<div class="edu-column">
+				<h3 class="column-subtitle">Professional Certifications</h3>
+				<ul class="cert-list">
+					{
+						certifications.map((cert) => (
+							<li class="cert-card">
+								<div class="cert-head">
+									{cert.url ? (
+										<a href={cert.url} target="_blank" rel="noreferrer noopener" class="cert-link">
+											<span>{cert.name}</span>
+											<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+												<line x1="7" y1="17" x2="17" y2="7"></line>
+												<polyline points="7 7 17 7 17 17"></polyline>
+											</svg>
+										</a>
+									) : (
+										<span class="cert-name">{cert.name}</span>
+									)}
+									<span class="cert-date">{cert.date}</span>
+								</div>
+								<p class="cert-issuer">{cert.issuer}</p>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		)}
+	</div>
 </section>
 
 <style>
-	.education {
-		scroll-margin-top: 5rem;
+	.education-section {
+		scroll-margin-top: 6rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.section-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.section-tag {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
 	}
 
 	.section-title {
-		font-size: 1.5rem;
-		font-weight: 680;
-		letter-spacing: -0.02em;
+		font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+		font-weight: 750;
+		letter-spacing: -0.03em;
 		color: var(--text);
+		margin: 0;
 	}
 
-	.edu-blocks {
+	.edu-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+		gap: 2rem;
+	}
+
+	.edu-column {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: 1rem;
 	}
 
-	.edu-card {
+	.column-subtitle {
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: var(--text);
+		margin: 0;
+	}
+
+	.edu-blocks,
+	.cert-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.edu-card,
+	.cert-card {
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		background: var(--surface);
 		padding: 1.25rem;
-		box-shadow: 0 1px 2px var(--shadow-color);
+		box-shadow: var(--shadow-sm);
+		transition: var(--transition-fast);
 
-		.edu-head {
-			display: flex;
-			align-items: baseline;
-			justify-content: space-between;
-			gap: 1rem;
-			flex-wrap: wrap;
-
-			.edu-institution {
-				font-size: 1.125rem;
-				font-weight: 640;
-				color: var(--text);
-			}
-
-			.edu-dates {
-				color: var(--text-muted);
-				font-family: var(--font-mono);
-				font-size: 0.85rem;
-				white-space: nowrap;
-			}
-		}
-
-		.edu-degree {
-			color: var(--text-muted);
-			margin-top: 0.5rem;
-		}
-
-		.edu-honors {
-			color: var(--accent);
-			font-size: 0.9rem;
-			margin-top: 0.5rem;
+		&:hover {
+			border-color: var(--border-active);
+			box-shadow: var(--shadow-md);
+			transform: translateY(-2px);
 		}
 	}
 
-	.cert-list {
+	.edu-head,
+	.cert-head {
 		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		list-style: none;
-		margin-top: 1.5rem;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
 
-		.cert-item {
-			display: flex;
-			align-items: baseline;
-			justify-content: space-between;
-			gap: 1rem;
-			flex-wrap: wrap;
-			padding: 0.875rem 1rem;
-			border: 1px solid var(--border);
-			border-radius: var(--radius);
-			background: var(--surface);
+		.edu-institution,
+		.cert-name {
+			font-size: 1.05rem;
+			font-weight: 700;
+			color: var(--text);
+			margin: 0;
+		}
 
-			a {
+		.cert-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
+			font-size: 1.05rem;
+			font-weight: 700;
+			color: var(--text);
+			text-decoration: none;
+
+			svg {
+				color: var(--text-subtle);
+				transition: transform 0.2s ease, color 0.2s ease;
+			}
+
+			&:hover {
 				color: var(--accent);
-				font-weight: 600;
-				text-decoration: none;
 
-				&:hover {
-					text-decoration: underline;
+				svg {
+					color: var(--accent);
+					transform: translate(2px, -2px);
 				}
 			}
-
-			.cert-meta {
-				color: var(--text-muted);
-				font-family: var(--font-mono);
-				font-size: 0.85rem;
-				white-space: nowrap;
-			}
 		}
+
+		.edu-dates,
+		.cert-date {
+			color: var(--text-muted);
+			font-family: var(--font-mono);
+			font-size: 0.8rem;
+			background: var(--surface-muted);
+			padding: 0.2rem 0.5rem;
+			border-radius: var(--radius-sm);
+			white-space: nowrap;
+			border: 1px solid var(--border-subtle);
+		}
+	}
+
+	.edu-degree {
+		color: var(--accent);
+		font-size: 0.925rem;
+		font-weight: 550;
+		margin: 0.35rem 0 0 0;
+	}
+
+	.edu-honors {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		margin: 0.75rem 0 0 0;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--border-subtle);
+
+		svg {
+			color: hsl(45 95% 50%);
+		}
+	}
+
+	.cert-issuer {
+		color: var(--text-muted);
+		font-size: 0.875rem;
+		margin: 0.35rem 0 0 0;
 	}
 </style>

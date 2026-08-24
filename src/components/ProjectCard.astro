@@ -14,8 +14,9 @@ const tierLabel = { flagship: 'Flagship', notable: 'Notable', experiment: 'Exper
 const primaryUrl = project.hasCaseStudy
 	? `/projects/${project.slug}`
 	: (project.liveUrl ?? project.githubUrl);
-const externalTarget = project.hasCaseStudy ? undefined : '_blank';
-const externalRel = project.hasCaseStudy ? undefined : 'noreferrer noopener';
+const isInternalCaseStudy = project.hasCaseStudy;
+const externalTarget = isInternalCaseStudy ? undefined : '_blank';
+const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 ---
 
 <article class="project-card">
@@ -29,7 +30,18 @@ const externalRel = project.hasCaseStudy ? undefined : 'noreferrer noopener';
 						rel={externalRel}
 						class="project-card-link"
 					>
-						{project.title}
+						<span>{project.title}</span>
+						{isInternalCaseStudy ? (
+							<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="link-arrow" aria-hidden="true">
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+								<polyline points="12 5 19 12 12 19"></polyline>
+							</svg>
+						) : (
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="link-external" aria-hidden="true">
+								<line x1="7" y1="17" x2="17" y2="7"></line>
+								<polyline points="7 7 17 7 17 17"></polyline>
+							</svg>
+						)}
 					</a>
 				) : (
 					project.title
@@ -37,43 +49,60 @@ const externalRel = project.hasCaseStudy ? undefined : 'noreferrer noopener';
 			</h3>
 			<p class="project-card-subtitle">{project.subtitle}</p>
 		</div>
-		<span class="project-card-tier" aria-hidden="true">{tierLabel}</span>
+		<span class:list={['project-card-tier', `tier-${project.tier}`]} aria-hidden="true">
+			{tierLabel}
+		</span>
 	</div>
 
 	<p class="project-card-role">{project.role}</p>
 	<p class="project-card-description">{project.description}</p>
 
 	{project.impactMetrics && project.impactMetrics.length > 0 && (
-		<ul class="project-card-metrics">
-			{project.impactMetrics.map((metric) => <li>{metric}</li>)}
+		<ul class="project-card-metrics" aria-label="Impact and metrics">
+			{project.impactMetrics.map((metric) => (
+				<li>
+					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+						<polyline points="17 6 23 6 23 12"></polyline>
+					</svg>
+					<span>{metric}</span>
+				</li>
+			))}
 		</ul>
 	)}
 
 	<div class="project-card-foot">
-		<ul class="project-tech" aria-label="Technologies">
+		<ul class="project-tech" aria-label="Technologies used">
 			{project.technologies.map((tech) => <li>{tech}</li>)}
 		</ul>
-		<ul class="project-actions" aria-label={`${project.title} links`}>
+		<div class="project-actions" aria-label={`${project.title} links`}>
 			{project.hasCaseStudy && (
-				<li>
-					<a href={`/projects/${project.slug}`}>Case study</a>
-				</li>
+				<a href={`/projects/${project.slug}`} class="btn-action primary">
+					<span>Case study</span>
+					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<line x1="5" y1="12" x2="19" y2="12"></line>
+						<polyline points="12 5 19 12 12 19"></polyline>
+					</svg>
+				</a>
 			)}
 			{project.liveUrl && (
-				<li>
-					<a href={project.liveUrl} target="_blank" rel="noreferrer noopener">
-						Live
-					</a>
-				</li>
+				<a href={project.liveUrl} target="_blank" rel="noreferrer noopener" class="btn-action" title="View live site">
+					<span>Live</span>
+					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<line x1="7" y1="17" x2="17" y2="7"></line>
+						<polyline points="7 7 17 7 17 17"></polyline>
+					</svg>
+				</a>
 			)}
 			{project.githubUrl && (
-				<li>
-					<a href={project.githubUrl} target="_blank" rel="noreferrer noopener">
-						Code
-					</a>
-				</li>
+				<a href={project.githubUrl} target="_blank" rel="noreferrer noopener" class="btn-action" title="View source repository">
+					<span>Code</span>
+					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+					</svg>
+				</a>
 			)}
-		</ul>
+		</div>
 	</div>
 </article>
 
@@ -84,8 +113,17 @@ const externalRel = project.hasCaseStudy ? undefined : 'noreferrer noopener';
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		background: var(--surface);
-		padding: 1.5rem;
-		box-shadow: 0 1px 2px var(--shadow-color);
+		padding: clamp(1.25rem, 3vw, 1.75rem);
+		box-shadow: var(--shadow-sm);
+		transition: var(--transition-fast);
+		position: relative;
+		overflow: hidden;
+
+		&:hover {
+			border-color: var(--border-active);
+			box-shadow: var(--shadow-md);
+			transform: translateY(-3px);
+		}
 	}
 
 	.project-card-head {
@@ -96,65 +134,104 @@ const externalRel = project.hasCaseStudy ? undefined : 'noreferrer noopener';
 
 		.project-card-title {
 			font-size: 1.25rem;
-			font-weight: 680;
+			font-weight: 700;
 			letter-spacing: -0.02em;
 			color: var(--text);
+			margin: 0;
 
 			.project-card-link {
 				color: inherit;
 				text-decoration: none;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+
+				.link-arrow,
+				.link-external {
+					color: var(--text-subtle);
+					transition: transform 0.2s ease, color 0.2s ease;
+				}
 
 				&:hover {
 					color: var(--accent);
+
+					.link-arrow {
+						color: var(--accent);
+						transform: translateX(3px);
+					}
+
+					.link-external {
+						color: var(--accent);
+						transform: translate(2px, -2px);
+					}
 				}
 			}
 		}
 
 		.project-card-subtitle {
 			color: var(--text-muted);
-			font-size: 0.95rem;
-			margin-top: 0.375rem;
+			font-size: 0.9rem;
+			margin-top: 0.25rem;
 		}
 
 		.project-card-tier {
 			flex-shrink: 0;
+			border-radius: var(--radius-full);
+			padding: 0.2rem 0.6rem;
+			font-family: var(--font-mono);
+			font-size: 0.72rem;
+			font-weight: 600;
+			letter-spacing: 0.02em;
 			border: 1px solid var(--border);
-			border-radius: 999px;
-			padding: 0.25rem 0.625rem;
 			background: var(--surface-muted);
 			color: var(--text-muted);
-			font-family: var(--font-mono);
-			font-size: 0.75rem;
+
+			&.tier-flagship {
+				background: var(--accent-muted);
+				border-color: var(--accent);
+				color: var(--accent);
+			}
 		}
 	}
 
 	.project-card-role {
 		color: var(--accent);
-		font-size: 0.9rem;
-		margin-top: 1rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		margin-top: 0.875rem;
 	}
 
 	.project-card-description {
-		color: var(--text);
-		line-height: 1.7;
-		margin-top: 0.5rem;
+		color: var(--text-muted);
+		line-height: 1.6;
+		font-size: 0.95rem;
+		margin-top: 0.35rem;
 	}
 
 	.project-card-metrics {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-top: 1rem;
+		gap: 0.4rem;
+		margin-top: 0.875rem;
 		list-style: none;
+		padding: 0;
 
 		li {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
 			border: 1px solid var(--border);
-			border-radius: 999px;
-			padding: 0.25rem 0.625rem;
-			background: var(--accent-muted);
-			color: var(--accent);
+			border-radius: var(--radius-full);
+			padding: 0.2rem 0.6rem;
+			background: var(--surface-muted);
+			color: var(--text);
 			font-family: var(--font-mono);
-			font-size: 0.78rem;
+			font-size: 0.75rem;
+			font-weight: 500;
+
+			svg {
+				color: var(--status-live);
+			}
 		}
 	}
 
@@ -164,39 +241,64 @@ const externalRel = project.hasCaseStudy ? undefined : 'noreferrer noopener';
 		justify-content: space-between;
 		gap: 1rem;
 		flex-wrap: wrap;
-		margin-top: 1.25rem;
+		margin-top: auto;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
 
 		.project-tech {
 			display: flex;
 			flex-wrap: wrap;
-			gap: 0.375rem;
+			gap: 0.35rem;
 			list-style: none;
+			margin: 0;
+			padding: 0;
 
 			li {
 				border: 1px solid var(--border);
-				border-radius: 999px;
-				padding: 0.25rem 0.625rem;
+				border-radius: 4px;
+				padding: 0.15rem 0.45rem;
 				background: var(--surface-muted);
-				color: var(--text);
-				font-size: 0.8rem;
+				color: var(--text-muted);
+				font-family: var(--font-mono);
+				font-size: 0.75rem;
 			}
 		}
 
 		.project-actions {
 			display: flex;
-			gap: 0.5rem;
-			list-style: none;
+			align-items: center;
+			gap: 0.4rem;
 
-			li a {
-				border-radius: 8px;
-				padding: 0.5rem 0.85rem;
+			.btn-action {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.3rem;
+				border-radius: var(--radius-sm);
+				padding: 0.4rem 0.75rem;
 				background: var(--surface-muted);
+				border: 1px solid var(--border);
 				color: var(--text);
+				font-size: 0.825rem;
+				font-weight: 550;
 				text-decoration: none;
+				transition: var(--transition-fast);
 
 				&:hover {
 					color: var(--accent);
+					border-color: var(--accent);
+					background: var(--surface);
+					transform: translateY(-1px);
+				}
+
+				&.primary {
 					background: var(--accent-muted);
+					border-color: var(--accent);
+					color: var(--accent);
+
+					&:hover {
+						background: var(--accent);
+						color: #ffffff;
+					}
 				}
 			}
 		}
