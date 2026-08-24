@@ -133,17 +133,10 @@ html[data-theme="dark"] {
 
 .section-header {
 	position: relative;
-	padding-left: clamp(2.75rem, 5vw, 4rem);
 }
 
 .section-header::before {
-	content: attr(data-section);
-	position: absolute;
-	left: 0;
-	top: -0.45rem;
-	color: color-mix(in srgb, var(--accent) 22%, transparent);
-	font: 700 clamp(2.5rem, 6vw, 4.5rem)/1 var(--font-mono);
-	letter-spacing: -0.12em;
+	display: none;
 }
 
 .section-tag {
