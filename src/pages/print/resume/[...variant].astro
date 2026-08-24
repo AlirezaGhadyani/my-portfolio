@@ -1,0 +1,614 @@
+---
+import '../../../styles/global.css';
+import '../../../styles/print.css';
+import { resumeData } from '../../../data/resume.ts';
+import { applyVariant, VARIANTS, type ResumeVariant } from '../../../data/variants.ts';
+import { formatMonthYear } from '../../../lib/formatDate.ts';
+
+export function getStaticPaths() {
+	const variants = Object.keys(VARIANTS) as ResumeVariant[];
+	return [
+		// default /print/resume
+		{ params: { variant: undefined }, props: { variant: 'fullstack' as ResumeVariant } },
+		...variants.map((v) => ({
+			params: { variant: v },
+			props: { variant: v },
+		})),
+	];
+}
+
+const { variant: propVariant } = Astro.props as { variant?: ResumeVariant };
+const variantParam = Astro.params.variant as ResumeVariant | undefined;
+const resolvedVariantKey: ResumeVariant = propVariant || variantParam || 'fullstack';
+const variantKey: ResumeVariant = resolvedVariantKey in VARIANTS ? resolvedVariantKey : 'fullstack';
+
+const activeVariant = applyVariant(resumeData, variantKey);
+const variantConfig = VARIANTS[variantKey];
+
+const { identity, summary, experience, skills, education, certifications, projects, documentTitle } = activeVariant;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{identity.name} — {documentTitle} (Resume)</title>
+		<meta name="robots" content="noindex" />
+	</head>
+	<body class="resume-body">
+		<!-- Screen-only variant switcher toolbar -->
+		<header class="screen-toolbar no-print">
+			<div class="toolbar-inner">
+				<div class="toolbar-info">
+					<span class="toolbar-badge">{variantConfig.label}</span>
+					<span class="toolbar-pages">{variantConfig.pdfPages} Page{variantConfig.pdfPages > 1 ? 's' : ''} Target</span>
+				</div>
+				<nav class="variant-links" aria-label="Resume variants">
+					{
+						(Object.keys(VARIANTS) as ResumeVariant[]).map((vKey) => (
+							<a
+								href={vKey === 'fullstack' ? '/print/resume' : `/print/resume/${vKey}`}
+								class:list={['variant-btn', { active: vKey === variantKey }]}
+							>
+								{VARIANTS[vKey].label.split(' ')[0]}
+							</a>
+						))
+					}
+				</nav>
+				<div class="toolbar-actions">
+					<a href={`/downloads/resume-${variantKey}.pdf`} download class="action-btn primary" title="Download compiled vector PDF">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+							<polyline points="7 10 12 15 17 10"></polyline>
+							<line x1="12" y1="15" x2="12" y2="3"></line>
+						</svg>
+						PDF
+					</a>
+					<a href="/downloads/resume-ats.txt" download class="action-btn" title="Download ATS Plain Text (.txt)">
+						TXT
+					</a>
+					<button type="button" class="action-btn" onclick="window.print()" title="Print via Browser">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<polyline points="6 9 6 2 18 2 18 9"></polyline>
+							<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+							<rect x="6" y="14" width="12" height="8"></rect>
+						</svg>
+						Print
+					</button>
+					<a href="/" class="action-btn">Back to Home</a>
+				</div>
+			</div>
+		</header>
+
+		<!-- Printable Resume Sheet Container -->
+		<main class="resume-sheet">
+			<!-- Header -->
+			<header class="resume-header page-break-inside-avoid">
+				<div class="header-main">
+					<h1 class="header-name">{identity.name}</h1>
+					<p class="header-title">{documentTitle}</p>
+				</div>
+				<div class="header-contact">
+					<div class="contact-row">
+						<span>{identity.location}</span>
+						<span class="sep">•</span>
+						<a href={`mailto:${identity.email}`}>{identity.email}</a>
+						{identity.phone && (
+							<>
+								<span class="sep">•</span>
+								<span>{identity.phone}</span>
+							</>
+						)}
+					</div>
+					<div class="contact-links">
+						<a href={identity.website} target="_blank" rel="noreferrer noopener">{identity.website.replace(/^https?:\/\//, '')}</a>
+						{
+							identity.links
+								.filter(link => !link.printHidden)
+								.map(link => (
+									<>
+										<span class="sep">•</span>
+										<a href={link.url} target="_blank" rel="noreferrer noopener">{link.label}</a>
+									</>
+								))
+						}
+					</div>
+				</div>
+			</header>
+
+			<!-- Professional Summary -->
+			<section class="resume-section page-break-inside-avoid" aria-labelledby="section-summary">
+				<h2 id="section-summary" class="section-title">Summary</h2>
+				<p class="summary-text">{summary.full}</p>
+			</section>
+
+			<!-- Technical Skills -->
+			<section class="resume-section page-break-inside-avoid" aria-labelledby="section-skills">
+				<h2 id="section-skills" class="section-title">Technical Skills</h2>
+				<div class="skills-list">
+					{
+						skills.map(category => (
+							<div class="skill-category-row">
+								<span class="category-name">{category.name}:</span>
+								<span class="category-items">
+									{category.skills.map(s => s.name).join(', ')}
+								</span>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Experience -->
+			<section class="resume-section" aria-labelledby="section-experience">
+				<h2 id="section-experience" class="section-title">Experience</h2>
+				<div class="experience-list">
+					{
+						experience.map(item => (
+							<article class="experience-item page-break-inside-avoid">
+								<div class="item-header">
+									<div class="item-role-group">
+										<h3 class="item-role">{item.role}</h3>
+										<span class="item-company"> — {item.company}</span>
+									</div>
+									<div class="item-meta">
+										<span class="item-date">
+											{formatMonthYear(item.startDate)} – {item.endDate ? formatMonthYear(item.endDate) : 'Present'}
+										</span>
+										<span class="item-location"> | {item.location}</span>
+									</div>
+								</div>
+								<p class="item-summary">{item.summary}</p>
+								<ul class="item-highlights">
+									{item.highlights.map(h => (
+										<li>{h}</li>
+									))}
+								</ul>
+								{item.technologies.length > 0 && (
+									<p class="item-tech">
+										<span class="tech-label">Key Tech:</span> {item.technologies.join(', ')}
+									</p>
+								)}
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Projects -->
+			{projects.length > 0 && (
+				<section class="resume-section" aria-labelledby="section-projects">
+					<h2 id="section-projects" class="section-title">Key Projects</h2>
+					<div class="projects-list">
+						{
+							projects.map(project => (
+								<article class="project-item page-break-inside-avoid">
+									<div class="item-header">
+										<div class="item-role-group">
+											<h3 class="item-role">{project.title}</h3>
+											<span class="item-company"> — {project.role}</span>
+										</div>
+										<div class="item-meta">
+											{project.liveUrl && (
+												<a href={project.liveUrl} class="project-link" target="_blank" rel="noreferrer noopener">
+													{project.liveUrl.replace(/^https?:\/\//, '')}
+												</a>
+											)}
+										</div>
+									</div>
+									<p class="item-summary">{project.description}</p>
+									{project.impactMetrics && project.impactMetrics.length > 0 && (
+										<p class="project-metrics">
+											<span class="tech-label">Impact:</span> {project.impactMetrics.join(' • ')}
+										</p>
+									)}
+									<p class="item-tech">
+										<span class="tech-label">Technologies:</span> {project.technologies.join(', ')}
+									</p>
+								</article>
+							))
+						}
+					</div>
+				</section>
+			)}
+
+			<!-- Education -->
+			<section class="resume-section page-break-inside-avoid" aria-labelledby="section-education">
+				<h2 id="section-education" class="section-title">Education</h2>
+				<div class="education-list">
+					{
+						education.map(edu => (
+							<div class="education-item">
+								<div class="item-header">
+									<div class="item-role-group">
+										<h3 class="item-role">{edu.degree} in {edu.field}</h3>
+										<span class="item-company"> — {edu.institution}</span>
+									</div>
+									<span class="item-date">{edu.startDate} – {edu.endDate}</span>
+								</div>
+								{edu.honors && <p class="edu-honors">{edu.honors}</p>}
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Certifications -->
+			{certifications && certifications.length > 0 && (
+				<section class="resume-section page-break-inside-avoid" aria-labelledby="section-certifications">
+					<h2 id="section-certifications" class="section-title">Certifications</h2>
+					<div class="certifications-list">
+						{
+							certifications.map(cert => (
+								<div class="cert-item">
+									<div class="item-header">
+										<span class="cert-name"><strong>{cert.name}</strong> — {cert.issuer}</span>
+										<span class="item-date">{cert.date}</span>
+									</div>
+								</div>
+							))
+						}
+					</div>
+				</section>
+			)}
+		</main>
+	</body>
+</html>
+
+<style>
+	/* Screen toolbar styling */
+	.screen-toolbar {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: #0f172a;
+		color: #f8fafc;
+		border-bottom: 1px solid #1e293b;
+		padding: 0.75rem 1.5rem;
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+	}
+
+	.toolbar-inner {
+		max-width: 54rem;
+		margin: 0 auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.toolbar-info {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.toolbar-badge {
+		font-weight: 600;
+		font-size: 0.875rem;
+		color: #38bdf8;
+	}
+
+	.toolbar-pages {
+		font-size: 0.75rem;
+		color: #94a3b8;
+		background: #1e293b;
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+	}
+
+	.variant-links {
+		display: flex;
+		gap: 0.375rem;
+	}
+
+	.variant-btn {
+		font-size: 0.8125rem;
+		padding: 0.35rem 0.65rem;
+		border-radius: 6px;
+		background: #1e293b;
+		color: #cbd5e1;
+		text-decoration: none;
+		transition: all 0.15s ease;
+
+		&:hover {
+			background: #334155;
+			color: #ffffff;
+		}
+
+		&.active {
+			background: #2563eb;
+			color: #ffffff;
+			font-weight: 600;
+		}
+	}
+
+	.toolbar-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.action-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		padding: 0.4rem 0.75rem;
+		border-radius: 6px;
+		border: 1px solid #334155;
+		background: transparent;
+		color: #f8fafc;
+		cursor: pointer;
+		text-decoration: none;
+		transition: background 0.15s ease;
+
+		&:hover {
+			background: #1e293b;
+		}
+
+		&.primary {
+			background: #2563eb;
+			border-color: #2563eb;
+			color: #ffffff;
+
+			&:hover {
+				background: #1d4ed8;
+			}
+		}
+	}
+
+	/* Sheet & Document styling */
+	.resume-body {
+		background: #f1f5f9;
+		margin: 0;
+		font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+		color: #0f172a;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	.resume-sheet {
+		max-width: 210mm;
+		min-height: 297mm;
+		margin: 1.5rem auto;
+		padding: 14mm 16mm;
+		background: #ffffff;
+		box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+		border-radius: 4px;
+		box-sizing: border-box;
+	}
+
+	@media print {
+		.resume-body {
+			background: #ffffff !important;
+		}
+
+		.resume-sheet {
+			max-width: none !important;
+			min-height: auto !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			box-shadow: none !important;
+			border-radius: 0 !important;
+		}
+	}
+
+	/* Resume Sections & Typography */
+	.resume-header {
+		border-bottom: 2px solid #0f172a;
+		padding-bottom: 0.75rem;
+		margin-bottom: 0.875rem;
+	}
+
+	.header-main {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.header-name {
+		font-size: 1.875rem;
+		font-weight: 750;
+		line-height: 1.1;
+		color: #0f172a;
+		letter-spacing: -0.025em;
+		margin: 0;
+	}
+
+	.header-title {
+		font-size: 1.0625rem;
+		font-weight: 600;
+		color: #2563eb;
+		margin: 0;
+	}
+
+	.header-contact {
+		margin-top: 0.4rem;
+		font-size: 0.84rem;
+		color: #475569;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+
+		a {
+			color: #334155;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.contact-row,
+	.contact-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem;
+	}
+
+	.sep {
+		color: #94a3b8;
+		font-size: 0.75rem;
+	}
+
+	.resume-section {
+		margin-top: 0.875rem;
+	}
+
+	.section-title {
+		font-size: 0.9375rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: #0f172a;
+		border-bottom: 1px solid #cbd5e1;
+		padding-bottom: 0.2rem;
+		margin: 0 0 0.5rem 0;
+	}
+
+	.summary-text {
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: #334155;
+		margin: 0;
+	}
+
+	/* Skills */
+	.skills-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		font-size: 0.84rem;
+	}
+
+	.skill-category-row {
+		display: flex;
+		gap: 0.5rem;
+		line-height: 1.4;
+	}
+
+	.category-name {
+		font-weight: 600;
+		color: #0f172a;
+		min-width: 7.5rem;
+	}
+
+	.category-items {
+		color: #334155;
+	}
+
+	/* Experience & Projects */
+	.experience-list,
+	.projects-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.experience-item,
+	.project-item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.item-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.item-role-group {
+		font-size: 0.875rem;
+	}
+
+	.item-role {
+		display: inline;
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #0f172a;
+		margin: 0;
+	}
+
+	.item-company {
+		font-weight: 600;
+		color: #334155;
+	}
+
+	.item-meta {
+		font-size: 0.8125rem;
+		color: #64748b;
+		font-family: var(--font-mono, monospace);
+	}
+
+	.project-link {
+		color: #2563eb;
+		text-decoration: none;
+		font-size: 0.8125rem;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.item-summary {
+		font-size: 0.84rem;
+		color: #334155;
+		line-height: 1.45;
+		margin: 0;
+	}
+
+	.item-highlights {
+		margin: 0.15rem 0 0.25rem 1.15rem;
+		padding: 0;
+		font-size: 0.84rem;
+		line-height: 1.45;
+		color: #334155;
+
+		li {
+			margin-bottom: 0.15rem;
+		}
+	}
+
+	.item-tech,
+	.project-metrics {
+		font-size: 0.8125rem;
+		color: #475569;
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	.tech-label {
+		font-weight: 600;
+		color: #0f172a;
+	}
+
+	/* Education & Certs */
+	.education-list,
+	.certifications-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.edu-honors {
+		font-size: 0.8125rem;
+		color: #64748b;
+		margin: 0;
+	}
+
+	.cert-name {
+		font-size: 0.84rem;
+		color: #334155;
+	}
+</style>

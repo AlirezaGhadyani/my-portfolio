@@ -1,0 +1,46 @@
+/*
+  Print stylesheet for resume export & browser print dialog.
+  Enforces clean A4 layout, vector typography, avoids awkward page breaks,
+  and normalizes colors for printing.
+*/
+
+@page {
+	size: A4 portrait;
+	margin: 12mm 14mm 12mm 14mm;
+}
+
+@media print {
+	:root,
+	html,
+	body {
+		background: #ffffff !important;
+		color: #111827 !important;
+		font-size: 10.5pt !important;
+		line-height: 1.45 !important;
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+
+	.no-print {
+		display: none !important;
+	}
+
+	.print-only {
+		display: block !important;
+	}
+
+	.page-break-inside-avoid {
+		break-inside: avoid !important;
+		page-break-inside: avoid !important;
+	}
+
+	.page-break-before-always {
+		break-before: page !important;
+		page-break-before: always !important;
+	}
+
+	a {
+		color: inherit !important;
+		text-decoration: none !important;
+	}
+}

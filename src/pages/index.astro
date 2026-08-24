@@ -27,6 +27,10 @@ const { identity, summary, experience, skills, education, certifications, projec
 					</a>
 				))
 			}
+			<a href="/print/resume" class="btn-resume">
+				<span>View & Download Resume</span>
+				<span class="badge-formats">PDF / TXT</span>
+			</a>
 		</nav>
 	</section>
 
@@ -110,6 +114,30 @@ const { identity, summary, experience, skills, education, certifications, projec
 				border-color: var(--accent);
 				color: var(--accent);
 				background: var(--accent-muted);
+			}
+		}
+
+		.btn-resume {
+			background: var(--accent);
+			border-color: var(--accent);
+			color: #ffffff;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-weight: 550;
+
+			&:hover {
+				background: var(--accent);
+				color: #ffffff;
+				opacity: 0.92;
+			}
+
+			.badge-formats {
+				font-size: 0.72rem;
+				background: rgba(255, 255, 255, 0.2);
+				padding: 0.15rem 0.4rem;
+				border-radius: 4px;
+				font-family: var(--font-mono);
 			}
 		}
 	}

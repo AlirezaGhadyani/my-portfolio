@@ -164,4 +164,33 @@
 
 ---
 
-## Phase 6 — Print & PDF Export Engine (Next)
+## Phase 6 — Print & PDF Export Engine
+
+**Objective:** Build the automated document generation pipeline with Playwright vector PDFs and plain-text ATS export.
+
+### Tasks
+
+- [x] Dedicated print layout and print stylesheet (`src/styles/print.css`, `@page` A4 rules, clean page break controls)
+- [x] Static print routes supporting all variants (`src/pages/print/resume/[...variant].astro` for `/print/resume`, `/print/resume/fullstack`, `/print/resume/frontend`, `/print/resume/brief`, `/print/resume/ats`)
+- [x] Screen toolbar for switching between variant previews and triggering browser print / downloads
+- [x] Plain-text ATS generator (`scripts/generate-txt.ts` -> `public/downloads/resume-ats.txt`)
+- [x] Automated Playwright vector PDF generator (`scripts/generate-pdf.ts` -> `public/downloads/resume-*.pdf`)
+- [x] NPM build scripts in `package.json` (`build:txt`, `build:pdf`, `build:all`)
+- [x] Resume download and view links wired into main site navigation and hero CTA
+
+### Acceptance
+
+- [x] `pnpm build` generates all static print routes (8 total pages)
+- [x] `pnpm build:all` executes cleanly, producing vector PDFs and formatted ATS text
+- [x] `pnpm check` executes cleanly (0 errors, 0 project warnings)
+- [x] `pnpm test` executes cleanly (19 tests passing)
+- [x] Generated PDFs and TXT files are selectable text and accurately reflect variant parameters
+
+### Notes / Deviations
+
+- Added fallback in `scripts/generate-pdf.ts` to locate local system Chrome/Chromium binaries (`/usr/bin/google-chrome`, `/usr/bin/chromium`) when Playwright precompiled download is restricted.
+- Static print route uses rest parameter `src/pages/print/resume/[...variant].astro` to cleanly prerender `/print/resume` as default fullstack, alongside `/print/resume/fullstack`, `/print/resume/frontend`, `/print/resume/brief`, and `/print/resume/ats`.
+
+---
+
+## Phase 7 — Cloudflare Edge Contact Form API (Next)
