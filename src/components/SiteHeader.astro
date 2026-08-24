@@ -129,7 +129,7 @@ const nav = [
 		background: color-mix(in srgb, var(--bg) 92%, transparent);
 		backdrop-filter: blur(16px);
 		-webkit-backdrop-filter: blur(16px);
-		border-bottom: 1px solid var(--border);
+		border-bottom: 1px solid var(--border-subtle);
 		transition: background-color 0.25s ease, border-color 0.25s ease;
 	}
 
@@ -138,9 +138,9 @@ const nav = [
 		align-items: center;
 		justify-content: space-between;
 		gap: 1.5rem;
-		max-width: 76rem;
+		max-width: var(--content-width);
 		margin-inline: auto;
-		padding: 0.875rem clamp(1.25rem, 5vw, 3rem);
+		padding: 0.8rem clamp(1.25rem, 5vw, 3.5rem);
 	}
 
 	.brand {
@@ -154,8 +154,9 @@ const nav = [
 		.brand-avatar {
 			width: 2.25rem;
 			height: 2.25rem;
-			border-radius: var(--radius-sm);
-			background: var(--accent);
+			border-radius: 2px;
+			background: transparent;
+			border: 1px solid var(--accent);
 			color: #ffffff;
 			display: flex;
 			align-items: center;
@@ -163,7 +164,7 @@ const nav = [
 			font-weight: 700;
 			font-size: 0.85rem;
 			letter-spacing: 0.02em;
-			box-shadow: var(--shadow-sm);
+			box-shadow: 3px 3px 0 hsl(217 91% 60% / .18);
 			transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 		}
 
@@ -312,11 +313,14 @@ const nav = [
 			align-items: center;
 			justify-content: space-between;
 			padding: 0.75rem 1rem;
-			border-radius: var(--radius-sm);
+			border-radius: 2px;
 			color: var(--text);
 			text-decoration: none;
 			font-size: 1rem;
 			font-weight: 500;
+			font-family: var(--font-mono);
+			font-size: .78rem;
+			letter-spacing: .02em;
 			min-height: 44px;
 			transition: var(--transition-fast);
 

@@ -15,7 +15,7 @@ const ordered = [...items].sort((a, b) => {
 ---
 
 <section id="experience" aria-labelledby="experience-title" class="experience-section">
-	<div class="section-header">
+	<div class="section-header" data-section="01">
 		<div class="section-tag">Career History</div>
 		<h2 id="experience-title" class="section-title">Work Experience</h2>
 	</div>
@@ -168,12 +168,12 @@ const ordered = [...items].sort((a, b) => {
 	.experience-card {
 		flex: 1;
 		border: 1px solid var(--border);
-		border-radius: var(--radius);
+		border-radius: 3px;
 		background: var(--surface);
 		padding: clamp(1.5rem, 3vw, 2.5rem);
 		box-shadow: var(--shadow-sm);
-		border-left: 3px solid var(--accent);
-		background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--surface) 76%, var(--bg)));
+		border-left: 2px solid var(--accent);
+		background: linear-gradient(135deg, color-mix(in srgb, var(--surface) 92%, var(--accent)), var(--surface));
 		transition: var(--transition-fast);
 
 		&:hover {

@@ -111,7 +111,7 @@ const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 		display: flex;
 		flex-direction: column;
 		border: 1px solid var(--border);
-		border-radius: var(--radius);
+		border-radius: 3px;
 		background: var(--surface);
 		padding: clamp(1.5rem, 3vw, 2rem);
 		box-shadow: var(--shadow-sm);
@@ -119,12 +119,14 @@ const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 		position: relative;
 		overflow: hidden;
 		min-height: 23rem;
-		background: linear-gradient(145deg, var(--surface), color-mix(in srgb, var(--surface) 82%, var(--bg)));
+		background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 92%, var(--accent)), var(--surface));
+		border-top: 2px solid var(--border);
 
 		&:hover {
 			border-color: var(--border-active);
 			box-shadow: var(--shadow-md);
 			transform: translateY(-3px);
+			border-top-color: var(--accent);
 		}
 	}
 

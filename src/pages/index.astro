@@ -56,7 +56,8 @@ const ldJson = {
 			<span>Available for thoughtful engineering work</span>
 		</div>
 		<h1 id="hero-title" class="hero-title">
-			{identity.name}
+			<span>{identity.name.split(' ')[0]}</span>
+			<span>{identity.name.split(' ')[1]}</span>
 			<strong>{identity.title}</strong>
 		</h1>
 		<div class="hero-role">
@@ -97,6 +98,7 @@ const ldJson = {
 		</div>
 		</div>
 		<div class="hero-visual" aria-label="A snapshot of the engineer's technical toolkit">
+			<div class="visual-coordinate">SYS / PROFILE_001 <span>01—05</span></div>
 			<div class="editor-window">
 				<div class="editor-bar"><span></span><span></span><span></span><b>{editorFilename}</b></div>
 				<div class="editor-body">
@@ -141,7 +143,7 @@ const ldJson = {
 		grid-template-columns: minmax(0, 1.05fr) minmax(20rem, .95fr);
 		align-items: center;
 		gap: clamp(3rem, 6vw, 6rem);
-		min-height: min(45rem, calc(100vh - 4.5rem));
+		min-height: min(47rem, calc(100vh - 4.5rem));
 		padding-block: clamp(5rem, 10vw, 8.5rem) clamp(4rem, 7vw, 6rem);
 	}
 
@@ -174,22 +176,24 @@ const ldJson = {
 		display: flex;
 		flex-direction: column;
 		gap: .15em;
-		font-size: clamp(3.5rem, 6.2vw, 5.8rem);
-		line-height: 1.05;
-		letter-spacing: -0.04em;
+		font-size: clamp(4rem, 8vw, 7rem);
+		line-height: .88;
+		letter-spacing: -0.075em;
 		font-weight: 800;
 		color: var(--text);
 		text-wrap: balance;
-		margin: 0;
+		margin: 1.6rem 0 0;
 	}
 
-	.hero-title strong { color: var(--accent); font-size: .34em; line-height: 1.25; letter-spacing: -.025em; font-weight: 650; text-transform: uppercase; }
-	.hero-visual { position: relative; min-width: 0; }
-	.editor-window { overflow: hidden; border: 1px solid hsl(217 50% 35% / .45); border-radius: 14px; background: #09111f; box-shadow: 0 30px 90px hsl(220 80% 3% / .55), 0 0 0 1px hsl(217 91% 60% / .06); transform: rotate(1.5deg); }
+	.hero-title strong { color: var(--accent); font-size: .22em; line-height: 1.25; letter-spacing: .035em; font-weight: 650; text-transform: uppercase; margin-top: 1.25rem; }
+	.hero-visual { position: relative; min-width: 0; padding-top: 2rem; }
+	.visual-coordinate { position: absolute; top: 0; right: 0; color: var(--text-subtle); font: 10px var(--font-mono); letter-spacing: .08em; }
+	.visual-coordinate span { color: var(--accent); margin-left: 1rem; }
+	.editor-window { overflow: hidden; border: 1px solid hsl(217 50% 35% / .55); border-radius: 4px; background: #09111f; box-shadow: 0 30px 90px hsl(220 80% 3% / .55), 0 0 0 1px hsl(217 91% 60% / .06); transform: rotate(1.5deg); }
 	.editor-bar, .editor-status { display: flex; align-items: center; gap: .45rem; padding: .75rem 1rem; border-bottom: 1px solid hsl(217 30% 18%); color: #75839b; font: 11px var(--font-mono); }
 	.editor-bar b { margin-inline: auto; font-weight: 500; color: #a9b7cc; }
 	.editor-bar span { width: 7px; height: 7px; border-radius: 50%; background: #ef6c72; }.editor-bar span:nth-child(2) { background: #e6b45c; }.editor-bar span:nth-child(3) { background: #62c98b; }
-	.editor-body { display: flex; padding: 1.75rem 1.2rem; min-height: 22rem; }
+	.editor-body { display: flex; padding: 2rem 1.2rem; min-height: 22rem; }
 	.line-numbers { width: 2rem; flex: none; color: #3d4d64; text-align: right; font: 12px/2 var(--font-mono); user-select: none; }
 	.editor-body pre { margin: 0; padding-left: 1rem; overflow: auto; color: #d9e2f0; font: 12px/2 var(--font-mono); }.editor-body code { white-space: pre-line; }.code-muted { color: #c792ea; }.code-key { color: #82aaff; }.code-string { color: #c3e88d; }
 	.editor-status { justify-content: space-between; border: 0; border-top: 1px solid hsl(217 30% 18%); font-size: 10px; }.editor-status i { display: inline-block; width: 6px; height: 6px; margin-right: .3rem; border-radius: 50%; background: #62c98b; }
@@ -321,7 +325,7 @@ const ldJson = {
 	}
 
 	@media (max-width: 30rem) {
-		.hero-title { font-size: clamp(2.8rem, 15vw, 4rem); }
+		.hero-title { font-size: clamp(3.25rem, 17vw, 5rem); }
 		.hero-actions, .hero-links { width: 100%; }
 		.btn-resume, .btn-secondary { justify-content: center; flex: 1; }
 		.editor-body { padding: 1rem .5rem; min-height: 17rem; }

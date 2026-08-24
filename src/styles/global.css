@@ -18,7 +18,7 @@
 	--radius-full: 9999px;
 	--transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 	--transition-fast: all 0.15s ease-out;
-	--content-width: 76rem;
+	--content-width: 80rem;
 }
 
 /* ---- Light theme ---- */
@@ -48,12 +48,12 @@ html[data-theme="light"] {
 
 /* ---- Dark theme ---- */
 html[data-theme="dark"] {
-	--bg: hsl(224 45% 5%);
-	--surface: hsl(224 37% 9%);
-	--surface-muted: hsl(224 31% 13%);
-	--surface-elevated: hsl(224 34% 16%);
-	--border: hsl(217 30% 20%);
-	--border-subtle: hsl(217 28% 14%);
+	--bg: hsl(222 44% 5%);
+	--surface: hsl(222 35% 9%);
+	--surface-muted: hsl(222 29% 13%);
+	--surface-elevated: hsl(222 32% 16%);
+	--border: hsl(216 28% 22%);
+	--border-subtle: hsl(216 25% 15%);
 	--border-active: hsl(217 91% 60%);
 	--text: hsl(210 40% 98%);
 	--text-muted: hsl(215 20% 68%);
@@ -84,7 +84,7 @@ html[data-theme="dark"] {
 
 	body {
 		background-color: var(--bg);
-		background-image: radial-gradient(circle at 80% 0%, hsl(217 91% 60% / .075), transparent 26rem), linear-gradient(180deg, hsl(224 45% 6%), var(--bg) 34rem);
+		background-image: radial-gradient(circle at 82% -8%, hsl(217 91% 60% / .09), transparent 34rem), linear-gradient(180deg, hsl(222 44% 6%), var(--bg) 38rem);
 		color: var(--text);
 		font-family: var(--font-sans);
 		font-size: 15px;
@@ -95,6 +95,17 @@ html[data-theme="dark"] {
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
+	}
+
+	body::before {
+		content: '';
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		background-image: linear-gradient(hsl(217 40% 55% / .035) 1px, transparent 1px), linear-gradient(90deg, hsl(217 40% 55% / .035) 1px, transparent 1px);
+		background-size: 4rem 4rem;
+		mask-image: linear-gradient(to bottom, black, transparent 75%);
+		z-index: -1;
 	}
 
 	a { color: inherit; }
@@ -112,6 +123,29 @@ html[data-theme="dark"] {
 
 .content-shell {
 	position: relative;
+	max-width: var(--content-width);
+	margin-inline: auto;
+	padding-inline: clamp(1.25rem, 5vw, 3.5rem);
+}
+
+.section-header {
+	position: relative;
+	padding-left: 4.5rem;
+}
+
+.section-header::before {
+	content: attr(data-section);
+	position: absolute;
+	left: 0;
+	top: -0.65rem;
+	color: hsl(217 91% 60% / .18);
+	font: 700 clamp(3rem, 7vw, 5.5rem)/1 var(--font-mono);
+	letter-spacing: -0.12em;
+}
+
+.section-tag {
+	font-size: .72rem !important;
+	letter-spacing: .14em !important;
 }
 
 .content-shell::before {
