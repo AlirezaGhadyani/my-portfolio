@@ -55,6 +55,7 @@ jobs:
           test -f dist/downloads/resume-frontend.pdf
           test -f dist/downloads/resume-brief.pdf
           test -f dist/downloads/resume-ats.pdf
+          node scripts/verify-outputs.ts dist/downloads
 
   deploy:
     runs-on: ubuntu-latest

@@ -36,7 +36,7 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 		pdfPages: 1,
 		summaryOverride: "short",
 		featuredSkillsFirst: ["Architecture", "TypeScript", "Full-Stack", "Performance"],
-		maxProjects: 3,
+		maxProjects: 0,
 		excludedSections: ["certifications"],
 	},
 	ats: {
@@ -45,7 +45,8 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 		pdfPages: 1,
 		summaryOverride: "short",
 		featuredSkillsFirst: ["Full-Stack Development", "System Architecture"],
-		maxProjects: 4,
+		maxProjects: 0,
+		excludedSections: ["certifications"],
 	},
 };
 

@@ -29,7 +29,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light" data-palette="amber">
+<html lang="en" data-theme="light" data-palette="amber" data-variant={variantKey}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,7 +37,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 		<title>{identity.name} — {documentTitle} (Resume)</title>
 		<meta name="robots" content="noindex" />
 	</head>
-	<body class="resume-body">
+	<body class="resume-body" data-variant={variantKey}>
 		<!-- Screen-only variant switcher toolbar -->
 		<header class="screen-toolbar no-print">
 			<div class="toolbar-inner">
@@ -527,6 +527,58 @@ const { identity, summary, experience, skills, education, certifications, projec
 
 	.resume-section {
 		margin-top: 0.875rem;
+	}
+
+	:global(html[data-variant="brief"]) .resume-section,
+	:global(html[data-variant="ats"]) .resume-section {
+		margin-top: 0.45rem;
+	}
+
+	:global(html[data-variant="brief"]) .section-title,
+	:global(html[data-variant="ats"]) .section-title {
+		margin: 0 0 0.2rem 0;
+		padding-bottom: 0.1rem;
+		font-size: 0.8rem;
+	}
+
+	:global(html[data-variant="brief"]) .experience-list,
+	:global(html[data-variant="brief"]) .projects-list,
+	:global(html[data-variant="ats"]) .experience-list,
+	:global(html[data-variant="ats"]) .projects-list {
+		gap: 0.4rem;
+	}
+
+	:global(html[data-variant="brief"]) .item-highlights,
+	:global(html[data-variant="ats"]) .item-highlights {
+		margin: 0.05rem 0 0.1rem 1rem;
+	}
+
+	:global(html[data-variant="brief"]) .resume-header,
+	:global(html[data-variant="ats"]) .resume-header {
+		padding-bottom: 0.35rem;
+		margin-bottom: 0.35rem;
+	}
+
+	:global(html[data-variant="brief"]) .header-name,
+	:global(html[data-variant="ats"]) .header-name {
+		font-size: 1.4rem;
+	}
+
+	:global(html[data-variant="brief"]) .header-title,
+	:global(html[data-variant="ats"]) .header-title {
+		font-size: 0.9rem;
+	}
+
+	:global(html[data-variant="brief"]) .summary-text,
+	:global(html[data-variant="ats"]) .summary-text,
+	:global(html[data-variant="brief"]) .item-summary,
+	:global(html[data-variant="ats"]) .item-summary,
+	:global(html[data-variant="brief"]) .item-highlights,
+	:global(html[data-variant="ats"]) .item-highlights,
+	:global(html[data-variant="brief"]) .skills-list,
+	:global(html[data-variant="ats"]) .skills-list {
+		font-size: 0.75rem;
+		line-height: 1.3;
 	}
 
 	.section-title {

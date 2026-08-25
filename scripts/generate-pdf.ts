@@ -80,6 +80,14 @@ async function launchBrowser(): Promise<Browser> {
 		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
 	};
 
+	const systemChrome = ["/usr/bin/google-chrome-stable", "/usr/bin/google-chrome", "/usr/bin/chromium"].find((p) =>
+		fs.existsSync(p),
+	);
+
+	if (process.env.USE_SYSTEM_CHROME !== "false" && systemChrome) {
+		options.executablePath = systemChrome;
+	}
+
 	return chromium.launch(options);
 }
 
@@ -138,7 +146,16 @@ export async function generatePdfs(): Promise<void> {
 			const distPdfPath = path.join(distDownloadsDir, `resume-${vKey}.pdf`);
 			fs.copyFileSync(outPdfPath, distPdfPath);
 
-			console.log(`[pdf] Successfully generated: ${outPdfPath}`);
+			const expectedPages = VARIANTS[vKey].pdfPages;
+			const pdfRaw = fs.readFileSync(outPdfPath, "utf-8");
+			const actualPages = (pdfRaw.match(/\/Type\s*\/Page[^s]/g) || []).length;
+			if (actualPages !== expectedPages) {
+				throw new Error(
+					`[pdf] Page count mismatch for ${vKey}: expected ${expectedPages} page(s), got ${actualPages} page(s).`,
+				);
+			}
+
+			console.log(`[pdf] Successfully generated (${actualPages}p): ${outPdfPath}`);
 		}
 	} finally {
 		if (browser) {

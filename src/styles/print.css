@@ -6,7 +6,7 @@
 
 @page {
 	size: A4 portrait;
-	margin: 12mm 14mm 12mm 14mm;
+	margin: 10mm 12mm 10mm 12mm;
 }
 
 @media print {
@@ -15,8 +15,8 @@
 	body {
 		background: #ffffff !important;
 		color: #111827 !important;
-		font-size: 10.5pt !important;
-		line-height: 1.45 !important;
+		font-size: 10pt !important;
+		line-height: 1.4 !important;
 		-webkit-print-color-adjust: exact !important;
 		print-color-adjust: exact !important;
 	}
