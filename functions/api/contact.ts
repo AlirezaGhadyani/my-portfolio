@@ -172,21 +172,6 @@ export async function handleContactRequest(request: Request, env: ContactEnv = {
 		);
 	}
 
-	const clientIp = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "127.0.0.1";
-
-	const rateLimiter = env.RATE_LIMIT_KV ? createKvRateLimiter(env.RATE_LIMIT_KV) : memoryRateLimiter;
-
-	const isLimited = await rateLimiter.isRateLimited(clientIp, 3, 600);
-	if (isLimited) {
-		return jsonResponse(
-			{
-				success: false,
-				error: "Too many requests. Please wait a few minutes before trying again.",
-			},
-			429,
-		);
-	}
-
 	let payload: unknown;
 	try {
 		payload = await request.json();
@@ -225,59 +210,104 @@ export async function handleContactRequest(request: Request, env: ContactEnv = {
 		});
 	}
 
-	if (env.TURNSTILE_SECRET_KEY) {
-		if (!turnstileToken) {
-			return jsonResponse(
-				{
-					success: false,
-					error: "Bot verification token is missing.",
-				},
-				400,
-			);
-		}
+	const rawClientIp = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for");
+	if (!rawClientIp) {
+		return jsonResponse(
+			{
+				success: false,
+				error: "Unable to identify client IP.",
+			},
+			400,
+		);
+	}
+	const clientIp = rawClientIp;
 
-		const turnstile = await verifyTurnstileToken(turnstileToken, env.TURNSTILE_SECRET_KEY, clientIp);
+	const rateLimiter = env.RATE_LIMIT_KV ? createKvRateLimiter(env.RATE_LIMIT_KV) : memoryRateLimiter;
 
-		if (!turnstile.success) {
-			return jsonResponse(
-				{
-					success: false,
-					error: "Turnstile challenge verification failed. Please refresh and try again.",
-				},
-				400,
-			);
-		}
+	const isLimited = await rateLimiter.isRateLimited(clientIp, 3, 600);
+	if (isLimited) {
+		return jsonResponse(
+			{
+				success: false,
+				error: "Too many requests. Please wait a few minutes before trying again.",
+			},
+			429,
+		);
+	}
+
+	if (!env.TURNSTILE_SECRET_KEY) {
+		console.error("[contact] misconfigured: TURNSTILE_SECRET_KEY not set");
+		return jsonResponse(
+			{
+				success: false,
+				error: "Contact form is temporarily unavailable. Please email me directly.",
+			},
+			503,
+		);
+	}
+
+	if (!turnstileToken) {
+		return jsonResponse(
+			{
+				success: false,
+				error: "Bot verification token is missing.",
+			},
+			400,
+		);
+	}
+
+	const turnstile = await verifyTurnstileToken(turnstileToken, env.TURNSTILE_SECRET_KEY, clientIp);
+
+	if (!turnstile.success) {
+		return jsonResponse(
+			{
+				success: false,
+				error: "Turnstile challenge verification failed. Please refresh and try again.",
+			},
+			400,
+		);
 	}
 
 	const resendApiKey = env.RESEND_API_KEY;
+	if (!resendApiKey) {
+		console.error("[contact] misconfigured: RESEND_API_KEY not set");
+		return jsonResponse(
+			{
+				success: false,
+				error: "Contact form is temporarily unavailable. Please email me directly.",
+			},
+			503,
+		);
+	}
+
 	const toEmail = env.CONTACT_TO_EMAIL || "contact@example.com";
 	const fromEmail = env.CONTACT_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
+	// eslint-disable-next-line no-control-regex
+	const sanitizedSubjectName = name.replace(/[\r\n\u0000-\u001f]/g, " ");
 
-	if (resendApiKey) {
-		const emailResult = await sendEmailViaResend({
-			apiKey: resendApiKey,
-			from: fromEmail,
-			to: toEmail,
-			replyTo: email,
-			subject: `New Portfolio Message from ${name}`,
-			text: `Name: ${name}\nEmail: ${email}\nIP: ${clientIp}\n\nMessage:\n${message}`,
-			html: `<p><strong>Name:</strong> ${escapeHtml(name)}</p>
+	const emailResult = await sendEmailViaResend({
+		apiKey: resendApiKey,
+		from: fromEmail,
+		to: toEmail,
+		replyTo: email,
+		subject: `New Portfolio Message from ${sanitizedSubjectName}`,
+		text: `Name: ${name}\nEmail: ${email}\nIP: ${clientIp}\n\nMessage:\n${message}`,
+		html: `<p><strong>Name:</strong> ${escapeHtml(name)}</p>
 <p><strong>Email:</strong> ${escapeHtml(email)}</p>
 <p><strong>IP:</strong> ${escapeHtml(clientIp)}</p>
 <hr />
 <p><strong>Message:</strong></p>
 <p style="white-space: pre-wrap;">${escapeHtml(message)}</p>`,
-		});
+	});
 
-		if (!emailResult.success) {
-			return jsonResponse(
-				{
-					success: false,
-					error: "Failed to deliver message. Please try again later or reach out directly.",
-				},
-				502,
-			);
-		}
+	if (!emailResult.success) {
+		return jsonResponse(
+			{
+				success: false,
+				error: "Failed to deliver message. Please try again later or reach out directly.",
+			},
+			502,
+		);
 	}
 
 	return jsonResponse({

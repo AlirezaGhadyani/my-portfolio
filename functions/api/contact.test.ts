@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { ContactPayloadSchema, handleContactRequest, createKvRateLimiter } from "../../functions/api/contact";
 
 describe("Contact API & Validation", () => {
@@ -70,6 +70,10 @@ describe("Contact API & Validation", () => {
 			vi.restoreAllMocks();
 		});
 
+		afterEach(() => {
+			vi.unstubAllGlobals();
+		});
+
 		it("returns 405 Method Not Allowed for non-POST requests", async () => {
 			const req = new Request("http://localhost/api/contact", {
 				method: "GET",
@@ -136,6 +140,27 @@ describe("Contact API & Validation", () => {
 			expect(body.success).toBe(true);
 		});
 
+		it("returns 400 if client IP cannot be identified", async () => {
+			const req = new Request("http://localhost/api/contact", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					name: "Valid User",
+					email: "valid@example.com",
+					message: "Hello this is a valid message for testing.",
+				}),
+			});
+			const res = await handleContactRequest(req, {
+				TURNSTILE_SECRET_KEY: "secret",
+				RESEND_API_KEY: "key",
+			});
+			expect(res.status).toBe(400);
+			const body = await res.json();
+			expect(body.error).toContain("Unable to identify client IP");
+		});
+
 		it("returns 429 after exceeding rate limit", async () => {
 			const testIp = "72.36.178.105";
 			const send = () =>
@@ -152,15 +177,19 @@ describe("Contact API & Validation", () => {
 							message: "Hello this is a valid rate limit test message.",
 						}),
 					}),
+					{
+						TURNSTILE_SECRET_KEY: "secret",
+						RESEND_API_KEY: "key",
+					},
 				);
 
-			// 3 requests allowed
+			// 3 requests allowed (they fail later due to missing turnstileToken/secrets if not provided, but rate limiter consumes)
 			const r1 = await send();
-			expect(r1.status).toBe(200);
+			expect(r1.status).not.toBe(429);
 			const r2 = await send();
-			expect(r2.status).toBe(200);
+			expect(r2.status).not.toBe(429);
 			const r3 = await send();
-			expect(r3.status).toBe(200);
+			expect(r3.status).not.toBe(429);
 
 			// 4th request rejected
 			const r4 = await send();
@@ -186,19 +215,127 @@ describe("Contact API & Validation", () => {
 			expect(await kvLimiter.isRateLimited("137.141.178.12", 2, 60)).toBe(true);
 		});
 
+		it("returns 503 when TURNSTILE_SECRET_KEY is absent", async () => {
+			const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+			const req = new Request("http://localhost/api/contact", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"CF-Connecting-IP": "130.140.179.37",
+				},
+				body: JSON.stringify({
+					name: "Test User",
+					email: "user@example.com",
+					message: "Valid message for testing missing turnstile secret.",
+					turnstileToken: "some-token",
+				}),
+			});
+
+			const res = await handleContactRequest(req, {
+				RESEND_API_KEY: "key_123",
+			});
+			expect(res.status).toBe(503);
+			const body = await res.json();
+			expect(body.success).toBe(false);
+			expect(body.error).toBe("Contact form is temporarily unavailable. Please email me directly.");
+			expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("TURNSTILE_SECRET_KEY not set"));
+		});
+
+		it("returns 503 when RESEND_API_KEY is absent", async () => {
+			const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+			vi.stubGlobal(
+				"fetch",
+				vi.fn().mockResolvedValue({
+					ok: true,
+					json: async () => ({ success: true }),
+				} as Response),
+			);
+
+			const req = new Request("http://localhost/api/contact", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"CF-Connecting-IP": "130.140.179.36",
+				},
+				body: JSON.stringify({
+					name: "Test User",
+					email: "user@example.com",
+					message: "Valid message for testing missing resend key.",
+					turnstileToken: "valid-token",
+				}),
+			});
+
+			const res = await handleContactRequest(req, {
+				TURNSTILE_SECRET_KEY: "secret_123",
+			});
+			expect(res.status).toBe(503);
+			const body = await res.json();
+			expect(body.success).toBe(false);
+			expect(body.error).toBe("Contact form is temporarily unavailable. Please email me directly.");
+			expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("RESEND_API_KEY not set"));
+		});
+
+		it("returns 502 when Resend responds non-ok", async () => {
+			vi.stubGlobal(
+				"fetch",
+				vi.fn().mockImplementation((url) => {
+					if (url === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
+						return Promise.resolve({
+							ok: true,
+							json: async () => ({ success: true }),
+						} as Response);
+					}
+					if (url === "https://api.resend.com/emails") {
+						return Promise.resolve({
+							ok: false,
+							status: 401,
+							text: async () => "Unauthorized",
+						} as Response);
+					}
+					return Promise.resolve({ ok: true } as Response);
+				}),
+			);
+
+			const req = new Request("http://localhost/api/contact", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"CF-Connecting-IP": "130.140.179.39",
+				},
+				body: JSON.stringify({
+					name: "Test User",
+					email: "user@example.com",
+					message: "Valid message when Resend fails.",
+					turnstileToken: "valid-token",
+				}),
+			});
+
+			const res = await handleContactRequest(req, {
+				TURNSTILE_SECRET_KEY: "secret_123",
+				RESEND_API_KEY: "bad_key",
+			});
+			expect(res.status).toBe(502);
+			const body = await res.json();
+			expect(body.success).toBe(false);
+			expect(body.error).toBe("Failed to deliver message. Please try again later or reach out directly.");
+		});
+
 		it("verifies Turnstile token when TURNSTILE_SECRET_KEY is configured", async () => {
-			global.fetch = vi.fn().mockImplementation((url) => {
-				if (url === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
+			vi.stubGlobal(
+				"fetch",
+				vi.fn().mockImplementation((url) => {
+					if (url === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
+						return Promise.resolve({
+							ok: true,
+							json: async () => ({ success: true }),
+						} as Response);
+					}
 					return Promise.resolve({
 						ok: true,
-						json: async () => ({ success: true }),
+						json: async () => ({ id: "email-123" }),
 					} as Response);
-				}
-				return Promise.resolve({
-					ok: true,
-					json: async () => ({ id: "email-123" }),
-				} as Response);
-			});
+				}),
+			);
 
 			const req = new Request("http://localhost/api/contact", {
 				method: "POST",
@@ -216,6 +353,7 @@ describe("Contact API & Validation", () => {
 
 			const res = await handleContactRequest(req, {
 				TURNSTILE_SECRET_KEY: "test-secret",
+				RESEND_API_KEY: "re_123",
 			});
 			expect(res.status).toBe(200);
 			const body = await res.json();
@@ -224,6 +362,12 @@ describe("Contact API & Validation", () => {
 
 		it("forwards message to Resend API when RESEND_API_KEY is configured", async () => {
 			const fetchMock = vi.fn().mockImplementation((url) => {
+				if (url === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
+					return Promise.resolve({
+						ok: true,
+						json: async () => ({ success: true }),
+					} as Response);
+				}
 				if (url === "https://api.resend.com/emails") {
 					return Promise.resolve({
 						ok: true,
@@ -232,7 +376,7 @@ describe("Contact API & Validation", () => {
 				}
 				return Promise.resolve({ ok: true } as Response);
 			});
-			global.fetch = fetchMock;
+			vi.stubGlobal("fetch", fetchMock);
 
 			const req = new Request("http://localhost/api/contact", {
 				method: "POST",
@@ -241,13 +385,15 @@ describe("Contact API & Validation", () => {
 					"CF-Connecting-IP": "130.140.179.49",
 				},
 				body: JSON.stringify({
-					name: "Resend User",
+					name: "Resend\r\nUser",
 					email: "client@example.com",
 					message: "Testing email dispatch via Resend API mock.",
+					turnstileToken: "valid-token",
 				}),
 			});
 
 			const res = await handleContactRequest(req, {
+				TURNSTILE_SECRET_KEY: "test-secret",
 				RESEND_API_KEY: "re_123456789",
 				CONTACT_TO_EMAIL: "owner@example.com",
 			});
@@ -261,6 +407,7 @@ describe("Contact API & Validation", () => {
 						Authorization: "Bearer re_123456789",
 						"Content-Type": "application/json",
 					},
+					body: expect.stringContaining('"subject":"New Portfolio Message from Resend  User"'),
 				}),
 			);
 		});
