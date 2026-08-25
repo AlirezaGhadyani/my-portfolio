@@ -51,13 +51,13 @@ const palettes = paletteIds.map((id) => themeConfig.palettes[id]);
 				const id = option.getAttribute('data-palette-option');
 				if (!id) return;
 				document.documentElement.setAttribute('data-palette', id);
-				try { localStorage.setItem('palette', id); } catch (error) { /* preference persistence is optional */ }
+				try { localStorage.setItem('palette', id); } catch { /* preference persistence is optional */ }
 				document.dispatchEvent(new CustomEvent('palettechange'));
 				sync(); close(); trigger.focus();
 			}));
 			selector.querySelector('[data-palette-reset]')?.addEventListener('click', () => {
 				document.documentElement.setAttribute('data-palette', defaultPalette);
-				try { localStorage.removeItem('palette'); } catch (error) { /* preference persistence is optional */ }
+				try { localStorage.removeItem('palette'); } catch { /* preference persistence is optional */ }
 				document.dispatchEvent(new CustomEvent('palettechange'));
 				sync(); close();
 			});

@@ -43,7 +43,7 @@
 				themeButton.setAttribute('aria-label', `Switch to ${next === 'dark' ? 'dark' : 'light'} color theme`);
 				try {
 					localStorage.setItem('theme', next);
-				} catch (error) {
+				} catch {
 					/* ignore preference-persistence failure */
 				}
 			});

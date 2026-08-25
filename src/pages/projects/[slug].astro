@@ -15,6 +15,7 @@ if (!entry) return Astro.throw(404, 'Case study not found');
 const { Content } = await render(entry);
 const { data } = entry;
 const project = resumeData.projects.find((item) => item.slug === data.projectSlug);
+void project;
 ---
 
 <Layout title={`${data.title} — Technical Case Study`} description={data.summary}>

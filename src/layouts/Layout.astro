@@ -48,36 +48,36 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 		<title>{title}</title>
 		<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette, validPalettes: paletteIds }}>
 			(function () {
-				var root = document.documentElement;
+				const root = document.documentElement;
 				if (
 					window.matchMedia &&
 					window.matchMedia('(prefers-reduced-motion: reduce)').matches
 				) {
 					root.setAttribute('data-motion', 'reduced');
 				}
-				var stored = null;
+				let stored;
 				try {
 					stored = localStorage.getItem('theme');
-				} catch (error) {
+				} catch {
 					stored = null;
 				}
-				var dark =
+				const dark =
 					stored === 'dark' ||
-					(stored === null &&
+					(!stored &&
 						window.matchMedia &&
 						window.matchMedia('(prefers-color-scheme: dark)').matches);
 				root.setAttribute('data-theme', dark ? 'dark' : 'light');
-				var storedPalette = null;
+				let storedPalette;
 				try {
 					storedPalette = localStorage.getItem('palette');
-				} catch (error) {
+				} catch {
 					storedPalette = null;
 				}
 				if (!storedPalette || validPalettes.indexOf(storedPalette) === -1) {
 					storedPalette = defaultPalette;
 					try {
 						localStorage.setItem('palette', storedPalette);
-					} catch (error) {
+					} catch {
 						/* preference persistence is optional */
 					}
 				}
