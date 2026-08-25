@@ -695,7 +695,7 @@ adapter).
 **Goal:** one coherent token layer. Sequenced after Phase 2 because both phases edit the same five
 section components.
 
-### [ ] T3.1 — Fix the invalid CSS `[independent]` — do this first, it is one line
+### [x] T3.1 — Fix the invalid CSS `[independent]` — do this first, it is one line
 
 **Problem.** `src/styles/global.css:177-179` nests an `@media` block **inside** `@keyframes pulse-dot`:
 
@@ -720,7 +720,7 @@ Check a mobile viewport.
 
 ---
 
-### [ ] T3.2 — Establish the real token layer `[blocks: T3.3]`
+### [x] T3.2 — Establish the real token layer `[blocks: T3.3]`
 
 **Problem.**
 
@@ -762,7 +762,7 @@ Check a mobile viewport.
 
 ---
 
-### [ ] T3.3 — Extract `SectionHeader.astro` `[depends: T3.2]`
+### [x] T3.3 — Extract `SectionHeader.astro` `[depends: T3.2]`
 
 **Problem.** `.section-header`, `.section-tag`, `.section-title` are duplicated verbatim in **5**
 components (`ContactSection:294-315`, `ExperienceSection:91-112`, `EducationSection:91-112`,
@@ -783,7 +783,7 @@ empty. Visual check of all five sections in both themes.
 
 ---
 
-### [ ] T3.4 — Remove self-overriding CSS `[independent]`
+### [x] T3.4 — Remove self-overriding CSS `[independent]`
 
 **Problem.** Six components declare a property, then override it later in the _same_ stylesheet —
 twice using `!important` against themselves:
@@ -812,7 +812,7 @@ syntax colours that work in both themes).
 
 ---
 
-### [ ] T3.5 — Resolve the font question `[independent]`
+### [x] T3.5 — Resolve the font question `[independent]`
 
 **Problem.** `global.css:10-11` declares `--font-sans: "Inter", …` and
 `--font-mono: "JetBrains Mono", "Fira Code", …`. **Neither font is loaded anywhere** — no
@@ -832,7 +832,7 @@ declared stack matching what renders (b). Regenerate PDFs and confirm glyphs are
 
 ---
 
-### [ ] T3.6 — Resolve the Tailwind question `[independent]`
+### [x] T3.6 — Resolve the Tailwind question `[independent]`
 
 **Problem.** Tailwind v4 + `@tailwindcss/vite` are installed and named in the project's core stack,
 but `src/` contains **effectively zero utility classes**. Its only contributions are the `@theme`
