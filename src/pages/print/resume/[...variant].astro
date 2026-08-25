@@ -51,7 +51,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 							<a
 								href={vKey === "fullstack" ? "/print/resume" : `/print/resume/${vKey}`}
 								class:list={["variant-btn", { active: vKey === variantKey }]}>
-								{VARIANTS[vKey].label.split(" ")[0]}
+								{VARIANTS[vKey].shortLabel}
 							</a>
 						))
 					}

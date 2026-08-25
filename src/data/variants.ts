@@ -4,9 +4,13 @@ export type ResumeVariant = "fullstack" | "frontend" | "ats" | "brief";
 
 export interface VariantConfig {
 	id: ResumeVariant;
+	/** Human label for the variant itself, e.g. "Standard ATS Format". UI only. */
 	label: string;
+	/** Compact switcher text, e.g. "ATS". Never derived from `label`. */
+	shortLabel: string;
+	/** The professional title printed on the document. Never a config label. */
+	jobTitle: string;
 	pdfPages: 1 | 2;
-	titleOverride?: string;
 	summaryOverride: "short" | "full";
 	featuredSkillsFirst: string[];
 	maxProjects: number;
@@ -17,6 +21,8 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 	fullstack: {
 		id: "fullstack",
 		label: "Full-Stack Software Engineer",
+		shortLabel: "Full-Stack",
+		jobTitle: "Full-Stack Software Engineer",
 		pdfPages: 2,
 		summaryOverride: "full",
 		featuredSkillsFirst: ["TypeScript", "React", "Node.js", "PostgreSQL", "Astro", "Tailwind CSS"],
@@ -25,6 +31,8 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 	frontend: {
 		id: "frontend",
 		label: "Senior Frontend / UI Engineer",
+		shortLabel: "Frontend",
+		jobTitle: "Senior Frontend / UI Engineer",
 		pdfPages: 2,
 		summaryOverride: "full",
 		featuredSkillsFirst: ["React", "Next.js", "Astro", "TypeScript", "Tailwind CSS", "Web Performance"],
@@ -33,6 +41,8 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 	brief: {
 		id: "brief",
 		label: "One-Page Executive Summary",
+		shortLabel: "1-Page",
+		jobTitle: "Full-Stack Software Engineer",
 		pdfPages: 1,
 		summaryOverride: "short",
 		featuredSkillsFirst: ["Architecture", "TypeScript", "Full-Stack", "Performance"],
@@ -42,6 +52,8 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 	ats: {
 		id: "ats",
 		label: "Standard ATS Format",
+		shortLabel: "ATS",
+		jobTitle: "Full-Stack Software Engineer",
 		pdfPages: 1,
 		summaryOverride: "short",
 		featuredSkillsFirst: ["Full-Stack Development", "System Architecture"],
@@ -85,6 +97,6 @@ export function applyVariant(data: ResumeData, variantId: ResumeVariant): Varian
 	return {
 		...result,
 		variant: variantId,
-		documentTitle: variant.titleOverride ?? variant.label,
+		documentTitle: variant.jobTitle,
 	};
 }

@@ -24,10 +24,23 @@ describe("applyVariant", () => {
 		expect(ResumeDataSchema.safeParse(variant).success).toBe(true);
 	});
 
-	it("stamps the variant id and a document title", () => {
+	it("stamps the variant id and a document title matching jobTitle", () => {
 		const variant = applyVariant(data, "frontend");
 		expect(variant.variant).toBe("frontend");
-		expect(variant.documentTitle).toBe(VARIANTS.frontend.label);
+		expect(variant.documentTitle).toBe(VARIANTS.frontend.jobTitle);
+	});
+
+	it("ensures jobTitle is a plausible job title and never equals UI label for ats/brief", () => {
+		for (const vKey of Object.keys(VARIANTS) as (keyof typeof VARIANTS)[]) {
+			const config = VARIANTS[vKey];
+			expect(config.jobTitle).toMatch(/Engineer|Developer/);
+			expect(config.shortLabel).toBeDefined();
+			expect(config.shortLabel.length).toBeLessThanOrEqual(10);
+		}
+		const ats = applyVariant(data, "ats");
+		const brief = applyVariant(data, "brief");
+		expect(ats.documentTitle).not.toBe(VARIANTS.ats.label);
+		expect(brief.documentTitle).not.toBe(VARIANTS.brief.label);
 	});
 
 	it("limits projects to the variant maxProjects", () => {
