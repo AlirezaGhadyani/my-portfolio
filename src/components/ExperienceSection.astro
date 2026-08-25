@@ -1,6 +1,7 @@
 ---
 import { dateRange, orderedExperience } from "../domain/present.ts";
 import type { ExperienceItem } from "../data/schema.ts";
+import SectionHeader from "./SectionHeader.astro";
 
 interface Props {
 	items: ExperienceItem[];
@@ -12,10 +13,7 @@ const ordered = orderedExperience(items);
 ---
 
 <section id="experience" aria-labelledby="experience-title" class="experience-section">
-	<div class="section-header" data-section="01">
-		<div class="section-tag">Career History</div>
-		<h2 id="experience-title" class="section-title">Work Experience</h2>
-	</div>
+	<SectionHeader tag="Career History" title="Work Experience" id="experience-title" />
 
 	<div class="timeline-container">
 		<ol class="timeline-list">
@@ -94,29 +92,6 @@ const ordered = orderedExperience(items);
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-	}
-
-	.section-header {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-
-	.section-tag {
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--accent);
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-	}
-
-	.section-title {
-		font-size: clamp(2rem, 4vw, 3rem);
-		font-weight: 750;
-		letter-spacing: -0.03em;
-		color: var(--text);
-		margin: 0;
 	}
 
 	.timeline-container {

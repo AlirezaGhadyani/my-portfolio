@@ -229,19 +229,6 @@ html[data-palette="amber"][data-theme="dark"] {
 	padding-inline: var(--gutter);
 }
 
-.section-header {
-	position: relative;
-}
-
-.section-header::before {
-	display: none;
-}
-
-.section-tag {
-	font-size: 0.72rem !important;
-	letter-spacing: 0.14em !important;
-}
-
 .content-shell::before {
 	content: "";
 	position: absolute;

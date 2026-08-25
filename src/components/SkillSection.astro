@@ -1,5 +1,6 @@
 ---
 import type { SkillCategory, Skill } from "../data/schema.ts";
+import SectionHeader from "./SectionHeader.astro";
 
 interface Props {
 	categories: SkillCategory[];
@@ -12,10 +13,7 @@ const levelLabel = (level: Exclude<Skill["level"], undefined>): string =>
 ---
 
 <section id="skills" aria-labelledby="skills-title" class="skills-section">
-	<div class="section-header" data-section="03">
-		<div class="section-tag">Core Competencies</div>
-		<h2 id="skills-title" class="section-title">Technical Skills</h2>
-	</div>
+	<SectionHeader tag="Core Competencies" title="Technical Skills" id="skills-title" />
 
 	<div class="skills-grid">
 		{
@@ -49,29 +47,6 @@ const levelLabel = (level: Exclude<Skill["level"], undefined>): string =>
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-	}
-
-	.section-header {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-
-	.section-tag {
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--accent);
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-	}
-
-	.section-title {
-		font-size: clamp(2rem, 4vw, 3rem);
-		font-weight: 750;
-		letter-spacing: -0.03em;
-		color: var(--text);
-		margin: 0;
 	}
 
 	.skills-grid {

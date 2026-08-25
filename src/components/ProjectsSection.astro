@@ -2,6 +2,7 @@
 import type { Project } from "../data/schema.ts";
 import ProjectCard from "./ProjectCard.astro";
 import { orderedProjects } from "../domain/present.ts";
+import SectionHeader from "./SectionHeader.astro";
 
 interface Props {
 	projects: Project[];
@@ -18,10 +19,7 @@ const supporting = featured.filter((project) => project !== flagship).slice(0, 2
 
 <section id="projects" aria-labelledby="projects-title" class="projects-section">
 	<div class="projects-head">
-		<div class="head-text section-header" data-section="02">
-			<div class="section-tag">Featured Work</div>
-			<h2 id="projects-title" class="section-title">Selected Projects</h2>
-		</div>
+		<SectionHeader tag="Featured Work" title="Selected Projects" id="projects-title" />
 		<a class="projects-archive-link" href="/projects">
 			<span>View all projects</span>
 			<svg
@@ -67,29 +65,6 @@ const supporting = featured.filter((project) => project !== flagship).slice(0, 2
 		justify-content: space-between;
 		gap: 1.5rem;
 		flex-wrap: wrap;
-
-		.head-text {
-			display: flex;
-			flex-direction: column;
-			gap: 0.35rem;
-		}
-
-		.section-tag {
-			font-family: var(--font-mono);
-			font-size: 0.8rem;
-			font-weight: 600;
-			color: var(--accent);
-			text-transform: uppercase;
-			letter-spacing: 0.08em;
-		}
-
-		.section-title {
-			font-size: clamp(2rem, 4vw, 3rem);
-			font-weight: 750;
-			letter-spacing: -0.03em;
-			color: var(--text);
-			margin: 0;
-		}
 
 		.projects-archive-link {
 			display: inline-flex;

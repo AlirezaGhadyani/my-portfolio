@@ -1,6 +1,7 @@
 ---
 import type { EducationItem, Certification } from "../data/schema.ts";
 import { certificationLine, educationLine } from "../domain/present.ts";
+import SectionHeader from "./SectionHeader.astro";
 
 interface Props {
 	education: EducationItem[];
@@ -13,10 +14,7 @@ const certificationDisplay = certifications.map(certificationLine);
 ---
 
 <section id="education" aria-labelledby="education-title" class="education-section">
-	<div class="section-header" data-section="04">
-		<div class="section-tag">Credentials & Learning</div>
-		<h2 id="education-title" class="section-title">Education & Certifications</h2>
-	</div>
+	<SectionHeader tag="Credentials & Learning" title="Education & Certifications" id="education-title" />
 
 	<div class="edu-grid">
 		<!-- Degrees -->
@@ -105,29 +103,6 @@ const certificationDisplay = certifications.map(certificationLine);
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-	}
-
-	.section-header {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-
-	.section-tag {
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--accent);
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-	}
-
-	.section-title {
-		font-size: clamp(2rem, 4vw, 3rem);
-		font-weight: 750;
-		letter-spacing: -0.03em;
-		color: var(--text);
-		margin: 0;
 	}
 
 	.edu-grid {
