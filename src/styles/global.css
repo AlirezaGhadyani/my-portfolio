@@ -240,16 +240,16 @@ html[data-palette="rose"][data-theme="dark"] {
 		opacity: 1;
 		box-shadow: 0 0 0 0 var(--status-live-glow);
 	}
-
-	@media (max-width: 48rem) {
-		.content-shell::before {
-			display: none;
-		}
-	}
 	50% {
 		transform: scale(1.15);
 		opacity: 0.85;
 		box-shadow: 0 0 0 6px transparent;
+	}
+}
+
+@media (max-width: 48rem) {
+	.content-shell::before {
+		display: none;
 	}
 }
 
