@@ -10,12 +10,12 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const entry = await getEntry("caseStudies", slug);
-if (!entry) return Astro.throw(404, "Case study not found");
+if (!entry) throw new Error(`Case study not found: ${slug}`);
 
 const { Content } = await render(entry);
 const { data } = entry;
 const project = resumeData.projects.find((item) => item.slug === data.projectSlug);
-void project;
+if (!project) throw new Error(`Project not found for case study: ${data.projectSlug}`);
 ---
 
 <Layout title={`${data.title} — Technical Case Study`} description={data.summary}>
@@ -45,7 +45,7 @@ void project;
 			<div class="case-meta-grid">
 				<div class="meta-card">
 					<span class="meta-label">Role</span>
-					<span class="meta-value">{data.role}</span>
+					<span class="meta-value">{project.role}</span>
 				</div>
 				<div class="meta-card">
 					<span class="meta-label">Timeline / Duration</span>
@@ -53,17 +53,17 @@ void project;
 				</div>
 				<div class="meta-card full-width">
 					<span class="meta-label">Core Architecture & Stack</span>
-					<span class="meta-value">{data.techStack.join(", ")}</span>
+					<span class="meta-value">{project.technologies.join(", ")}</span>
 				</div>
 			</div>
 		</header>
 
 		{
-			data.impactMetrics.length > 0 && (
+			project.impactMetrics && project.impactMetrics.length > 0 && (
 				<div class="metrics-container">
 					<h2 class="metrics-title">Key Architectural Outcomes & Metrics</h2>
 					<ul class="case-metrics">
-						{data.impactMetrics.map((metric) => (
+						{project.impactMetrics.map((metric) => (
 							<li>
 								<svg
 									width="14"

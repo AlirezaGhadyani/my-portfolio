@@ -61,12 +61,15 @@ describe("applyVariant", () => {
 	it("uses the short summary for one-page variants", () => {
 		const brief = applyVariant(data, "brief");
 		const ats = applyVariant(data, "ats");
-		expect(brief.summary.full).toBe(brief.summary.short);
-		expect(ats.summary.full).toBe(ats.summary.short);
+		expect(brief.activeSummary).toBe(data.summary.short);
+		expect(ats.activeSummary).toBe(data.summary.short);
+		expect(brief.summary).toEqual(data.summary);
+		expect(ats.summary).toEqual(data.summary);
 	});
 
 	it("keeps the full summary for two-page variants", () => {
 		const fullstack = applyVariant(data, "fullstack");
+		expect(fullstack.activeSummary).toBe(data.summary.full);
 		expect(fullstack.summary.full).toBe(data.summary.full);
 	});
 

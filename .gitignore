@@ -22,6 +22,8 @@ pnpm-debug.log*
 
 # playwright / generated downloads
 public/downloads/
+public/sitemap.xml
+public/robots.txt
 
 # coverage output
 coverage/

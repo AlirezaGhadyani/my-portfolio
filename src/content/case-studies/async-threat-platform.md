@@ -1,19 +1,8 @@
 ---
 title: "Async Threat Intelligence Platform"
 projectSlug: "async-threat-platform"
-role: "Lead full-stack engineer"
 duration: "9 months"
 summary: "An edge-rendered security analytics SaaS that ingests millions of threat signals per hour and serves near-zero-JS dashboards from Cloudflare's edge."
-techStack:
-  - "Astro"
-  - "Cloudflare Workers"
-  - "React"
-  - "TypeScript"
-  - "PostgreSQL"
-  - "WebSocket"
-impactMetrics:
-  - "-40% p95 latency"
-  - "2.4M signals/day"
 ---
 
 ## Problem

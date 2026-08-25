@@ -1,5 +1,5 @@
 ---
-import { formatMonthYear } from "../lib/formatDate.ts";
+import { dateRange, orderedExperience } from "../domain/present.ts";
 import type { ExperienceItem } from "../data/schema.ts";
 
 interface Props {
@@ -8,10 +8,7 @@ interface Props {
 
 const { items } = Astro.props;
 
-const ordered = [...items].sort((a, b) => {
-	if (a.tier !== b.tier) return a.tier === "primary" ? -1 : 1;
-	return b.startDate.localeCompare(a.startDate);
-});
+const ordered = orderedExperience(items);
 ---
 
 <section id="experience" aria-labelledby="experience-title" class="experience-section">
@@ -55,7 +52,7 @@ const ordered = [...items].sort((a, b) => {
 										<line x1="3" y1="10" x2="21" y2="10" />
 									</svg>
 									<span>
-										{formatMonthYear(item.startDate)} — {item.endDate ? formatMonthYear(item.endDate) : "Present"}
+										{dateRange(item.startDate, item.endDate)}
 									</span>
 								</div>
 							</div>

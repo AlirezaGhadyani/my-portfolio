@@ -3,14 +3,14 @@ import "../../../styles/global.css";
 import "../../../styles/print.css";
 import { resumeData } from "../../../data/resume.ts";
 import { applyVariant, VARIANTS, type ResumeVariant } from "../../../data/variants.ts";
-import { formatMonthYear } from "../../../lib/formatDate.ts";
+import { certificationLine, dateRange, educationLine, orderedExperience, skillLine } from "../../../domain/present.ts";
 
 export function getStaticPaths() {
 	const variants = Object.keys(VARIANTS) as ResumeVariant[];
 	return [
 		// default /print/resume
 		{ params: { variant: undefined }, props: { variant: "fullstack" as ResumeVariant } },
-		...variants.map((v) => ({
+		...variants.filter((v) => v !== "fullstack").map((v) => ({
 			params: { variant: v },
 			props: { variant: v },
 		})),
@@ -25,7 +25,7 @@ const variantKey: ResumeVariant = resolvedVariantKey in VARIANTS ? resolvedVaria
 const activeVariant = applyVariant(resumeData, variantKey);
 const variantConfig = VARIANTS[variantKey];
 
-const { identity, summary, experience, skills, education, certifications, projects, documentTitle } = activeVariant;
+const { identity, experience, skills, education, certifications, projects, documentTitle, activeSummary } = activeVariant;
 ---
 
 <!doctype html>
@@ -163,7 +163,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 			<!-- Professional Summary -->
 			<section class="resume-section page-break-inside-avoid" aria-labelledby="section-summary">
 				<h2 id="section-summary" class="section-title">Professional Summary</h2>
-				<p class="summary-text">{summary.full}</p>
+				<p class="summary-text">{activeSummary}</p>
 			</section>
 
 			<!-- Technical Skills -->
@@ -174,7 +174,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 						skills.map((category) => (
 							<div class="skill-category-row">
 								<span class="category-name">{category.name}:</span>
-								<span class="category-items">{category.skills.map((s) => s.name).join(", ")}</span>
+								<span class="category-items">{skillLine(category)}</span>
 							</div>
 						))
 					}
@@ -186,7 +186,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 				<h2 id="section-experience" class="section-title">Work Experience</h2>
 				<div class="experience-list">
 					{
-						experience.map((item) => (
+						orderedExperience(experience).map((item) => (
 							<article class="experience-item page-break-inside-avoid">
 								<div class="item-header">
 									<div class="item-role-group">
@@ -195,7 +195,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 									</div>
 									<div class="item-meta">
 										<span class="item-date">
-											{formatMonthYear(item.startDate)} – {item.endDate ? formatMonthYear(item.endDate) : "Present"}
+											{dateRange(item.startDate, item.endDate)}
 										</span>
 										<span class="item-location"> | {item.location}</span>
 									</div>
@@ -271,7 +271,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 										<span class="item-company"> — {edu.institution}</span>
 									</div>
 									<span class="item-date">
-										{edu.startDate} – {edu.endDate}
+										{educationLine(edu).dates}
 									</span>
 								</div>
 								{edu.honors && <p class="edu-honors">{edu.honors}</p>}
@@ -295,7 +295,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 										<span class="cert-name">
 											<strong>{cert.name}</strong> — {cert.issuer}
 										</span>
-										<span class="item-date">{cert.date}</span>
+									<span class="item-date">{certificationLine(cert).date}</span>
 									</div>
 								</div>
 							))}

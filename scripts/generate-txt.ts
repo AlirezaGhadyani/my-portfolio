@@ -3,17 +3,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { resumeData } from "../src/data/resume.ts";
 import { applyVariant } from "../src/data/variants.ts";
-import { formatMonthYear } from "../src/lib/formatDate.ts";
+import { certificationLine, dateRange, educationLine, orderedExperience, skillLine } from "../src/domain/present.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
-const downloadsDir = path.join(projectRoot, "public", "downloads");
-const distDir = path.join(projectRoot, "dist");
+const downloadsDir = path.join(projectRoot, "dist", "downloads");
 
 export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief" = "ats"): string {
 	const data = applyVariant(resumeData, variantKey);
-	const { identity, summary, experience, skills, education, certifications, projects, documentTitle } = data;
+	const { identity, experience, skills, education, certifications, projects, documentTitle, activeSummary } = data;
 
 	const lines: string[] = [];
 
@@ -37,22 +36,22 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 	// Summary
 	lines.push("SUMMARY");
 	lines.push(subHr);
-	lines.push(summary.full);
+	lines.push(activeSummary);
 	lines.push("");
 
 	// Technical Skills
 	lines.push("TECHNICAL SKILLS");
 	lines.push(subHr);
 	for (const cat of skills) {
-		lines.push(`${cat.name}: ${cat.skills.map((s) => s.name).join(", ")}`);
+		lines.push(`${cat.name}: ${skillLine(cat)}`);
 	}
 	lines.push("");
 
 	// Experience
 	lines.push("EXPERIENCE");
 	lines.push(subHr);
-	for (const exp of experience) {
-		const dates = `${formatMonthYear(exp.startDate)} – ${exp.endDate ? formatMonthYear(exp.endDate) : "Present"}`;
+	for (const exp of orderedExperience(experience)) {
+		const dates = dateRange(exp.startDate, exp.endDate);
 		lines.push(`${exp.role} | ${exp.company} | ${exp.location}`);
 		lines.push(`Dates: ${dates}`);
 		lines.push(exp.summary);
@@ -86,9 +85,10 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 	lines.push("EDUCATION");
 	lines.push(subHr);
 	for (const edu of education) {
-		lines.push(`${edu.degree} in ${edu.field} — ${edu.institution}`);
-		lines.push(`Dates: ${edu.startDate} – ${edu.endDate}`);
-		if (edu.honors) lines.push(`Honors: ${edu.honors}`);
+		const display = educationLine(edu);
+		lines.push(display.heading);
+		lines.push(`Dates: ${display.dates}`);
+		if (display.honors) lines.push(`Honors: ${display.honors}`);
 		lines.push("");
 	}
 
@@ -97,12 +97,13 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 		lines.push("CERTIFICATIONS");
 		lines.push(subHr);
 		for (const cert of certifications) {
-			lines.push(`${cert.name} — ${cert.issuer} (${cert.date})`);
+			const display = certificationLine(cert);
+			lines.push(`${display.heading} (${display.date})`);
 		}
 		lines.push("");
 	}
 
-	return lines.join("\n");
+	return lines.join("\n").replace(/[–—]/g, "-");
 }
 
 export function writePlainTextResumes(): void {
@@ -115,15 +116,6 @@ export function writePlainTextResumes(): void {
 	fs.writeFileSync(atsPath, atsContent, "utf-8");
 	console.log(`[txt] Generated: ${atsPath}`);
 
-	// Mirror to dist/downloads if dist directory exists
-	if (fs.existsSync(distDir)) {
-		const distDownloadsDir = path.join(distDir, "downloads");
-		if (!fs.existsSync(distDownloadsDir)) {
-			fs.mkdirSync(distDownloadsDir, { recursive: true });
-		}
-		const distAtsPath = path.join(distDownloadsDir, "resume-ats.txt");
-		fs.copyFileSync(atsPath, distAtsPath);
-	}
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

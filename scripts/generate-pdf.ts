@@ -4,12 +4,13 @@ import { fileURLToPath } from "node:url";
 import http from "node:http";
 import { chromium, type Browser, type LaunchOptions } from "playwright";
 import { VARIANTS, type ResumeVariant } from "../src/data/variants.ts";
+import { assertPdfPageCount } from "./verify-outputs.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
-const downloadsDir = path.join(projectRoot, "public", "downloads");
 const distDir = path.join(projectRoot, "dist");
+const downloadsDir = path.join(distDir, "downloads");
 
 const MIME_TYPES: Record<string, string> = {
 	".html": "text/html",
@@ -80,14 +81,6 @@ async function launchBrowser(): Promise<Browser> {
 		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
 	};
 
-	const systemChrome = ["/usr/bin/google-chrome-stable", "/usr/bin/google-chrome", "/usr/bin/chromium"].find((p) =>
-		fs.existsSync(p),
-	);
-
-	if (process.env.USE_SYSTEM_CHROME !== "false" && systemChrome) {
-		options.executablePath = systemChrome;
-	}
-
 	return chromium.launch(options);
 }
 
@@ -98,11 +91,6 @@ export async function generatePdfs(): Promise<void> {
 
 	if (!fs.existsSync(downloadsDir)) {
 		fs.mkdirSync(downloadsDir, { recursive: true });
-	}
-
-	const distDownloadsDir = path.join(distDir, "downloads");
-	if (!fs.existsSync(distDownloadsDir)) {
-		fs.mkdirSync(distDownloadsDir, { recursive: true });
 	}
 
 	console.log("[pdf] Starting static server for dist/...");
@@ -142,18 +130,9 @@ export async function generatePdfs(): Promise<void> {
 				},
 			});
 
-			// Mirror to dist/downloads for production static builds
-			const distPdfPath = path.join(distDownloadsDir, `resume-${vKey}.pdf`);
-			fs.copyFileSync(outPdfPath, distPdfPath);
-
 			const expectedPages = VARIANTS[vKey].pdfPages;
-			const pdfRaw = fs.readFileSync(outPdfPath, "utf-8");
-			const actualPages = (pdfRaw.match(/\/Type\s*\/Page[^s]/g) || []).length;
-			if (actualPages !== expectedPages) {
-				throw new Error(
-					`[pdf] Page count mismatch for ${vKey}: expected ${expectedPages} page(s), got ${actualPages} page(s).`,
-				);
-			}
+			assertPdfPageCount(outPdfPath, expectedPages);
+			const actualPages = expectedPages;
 
 			console.log(`[pdf] Successfully generated (${actualPages}p): ${outPdfPath}`);
 		}

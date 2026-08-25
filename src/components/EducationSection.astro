@@ -1,5 +1,6 @@
 ---
 import type { EducationItem, Certification } from "../data/schema.ts";
+import { certificationLine, educationLine } from "../domain/present.ts";
 
 interface Props {
 	education: EducationItem[];
@@ -7,6 +8,8 @@ interface Props {
 }
 
 const { education, certifications = [] } = Astro.props;
+const educationDisplay = education.map(educationLine);
+const certificationDisplay = certifications.map(certificationLine);
 ---
 
 <section id="education" aria-labelledby="education-title" class="education-section">
@@ -31,7 +34,7 @@ const { education, certifications = [] } = Astro.props;
 									</p>
 								</div>
 								<span class="edu-dates">
-									{item.startDate} — {item.endDate}
+									{educationDisplay[education.indexOf(item)].dates}
 								</span>
 							</div>
 							{item.honors && (
@@ -63,7 +66,7 @@ const { education, certifications = [] } = Astro.props;
 				<div class="edu-column">
 					<h3 class="column-subtitle">Professional Certifications</h3>
 					<ul class="cert-list">
-						{certifications.map((cert) => (
+						{certifications.map((cert, index) => (
 							<li class="cert-card">
 								<div class="cert-head">
 									{cert.url ? (
@@ -86,7 +89,7 @@ const { education, certifications = [] } = Astro.props;
 									) : (
 										<span class="cert-name">{cert.name}</span>
 									)}
-									<span class="cert-date">{cert.date}</span>
+									<span class="cert-date">{certificationDisplay[index].date}</span>
 								</div>
 								<p class="cert-issuer">{cert.issuer}</p>
 							</li>

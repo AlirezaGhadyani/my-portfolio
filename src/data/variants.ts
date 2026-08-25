@@ -65,6 +65,7 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 export interface VariantResume extends ResumeData {
 	variant: ResumeVariant;
 	documentTitle: string;
+	activeSummary: string;
 }
 
 function orderSkills(categories: SkillCategory[], featuredFirst: string[]): SkillCategory[] {
@@ -75,28 +76,34 @@ function orderSkills(categories: SkillCategory[], featuredFirst: string[]): Skil
 	});
 }
 
-function applySummaryOverride(summary: ResumeData["summary"], override: "short" | "full"): ResumeData["summary"] {
-	return override === "short" ? { ...summary, full: summary.short } : summary;
-}
-
 export function applyVariant(data: ResumeData, variantId: ResumeVariant): VariantResume {
 	const variant = VARIANTS[variantId];
 	const skillsList = orderSkills(data.skills, variant.featuredSkillsFirst);
+	const projectRank = { flagship: 0, notable: 1, experiment: 2 } as const;
 
 	const result: ResumeData = {
 		...data,
-		summary: applySummaryOverride(data.summary, variant.summaryOverride),
 		skills: skillsList,
-		projects: data.projects.filter((_, index) => index < variant.maxProjects),
+		projects: [...data.projects]
+			.sort((a, b) => projectRank[a.tier] - projectRank[b.tier] || a.title.localeCompare(b.title))
+			.slice(0, variant.maxProjects),
 	};
 
 	if (variant.excludedSections?.includes("certifications")) {
-		result.certifications = undefined;
+		const { certifications, ...withoutCertifications } = result;
+		void certifications;
+		return {
+			...withoutCertifications,
+			variant: variantId,
+			documentTitle: variant.jobTitle,
+			activeSummary: variant.summaryOverride === "short" ? data.summary.short : data.summary.full,
+		};
 	}
 
 	return {
 		...result,
 		variant: variantId,
 		documentTitle: variant.jobTitle,
+		activeSummary: variant.summaryOverride === "short" ? data.summary.short : data.summary.full,
 	};
 }

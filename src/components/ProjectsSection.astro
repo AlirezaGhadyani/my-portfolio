@@ -1,6 +1,7 @@
 ---
 import type { Project } from "../data/schema.ts";
 import ProjectCard from "./ProjectCard.astro";
+import { orderedProjects } from "../domain/present.ts";
 
 interface Props {
 	projects: Project[];
@@ -8,11 +9,8 @@ interface Props {
 
 const { projects } = Astro.props;
 
-const orderRank = { flagship: 0, notable: 1, experiment: 2 } as const;
-
-const featured = [...projects]
+const featured = orderedProjects(projects)
 	.filter((project) => project.featured)
-	.sort((a, b) => orderRank[a.tier] - orderRank[b.tier] || a.title.localeCompare(b.title))
 	.slice(0, 6);
 const flagship = featured.find((project) => project.tier === "flagship") ?? featured[0];
 const supporting = featured.filter((project) => project !== flagship).slice(0, 2);

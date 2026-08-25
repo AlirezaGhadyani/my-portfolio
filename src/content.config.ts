@@ -1,10 +1,10 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
-import { z as zod } from "astro/zod";
+import { z as zod } from "zod";
 
 const caseStudies = defineCollection({
 	loader: glob({
-		pattern: "src/content/case-studies/**/*.{md,mdx}",
+	pattern: "src/content/case-studies/**/*.md",
 		base: "./",
 		generateId: ({ entry }) => {
 			const file = entry.split("/").pop() ?? entry;
@@ -14,11 +14,8 @@ const caseStudies = defineCollection({
 	schema: zod.object({
 		title: zod.string(),
 		projectSlug: zod.string(),
-		role: zod.string(),
 		duration: zod.string(),
 		summary: zod.string(),
-		techStack: zod.array(zod.string()),
-		impactMetrics: zod.array(zod.string()),
 	}),
 });
 
