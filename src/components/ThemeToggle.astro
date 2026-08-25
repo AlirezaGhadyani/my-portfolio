@@ -32,8 +32,9 @@
 
 <script is:inline>
 	(function () {
-		const themeButton = document.querySelector('[data-theme-toggle]');
-		if (themeButton) {
+		document.querySelectorAll('[data-theme-toggle]').forEach((themeButton) => {
+			if (themeButton.dataset.themeBound) return;
+			themeButton.dataset.themeBound = 'true';
 			themeButton.addEventListener('click', () => {
 				const root = document.documentElement;
 				const current = root.getAttribute('data-theme') || 'dark';
@@ -46,7 +47,7 @@
 					/* ignore preference-persistence failure */
 				}
 			});
-		}
+		});
 	})();
 </script>
 

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { resumeData } from '../data/resume.ts';
+import { themeConfig, paletteIds } from '../data/theme.ts';
 
 interface Props {
 	title?: string;
@@ -45,7 +46,7 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 		<meta name="twitter:description" content={metaDescription} />
 		<meta name="twitter:image" content={ogImage} />
 		<title>{title}</title>
-		<script is:inline>
+		<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette, validPalettes: paletteIds }}>
 			(function () {
 				var root = document.documentElement;
 				if (
@@ -66,6 +67,21 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 						window.matchMedia &&
 						window.matchMedia('(prefers-color-scheme: dark)').matches);
 				root.setAttribute('data-theme', dark ? 'dark' : 'light');
+				var storedPalette = null;
+				try {
+					storedPalette = localStorage.getItem('palette');
+				} catch (error) {
+					storedPalette = null;
+				}
+				if (!storedPalette || validPalettes.indexOf(storedPalette) === -1) {
+					storedPalette = defaultPalette;
+					try {
+						localStorage.setItem('palette', storedPalette);
+					} catch (error) {
+						/* preference persistence is optional */
+					}
+				}
+				root.setAttribute('data-palette', storedPalette);
 			})();
 		</script>
 	</head>

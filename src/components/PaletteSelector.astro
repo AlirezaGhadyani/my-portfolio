@@ -1,0 +1,96 @@
+---
+import { paletteIds, themeConfig } from '../data/theme.ts';
+
+interface Props {
+	id?: string;
+}
+
+const { id = 'palette-menu' } = Astro.props;
+
+const palettes = paletteIds.map((id) => themeConfig.palettes[id]);
+---
+
+<div class="palette-selector" data-palette-selector>
+	<button type="button" class="palette-trigger" data-palette-trigger aria-haspopup="dialog" aria-expanded="false" aria-controls={id} title="Choose accent palette">
+		<span class="palette-trigger-swatch" aria-hidden="true"></span>
+		<span class="palette-trigger-label">Palette</span>
+		<svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+	</button>
+	<div id={id} class="palette-menu" data-palette-menu role="dialog" aria-label="Choose accent palette" hidden>
+		<div class="palette-menu-heading"><strong>Accent palette</strong><span>Choose a mood for the site</span></div>
+		<div class="palette-options" role="listbox" aria-label="Accent palettes">
+			{palettes.map((palette) => (
+				<button type="button" class="palette-option" data-palette-option={palette.id} role="option" aria-selected="false">
+					<span class="palette-swatch" style={`--palette-light: ${palette.light.accent}; --palette-dark: ${palette.dark.accent}`} aria-hidden="true"></span>
+					<span class="palette-option-copy"><strong>{palette.name}</strong><small>{palette.description}</small></span>
+					{palette.id === themeConfig.defaultPalette && <span class="palette-default">Default</span>}
+					<svg class="palette-check" aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6" /></svg>
+				</button>
+			))}
+		</div>
+		<button type="button" class="palette-reset" data-palette-reset>Reset to default</button>
+	</div>
+</div>
+
+<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette }}>
+	(function () {
+		document.querySelectorAll('[data-palette-selector]').forEach((selector) => {
+			if (selector.dataset.paletteBound) return;
+			selector.dataset.paletteBound = 'true';
+			const trigger = selector.querySelector('[data-palette-trigger]');
+			const menu = selector.querySelector('[data-palette-menu]');
+			const options = Array.from(selector.querySelectorAll('[data-palette-option]'));
+			if (!trigger || !menu) return;
+			const close = () => { menu.hidden = true; trigger.setAttribute('aria-expanded', 'false'); };
+			const sync = () => {
+				const active = document.documentElement.getAttribute('data-palette');
+				options.forEach((option) => option.setAttribute('aria-selected', String(option.getAttribute('data-palette-option') === active)));
+			};
+			trigger.addEventListener('click', () => { menu.hidden = !menu.hidden; trigger.setAttribute('aria-expanded', String(!menu.hidden)); if (!menu.hidden) sync(); });
+			options.forEach((option) => option.addEventListener('click', () => {
+				const id = option.getAttribute('data-palette-option');
+				if (!id) return;
+				document.documentElement.setAttribute('data-palette', id);
+				try { localStorage.setItem('palette', id); } catch (error) { /* preference persistence is optional */ }
+				document.dispatchEvent(new CustomEvent('palettechange'));
+				sync(); close(); trigger.focus();
+			}));
+			selector.querySelector('[data-palette-reset]')?.addEventListener('click', () => {
+				document.documentElement.setAttribute('data-palette', defaultPalette);
+				try { localStorage.removeItem('palette'); } catch (error) { /* preference persistence is optional */ }
+				document.dispatchEvent(new CustomEvent('palettechange'));
+				sync(); close();
+			});
+			document.addEventListener('palettechange', sync);
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape' && !menu.hidden) { close(); trigger.focus(); }
+				if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && !menu.hidden) { event.preventDefault(); const current = options.indexOf(document.activeElement); options[(current + (event.key === 'ArrowDown' ? 1 : options.length - 1)) % options.length]?.focus(); }
+			});
+			document.addEventListener('click', (event) => { if (!selector.contains(event.target)) close(); });
+			sync();
+		});
+	})();
+</script>
+
+<style>
+	.palette-selector { position: relative; }
+	.palette-trigger { display: inline-flex; align-items: center; gap: .4rem; min-height: 2.375rem; padding: .45rem .65rem; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--surface); color: var(--text-muted); cursor: pointer; box-shadow: var(--shadow-sm); transition: var(--transition-fast); }
+	.palette-trigger:hover { border-color: var(--accent); color: var(--accent); background: var(--surface-muted); }
+	.palette-trigger-label { font: 600 .7rem var(--font-mono); letter-spacing: .03em; }
+	.palette-trigger-swatch, .palette-swatch { display: inline-block; width: 1rem; height: 1rem; border-radius: 50%; background: linear-gradient(135deg, var(--palette-light, var(--accent)) 50%, var(--palette-dark, var(--accent-hover)) 50%); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .12); }
+	.palette-menu { position: absolute; z-index: 60; top: calc(100% + .65rem); right: 0; width: min(19rem, calc(100vw - 2rem)); padding: .75rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-elevated); box-shadow: var(--shadow-lg); }
+	.palette-menu-heading { display: flex; flex-direction: column; gap: .15rem; padding: .35rem .45rem .65rem; border-bottom: 1px solid var(--border-subtle); }
+	.palette-menu-heading strong { color: var(--text); font-size: .85rem; }
+	.palette-menu-heading span, .palette-option small { color: var(--text-muted); font-size: .72rem; }
+	.palette-options { display: grid; gap: .25rem; padding-block: .5rem; }
+	.palette-option { display: flex; align-items: center; gap: .65rem; min-height: 3.1rem; width: 100%; padding: .45rem; border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; color: var(--text); text-align: left; cursor: pointer; }
+	.palette-option:hover, .palette-option[aria-selected="true"] { border-color: var(--border-active); background: var(--accent-muted); }
+	.palette-option-copy { display: flex; flex: 1; flex-direction: column; gap: .08rem; }
+	.palette-option-copy strong { font-size: .8rem; }
+	.palette-default { padding: .18rem .35rem; border-radius: var(--radius-sm); background: var(--accent-muted); color: var(--accent); font: 600 .6rem var(--font-mono); }
+	.palette-check { display: none; color: var(--accent); }
+	.palette-option[aria-selected="true"] .palette-check { display: block; }
+	.palette-reset { width: 100%; padding: .5rem; border: 0; border-top: 1px solid var(--border-subtle); background: transparent; color: var(--text-muted); font: 600 .7rem var(--font-mono); cursor: pointer; }
+	.palette-reset:hover { color: var(--accent); }
+	@media (max-width: 48rem) { .palette-trigger-label { display: none; } }
+</style>
