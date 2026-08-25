@@ -1,0 +1,16 @@
+# Cloudflare Pages / Workers configuration
+name = "portfolio"
+compatibility_date = "2026-08-25"
+pages_build_output_dir = "dist"
+
+# Runtime Environment Variables (Secrets must be set via `wrangler secret put <KEY>` or Cloudflare dashboard)
+# - RESEND_API_KEY
+# - TURNSTILE_SECRET_KEY
+[vars]
+CONTACT_TO_EMAIL = "contact@example.com"
+CONTACT_FROM_EMAIL = "onboarding@resend.dev"
+
+# Optional KV namespace binding for rate limiting fallback
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "<kv-namespace-id>"
