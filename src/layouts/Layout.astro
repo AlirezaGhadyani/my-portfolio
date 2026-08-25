@@ -4,6 +4,8 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { resumeData } from "../data/resume.ts";
 import { themeConfig, paletteIds } from "../data/theme.ts";
+import interWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2";
+import monoWoff2 from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2";
 
 interface Props {
 	title?: string;
@@ -31,6 +33,8 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={metaDescription} />
 		<meta name="color-scheme" content="light dark" />
+		<link rel="preload" href={interWoff2} as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href={monoWoff2} as="font" type="font/woff2" crossorigin />
 		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Jordan Avery" />
