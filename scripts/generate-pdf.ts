@@ -75,18 +75,10 @@ function startStaticServer(baseDir: string): Promise<{ server: http.Server; port
 }
 
 async function launchBrowser(): Promise<Browser> {
-	const systemChrome = ["/usr/bin/google-chrome", "/usr/bin/chromium", "/usr/bin/chromium-browser"].find((p) =>
-		fs.existsSync(p),
-	);
-
 	const options: LaunchOptions = {
 		headless: true,
 		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
 	};
-
-	if (systemChrome) {
-		options.executablePath = systemChrome;
-	}
 
 	return chromium.launch(options);
 }
@@ -125,7 +117,8 @@ export async function generatePdfs(): Promise<void> {
 			const outPdfPath = path.join(downloadsDir, `resume-${vKey}.pdf`);
 
 			console.log(`[pdf] Generating: ${vKey} -> ${outPdfPath}`);
-			await page.goto(targetUrl, { waitUntil: "networkidle" });
+			await page.goto(targetUrl, { waitUntil: "load" });
+			await page.evaluate(() => document.fonts.ready);
 			await page.emulateMedia({ media: "print" });
 
 			await page.pdf({
