@@ -26,5 +26,8 @@ public/downloads/
 # coverage output
 coverage/
 
+# baseline snapshots
+.baseline/
+
 # jetbrains setting folder
 .idea/
