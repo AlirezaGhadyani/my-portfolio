@@ -81,7 +81,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 					<a href="/downloads/resume-ats.txt" download class="action-btn" title="Download ATS Plain Text (.txt)">
 						<span>TXT</span>
 					</a>
-					<button type="button" class="action-btn" onclick="window.print()" title="Print via Browser">
+					<button type="button" class="action-btn" data-print title="Print via Browser">
 						<svg
 							width="15"
 							height="15"
@@ -304,6 +304,11 @@ const { identity, summary, experience, skills, education, certifications, projec
 				)
 			}
 		</main>
+		<script is:inline>
+			document.querySelectorAll("[data-print]").forEach((btn) => {
+				btn.addEventListener("click", () => window.print());
+			});
+		</script>
 	</body>
 </html>
 
