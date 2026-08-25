@@ -95,7 +95,7 @@ export function verifyCrossRendererOutputs(distRoot = path.join(projectRoot, "di
 			throw new Error(`Case study references an unknown project: ${filename}`);
 		}
 	}
-	for (const pathname of [...sitemap.matchAll(/<loc>[^<]+(\/[^<]*)<\/loc>/g)].map((match) => match[1])) {
+	for (const pathname of [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => new URL(match[1]).pathname)) {
 		const routePath = pathname === "/" ? "index.html" : `${pathname.replace(/^\//, "").replace(/\/$/, "")}/index.html`;
 		if (!fs.existsSync(path.join(distRoot, routePath))) throw new Error(`Sitemap URL has no built route: ${pathname}`);
 	}
