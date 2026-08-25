@@ -19,10 +19,6 @@ export interface ContactEnv {
 	CONTACT_TO_EMAIL?: string;
 	CONTACT_FROM_EMAIL?: string;
 	TURNSTILE_SECRET_KEY?: string;
-	RATE_LIMIT_KV?: {
-		get(key: string): Promise<string | null>;
-		put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
-	};
 }
 
 export interface RateLimiter {
@@ -32,7 +28,7 @@ export interface RateLimiter {
 const memoryRateLimitMap = new Map<string, number[]>();
 
 export const memoryRateLimiter: RateLimiter = {
-	async isRateLimited(ip: string, limit = 3, windowSeconds = 600): Promise<boolean> {
+	async isRateLimited(ip: string, limit = 5, windowSeconds = 600): Promise<boolean> {
 		const now = Date.now();
 		const windowMs = windowSeconds * 1000;
 		const timestamps = (memoryRateLimitMap.get(ip) || []).filter((t) => now - t < windowMs);
@@ -46,25 +42,6 @@ export const memoryRateLimiter: RateLimiter = {
 		return false;
 	},
 };
-
-export function createKvRateLimiter(kv: ContactEnv["RATE_LIMIT_KV"]): RateLimiter {
-	if (!kv) return memoryRateLimiter;
-
-	return {
-		async isRateLimited(ip: string, limit = 3, windowSeconds = 600): Promise<boolean> {
-			const key = `ratelimit:${ip}`;
-			const raw = await kv.get(key);
-			const count = raw ? parseInt(raw, 10) : 0;
-
-			if (count >= limit) {
-				return true;
-			}
-
-			await kv.put(key, String(count + 1), { expirationTtl: windowSeconds });
-			return false;
-		},
-	};
-}
 
 export async function verifyTurnstileToken(
 	token: string,
@@ -222,9 +199,7 @@ export async function handleContactRequest(request: Request, env: ContactEnv = {
 	}
 	const clientIp = rawClientIp;
 
-	const rateLimiter = env.RATE_LIMIT_KV ? createKvRateLimiter(env.RATE_LIMIT_KV) : memoryRateLimiter;
-
-	const isLimited = await rateLimiter.isRateLimited(clientIp, 3, 600);
+	const isLimited = await memoryRateLimiter.isRateLimited(clientIp, 5, 600);
 	if (isLimited) {
 		return jsonResponse(
 			{

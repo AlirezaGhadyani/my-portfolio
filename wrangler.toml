@@ -10,7 +10,6 @@ pages_build_output_dir = "dist"
 CONTACT_TO_EMAIL = "contact@example.com"
 CONTACT_FROM_EMAIL = "onboarding@resend.dev"
 
-# Optional KV namespace binding for rate limiting fallback
-# [[kv_namespaces]]
-# binding = "RATE_LIMIT_KV"
-# id = "<kv-namespace-id>"
+# Rate Limiting configuration:
+# For production edge rate limiting on /api/contact, configure Cloudflare WAF / Rate Limiting Rules
+# in the Cloudflare dashboard or via Zone Rulesets (e.g. 5 requests per 10 minutes per IP).

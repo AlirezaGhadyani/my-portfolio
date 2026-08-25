@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { ContactPayloadSchema, handleContactRequest, createKvRateLimiter } from "../../functions/api/contact";
+import { ContactPayloadSchema, handleContactRequest, memoryRateLimiter } from "../../functions/api/contact";
 
 describe("Contact API & Validation", () => {
 	describe("ContactPayloadSchema", () => {
@@ -183,36 +183,24 @@ describe("Contact API & Validation", () => {
 					},
 				);
 
-			// 3 requests allowed (they fail later due to missing turnstileToken/secrets if not provided, but rate limiter consumes)
-			const r1 = await send();
-			expect(r1.status).not.toBe(429);
-			const r2 = await send();
-			expect(r2.status).not.toBe(429);
-			const r3 = await send();
-			expect(r3.status).not.toBe(429);
+			// 5 requests allowed
+			for (let i = 0; i < 5; i++) {
+				const r = await send();
+				expect(r.status).not.toBe(429);
+			}
 
-			// 4th request rejected
-			const r4 = await send();
-			expect(r4.status).toBe(429);
-			const body = await r4.json();
+			// 6th request rejected
+			const r6 = await send();
+			expect(r6.status).toBe(429);
+			const body = await r6.json();
 			expect(body.error).toContain("Too many requests");
 		});
 
-		it("supports Cloudflare KV rate limiting", async () => {
-			const mockStorage = new Map<string, string>();
-			const mockKv = {
-				async get(key: string) {
-					return mockStorage.get(key) || null;
-				},
-				async put(key: string, value: string) {
-					mockStorage.set(key, value);
-				},
-			};
-
-			const kvLimiter = createKvRateLimiter(mockKv);
-			expect(await kvLimiter.isRateLimited("137.141.178.12", 2, 60)).toBe(false);
-			expect(await kvLimiter.isRateLimited("137.141.178.12", 2, 60)).toBe(false);
-			expect(await kvLimiter.isRateLimited("137.141.178.12", 2, 60)).toBe(true);
+		it("tests memoryRateLimiter window tracking", async () => {
+			const ip = "137.142.176.9";
+			expect(await memoryRateLimiter.isRateLimited(ip, 2, 60)).toBe(false);
+			expect(await memoryRateLimiter.isRateLimited(ip, 2, 60)).toBe(false);
+			expect(await memoryRateLimiter.isRateLimited(ip, 2, 60)).toBe(true);
 		});
 
 		it("returns 503 when TURNSTILE_SECRET_KEY is absent", async () => {
