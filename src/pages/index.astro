@@ -1,105 +1,141 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ExperienceSection from '../components/ExperienceSection.astro';
-import SkillSection from '../components/SkillSection.astro';
-import EducationSection from '../components/EducationSection.astro';
-import ProjectsSection from '../components/ProjectsSection.astro';
-import ContactSection from '../components/ContactSection.astro';
-import { resumeData } from '../data/resume.ts';
+import Layout from "../layouts/Layout.astro";
+import ExperienceSection from "../components/ExperienceSection.astro";
+import SkillSection from "../components/SkillSection.astro";
+import EducationSection from "../components/EducationSection.astro";
+import ProjectsSection from "../components/ProjectsSection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { resumeData } from "../data/resume.ts";
 
-const { identity, summary, experience, skills, education, certifications, projects } =
-	resumeData;
+const { identity, summary, experience, skills, education, certifications, projects } = resumeData;
 
-const websiteUrl = identity.website.replace(/\/+$/, '');
+const websiteUrl = identity.website.replace(/\/+$/, "");
 const sameAs = identity.links.map((link) => link.url);
-const featuredProject = projects.find((project) => project.tier === 'flagship') ?? projects[0];
+const featuredProject = projects.find((project) => project.tier === "flagship") ?? projects[0];
 const proofMetrics = featuredProject.impactMetrics ?? [];
 
 const personSchema = {
-	'@type': 'Person',
-	'@id': `${websiteUrl}/#person`,
-	'name': identity.name,
-	'jobTitle': identity.title,
-	'description': summary.short,
-	'url': websiteUrl,
-	'email': `mailto:${identity.email}`,
+	"@type": "Person",
+	"@id": `${websiteUrl}/#person`,
+	name: identity.name,
+	jobTitle: identity.title,
+	description: summary.short,
+	url: websiteUrl,
+	email: `mailto:${identity.email}`,
 	...((identity.phone && { telephone: identity.phone }) ?? {}),
-	'address': { '@type': 'PostalAddress', 'addressLocality': identity.location },
-	'sameAs': sameAs,
-	'alumniOf': education.map((entry) => ({
-		'@type': 'CollegeOrUniversity',
-		'name': entry.institution,
+	address: { "@type": "PostalAddress", addressLocality: identity.location },
+	sameAs: sameAs,
+	alumniOf: education.map((entry) => ({
+		"@type": "CollegeOrUniversity",
+		name: entry.institution,
 	})),
-	'knowsAbout': [...new Set(skills.flatMap((category) => category.skills.map((skill) => skill.name)))],
+	knowsAbout: [...new Set(skills.flatMap((category) => category.skills.map((skill) => skill.name)))],
 };
 
 const ldJson = {
-	'@context': 'https://schema.org',
-	'@graph': [
+	"@context": "https://schema.org",
+	"@graph": [
 		{
-			'@type': 'ProfilePage',
-			'@id': `${websiteUrl}/#profile`,
-			'name': identity.name,
-			'url': `${websiteUrl}/`,
-			'about': personSchema,
-			'mainEntity': { '@id': `${websiteUrl}/#person` },
+			"@type": "ProfilePage",
+			"@id": `${websiteUrl}/#profile`,
+			name: identity.name,
+			url: `${websiteUrl}/`,
+			about: personSchema,
+			mainEntity: { "@id": `${websiteUrl}/#person` },
 		},
-		{ ...personSchema, '@id': `${websiteUrl}/#person` },
+		{ ...personSchema, "@id": `${websiteUrl}/#person` },
 	],
 };
 ---
 
 <Layout>
 	<section class="hero" aria-labelledby="hero-title">
-		<div class="hero-kicker"><span>Portfolio / 2026</span><span class="kicker-rule" aria-hidden="true"></span><span>Independent engineering practice</span></div>
+		<div class="hero-kicker">
+			<span>Portfolio / 2026</span><span class="kicker-rule" aria-hidden="true"></span><span
+				>Independent engineering practice</span
+			>
+		</div>
 		<div class="hero-copy">
-		<div class="hero-eyebrow">
-			<span class="live-status-dot" aria-hidden="true"></span>
-			<span>Available for thoughtful engineering work</span>
-		</div>
-		<h1 id="hero-title" class="hero-title"><span>{identity.name}</span><strong>{identity.title}</strong></h1>
-		<div class="hero-role">
-			<span class="location-badge">
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-					<circle cx="12" cy="10" r="3"></circle>
-				</svg>
-				{identity.location}
-			</span>
-		</div>
-		<p class="hero-summary">{summary.full}</p>
-		<div class="hero-actions">
-			<a href="/print/resume" class="btn-resume">
-				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-					<polyline points="14 2 14 8 20 8"></polyline>
-					<line x1="16" y1="13" x2="8" y2="13"></line>
-					<line x1="16" y1="17" x2="8" y2="17"></line>
-					<polyline points="10 9 9 9 8 9"></polyline>
-				</svg>
-				<span>View & Download Resume</span>
-				<span class="badge-formats">PDF / TXT</span>
-			</a>
-			<nav class="hero-links" aria-label="Social and professional profiles">
-				{
-					identity.links.map(({ label, url }) => (
-						<a href={url} target="_blank" rel="noreferrer noopener" class="btn-secondary">
-							<span>{label}</span>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="external-icon" aria-hidden="true">
-								<line x1="7" y1="17" x2="17" y2="7"></line>
-								<polyline points="7 7 17 7 17 17"></polyline>
-							</svg>
-						</a>
-					))
-				}
-			</nav>
-		</div>
+			<div class="hero-eyebrow">
+				<span class="live-status-dot" aria-hidden="true"></span>
+				<span>Available for thoughtful engineering work</span>
+			</div>
+			<h1 id="hero-title" class="hero-title"><span>{identity.name}</span><strong>{identity.title}</strong></h1>
+			<div class="hero-role">
+				<span class="location-badge">
+					<svg
+						width="14"
+						height="14"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true">
+						<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+						<circle cx="12" cy="10" r="3"></circle>
+					</svg>
+					{identity.location}
+				</span>
+			</div>
+			<p class="hero-summary">{summary.full}</p>
+			<div class="hero-actions">
+				<a href="/print/resume" class="btn-resume">
+					<svg
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true">
+						<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+						<polyline points="14 2 14 8 20 8"></polyline>
+						<line x1="16" y1="13" x2="8" y2="13"></line>
+						<line x1="16" y1="17" x2="8" y2="17"></line>
+						<polyline points="10 9 9 9 8 9"></polyline>
+					</svg>
+					<span>View & Download Resume</span>
+					<span class="badge-formats">PDF / TXT</span>
+				</a>
+				<nav class="hero-links" aria-label="Social and professional profiles">
+					{
+						identity.links.map(({ label, url }) => (
+							<a href={url} target="_blank" rel="noreferrer noopener" class="btn-secondary">
+								<span>{label}</span>
+								<svg
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="external-icon"
+									aria-hidden="true">
+									<line x1="7" y1="17" x2="17" y2="7" />
+									<polyline points="7 7 17 7 17 17" />
+								</svg>
+							</a>
+						))
+					}
+				</nav>
+			</div>
 		</div>
 		<div class="hero-visual" aria-label={`Technical proof from ${featuredProject.title}`}>
 			<div class="proof-label"><span class="proof-index">01</span> Featured system</div>
 			<div class="code-panel">
-				<div class="code-panel-head"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-file">threat-signals.ts</span><span class="code-kind">TypeScript</span></div>
-				<pre aria-label={`Code excerpt for ${featuredProject.title}`}><code><span class="code-muted">const</span> <span class="code-name">signals</span> = <span class="code-muted">await</span> ingest(&#123;
+				<div class="code-panel-head">
+					<span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-file"
+						>threat-signals.ts</span
+					><span class="code-kind">TypeScript</span>
+				</div>
+				<pre
+					aria-label={`Code excerpt for ${featuredProject.title}`}><code><span class="code-muted">const</span> <span class="code-name">signals</span> = <span class="code-muted">await</span> ingest(&#123;
   source: <span class="code-string">'edge-stream'</span>,
   batchSize: <span class="code-number">2_400_000</span>,
 &#125;);
@@ -107,9 +143,25 @@ const ldJson = {
 <span class="code-muted">return</span> detectThreats(signals)
   .filter(<span class="code-name">isActionable</span>)
   .publish(&#123; latency: <span class="code-string">'p95'</span> &#125;);</code></pre>
-				<div class="code-caption"><span>{featuredProject.title}</span><a href={featuredProject.hasCaseStudy ? `/projects/${featuredProject.slug}` : '#projects'}>Read the technical story <span aria-hidden="true">↗</span></a></div>
+				<div class="code-caption">
+					<span>{featuredProject.title}</span><a
+						href={featuredProject.hasCaseStudy ? `/projects/${featuredProject.slug}` : "#projects"}
+						>Read the technical story <span aria-hidden="true">↗</span></a
+					>
+				</div>
 			</div>
-			{proofMetrics.length > 0 && <ul class="proof-metrics">{proofMetrics.slice(0, 3).map((metric) => <li><strong>{metric}</strong><span>measured outcome</span></li>)}</ul>}
+			{
+				proofMetrics.length > 0 && (
+					<ul class="proof-metrics">
+						{proofMetrics.slice(0, 3).map((metric) => (
+							<li>
+								<strong>{metric}</strong>
+								<span>measured outcome</span>
+							</li>
+						))}
+					</ul>
+				)
+			}
 		</div>
 	</section>
 
@@ -135,17 +187,32 @@ const ldJson = {
 	.hero {
 		position: relative;
 		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(20rem, .95fr);
+		grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
 		align-items: center;
 		gap: clamp(2.5rem, 5vw, 5rem);
 		min-height: min(47rem, calc(100vh - 4.5rem));
 		padding-block: clamp(2.75rem, 6vw, 5.5rem) clamp(3.5rem, 6vw, 5rem);
 	}
 
-	.hero-kicker { grid-column: 1 / -1; display: flex; align-items: center; gap: .7rem; color: var(--text-subtle); font: 600 .72rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
-	.kicker-rule { width: 2.5rem; height: 1px; background: var(--accent); }
+	.hero-kicker {
+		grid-column: 1 / -1;
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		color: var(--text-subtle);
+		font: 600 0.72rem/1 var(--font-mono);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.kicker-rule {
+		width: 2.5rem;
+		height: 1px;
+		background: var(--accent);
+	}
 
-	.hero-copy { min-width: 0; }
+	.hero-copy {
+		min-width: 0;
+	}
 
 	.hero-eyebrow {
 		display: inline-flex;
@@ -173,9 +240,9 @@ const ldJson = {
 	.hero-title {
 		display: flex;
 		flex-direction: column;
-		gap: .15em;
+		gap: 0.15em;
 		font-size: clamp(3.5rem, 7vw, 6.8rem);
-		line-height: .88;
+		line-height: 0.88;
 		letter-spacing: -0.075em;
 		font-weight: 800;
 		color: var(--text);
@@ -183,30 +250,134 @@ const ldJson = {
 		margin: 1.8rem 0 0;
 	}
 
-	.hero-title strong { color: var(--accent); font-size: .22em; line-height: 1.25; letter-spacing: .035em; font-weight: 650; text-transform: uppercase; margin-top: 1.4rem; }
-	.hero-visual { position: relative; min-width: 0; padding-top: 1rem; }
-	.proof-label { display: flex; align-items: center; gap: .7rem; color: var(--accent); font: 600 .72rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
-	.proof-index { color: var(--text-subtle); }
-	.code-panel { margin-top: 1rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-lg); }
-	.code-panel-head { display: flex; align-items: center; gap: .75rem; min-height: 2.7rem; padding: 0 .9rem; border-bottom: 1px solid var(--border-subtle); background: var(--surface-muted); color: var(--text-subtle); font: 600 .7rem/1 var(--font-mono); }
-	.window-dots { display: flex; gap: .3rem; }
-	.window-dots i { display: block; width: .45rem; height: .45rem; border-radius: 50%; background: var(--border); }
-	.window-dots i:first-child { background: var(--accent); }
-	.code-file { color: var(--text-muted); }
-	.code-kind { margin-left: auto; color: var(--text-subtle); }
-	.code-panel pre { overflow-x: auto; margin: 0; padding: clamp(1.25rem, 3vw, 1.8rem); color: var(--text-muted); font: .78rem/1.8 var(--font-mono); }
-	.code-muted { color: var(--text-subtle); }
-	.code-name { color: var(--accent); }
-	.code-string { color: hsl(145 48% 62%); }
-	.code-number { color: hsl(29 92% 70%); }
-	.code-caption { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 1.25rem; border-top: 1px solid var(--border-subtle); color: var(--text-muted); font-size: .78rem; }
-	.code-caption a { color: var(--accent); font-weight: 650; text-decoration: none; }
-	.proof-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; list-style: none; margin: 1.25rem 0 0; padding: 0; }
-	.proof-metrics li { display: flex; flex-direction: column; gap: .25rem; }
-	.proof-metrics strong { color: var(--text); font: 700 1.2rem/1.1 var(--font-mono); }
-	.proof-metrics span { color: var(--text-subtle); font-size: .75rem; }
-	.proof-link { color: var(--accent); font-weight: 650; text-decoration: none; }
-	.proof-link:hover { color: var(--accent-hover); }
+	.hero-title strong {
+		color: var(--accent);
+		font-size: 0.22em;
+		line-height: 1.25;
+		letter-spacing: 0.035em;
+		font-weight: 650;
+		text-transform: uppercase;
+		margin-top: 1.4rem;
+	}
+	.hero-visual {
+		position: relative;
+		min-width: 0;
+		padding-top: 1rem;
+	}
+	.proof-label {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		color: var(--accent);
+		font: 600 0.72rem/1 var(--font-mono);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+	.proof-index {
+		color: var(--text-subtle);
+	}
+	.code-panel {
+		margin-top: 1rem;
+		overflow: hidden;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: var(--surface);
+		box-shadow: var(--shadow-lg);
+	}
+	.code-panel-head {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 2.7rem;
+		padding: 0 0.9rem;
+		border-bottom: 1px solid var(--border-subtle);
+		background: var(--surface-muted);
+		color: var(--text-subtle);
+		font: 600 0.7rem/1 var(--font-mono);
+	}
+	.window-dots {
+		display: flex;
+		gap: 0.3rem;
+	}
+	.window-dots i {
+		display: block;
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 50%;
+		background: var(--border);
+	}
+	.window-dots i:first-child {
+		background: var(--accent);
+	}
+	.code-file {
+		color: var(--text-muted);
+	}
+	.code-kind {
+		margin-left: auto;
+		color: var(--text-subtle);
+	}
+	.code-panel pre {
+		overflow-x: auto;
+		margin: 0;
+		padding: clamp(1.25rem, 3vw, 1.8rem);
+		color: var(--text-muted);
+		font: 0.78rem/1.8 var(--font-mono);
+	}
+	.code-muted {
+		color: var(--text-subtle);
+	}
+	.code-name {
+		color: var(--accent);
+	}
+	.code-string {
+		color: hsl(145 48% 62%);
+	}
+	.code-number {
+		color: hsl(29 92% 70%);
+	}
+	.code-caption {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.9rem 1.25rem;
+		border-top: 1px solid var(--border-subtle);
+		color: var(--text-muted);
+		font-size: 0.78rem;
+	}
+	.code-caption a {
+		color: var(--accent);
+		font-weight: 650;
+		text-decoration: none;
+	}
+	.proof-metrics {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		list-style: none;
+		margin: 1.25rem 0 0;
+		padding: 0;
+	}
+	.proof-metrics li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+	.proof-metrics strong {
+		color: var(--text);
+		font: 700 1.2rem/1.1 var(--font-mono);
+	}
+	.proof-metrics span {
+		color: var(--text-subtle);
+		font-size: 0.75rem;
+	}
+	.proof-link {
+		color: var(--accent);
+		font-weight: 650;
+		text-decoration: none;
+	}
+	.proof-link:hover {
+		color: var(--accent-hover);
+	}
 
 	.hero-role {
 		display: flex;
@@ -218,14 +389,16 @@ const ldJson = {
 	.location-badge {
 		display: inline-flex;
 		align-items: center;
-		gap: .45rem;
+		gap: 0.45rem;
 		color: var(--text-muted);
-		font: 600 .75rem/1 var(--font-mono);
-		letter-spacing: .03em;
+		font: 600 0.75rem/1 var(--font-mono);
+		letter-spacing: 0.03em;
 		text-transform: uppercase;
 	}
 
-	.location-badge svg { color: var(--accent); }
+	.location-badge svg {
+		color: var(--accent);
+	}
 
 	.hero-summary {
 		color: var(--text-muted);
@@ -303,7 +476,9 @@ const ldJson = {
 
 		.external-icon {
 			color: var(--text-subtle);
-			transition: transform 0.2s ease, color 0.2s ease;
+			transition:
+				transform 0.2s ease,
+				color 0.2s ease;
 		}
 
 		&:hover {
@@ -325,18 +500,47 @@ const ldJson = {
 	}
 
 	@media (max-width: 48rem) {
-		.hero { grid-template-columns: 1fr; min-height: auto; gap: 2.75rem; }
-		.hero-visual { max-width: 38rem; width: 100%; margin-inline: auto; }
+		.hero {
+			grid-template-columns: 1fr;
+			min-height: auto;
+			gap: 2.75rem;
+		}
+		.hero-visual {
+			max-width: 38rem;
+			width: 100%;
+			margin-inline: auto;
+		}
 	}
 
 	@media (max-width: 30rem) {
-		.hero-title { font-size: clamp(3.25rem, 17vw, 5rem); }
-		.hero-actions, .hero-links { width: 100%; }
-		.btn-resume, .btn-secondary { justify-content: center; width: 100%; }
-		.hero-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-		.hero-kicker { font-size: .65rem; }
-		.proof-metrics { gap: .75rem; }
-		.code-panel pre { font-size: .7rem; }
-		.code-caption { flex-direction: column; gap: .35rem; }
+		.hero-title {
+			font-size: clamp(3.25rem, 17vw, 5rem);
+		}
+		.hero-actions,
+		.hero-links {
+			width: 100%;
+		}
+		.btn-resume,
+		.btn-secondary {
+			justify-content: center;
+			width: 100%;
+		}
+		.hero-links {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.hero-kicker {
+			font-size: 0.65rem;
+		}
+		.proof-metrics {
+			gap: 0.75rem;
+		}
+		.code-panel pre {
+			font-size: 0.7rem;
+		}
+		.code-caption {
+			flex-direction: column;
+			gap: 0.35rem;
+		}
 	}
 </style>

@@ -1,16 +1,16 @@
 ---
-import { getEntry, render, getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import { resumeData } from '../../data/resume.ts';
+import { getEntry, render, getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { resumeData } from "../../data/resume.ts";
 
 export async function getStaticPaths() {
-	const caseStudies = await getCollection('caseStudies');
+	const caseStudies = await getCollection("caseStudies");
 	return caseStudies.map((entry) => ({ params: { slug: entry.id } }));
 }
 
 const { slug } = Astro.params;
-const entry = await getEntry('caseStudies', slug);
-if (!entry) return Astro.throw(404, 'Case study not found');
+const entry = await getEntry("caseStudies", slug);
+if (!entry) return Astro.throw(404, "Case study not found");
 
 const { Content } = await render(entry);
 const { data } = entry;
@@ -21,7 +21,16 @@ void project;
 <Layout title={`${data.title} — Technical Case Study`} description={data.summary}>
 	<article class="case-study">
 		<a class="case-back" href="/projects">
-			<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<svg
+				width="15"
+				height="15"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true">
 				<line x1="19" y1="12" x2="5" y2="12"></line>
 				<polyline points="12 19 5 12 12 5"></polyline>
 			</svg>
@@ -44,27 +53,38 @@ void project;
 				</div>
 				<div class="meta-card full-width">
 					<span class="meta-label">Core Architecture & Stack</span>
-					<span class="meta-value">{data.techStack.join(', ')}</span>
+					<span class="meta-value">{data.techStack.join(", ")}</span>
 				</div>
 			</div>
 		</header>
 
-		{data.impactMetrics.length > 0 && (
-			<div class="metrics-container">
-				<h2 class="metrics-title">Key Architectural Outcomes & Metrics</h2>
-				<ul class="case-metrics">
-					{data.impactMetrics.map((metric) => (
-						<li>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-								<polyline points="17 6 23 6 23 12"></polyline>
-							</svg>
-							<span>{metric}</span>
-						</li>
-					))}
-				</ul>
-			</div>
-		)}
+		{
+			data.impactMetrics.length > 0 && (
+				<div class="metrics-container">
+					<h2 class="metrics-title">Key Architectural Outcomes & Metrics</h2>
+					<ul class="case-metrics">
+						{data.impactMetrics.map((metric) => (
+							<li>
+								<svg
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									aria-hidden="true">
+									<polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+									<polyline points="17 6 23 6 23 12" />
+								</svg>
+								<span>{metric}</span>
+							</li>
+						))}
+					</ul>
+				</div>
+			)
+		}
 
 		<div class="case-body">
 			<Content />
@@ -120,7 +140,7 @@ void project;
 			letter-spacing: 0.08em;
 		}
 
-	.case-title {
+		.case-title {
 			font-size: clamp(2.75rem, 6vw, 5rem);
 			line-height: 1.08;
 			letter-spacing: -0.035em;

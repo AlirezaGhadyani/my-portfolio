@@ -43,7 +43,7 @@ html[data-theme="light"] {
 	--accent-glow: hsl(13 68% 46% / 0.15);
 	--shadow-sm: 0 1px 2px 0 hsl(220 25% 10% / 0.04);
 	--shadow-md: 0 4px 12px -2px hsl(220 25% 10% / 0.08), 0 2px 6px -1px hsl(220 25% 10% / 0.04);
-	--shadow-lg: 0 12px 28px -4px hsl(220 25% 10% / 0.10), 0 4px 12px -2px hsl(220 25% 10% / 0.05);
+	--shadow-lg: 0 12px 28px -4px hsl(220 25% 10% / 0.1), 0 4px 12px -2px hsl(220 25% 10% / 0.05);
 	--shadow-color: hsl(220 25% 10% / 0.06);
 	--status-live: hsl(142 71% 45%);
 	--status-live-glow: hsl(142 71% 45% / 0.35);
@@ -74,17 +74,67 @@ html[data-theme="dark"] {
 }
 
 /* Palette-specific accent tokens. Mode selectors keep light/dark contrast intentional. */
-html[data-palette="ocean"][data-theme="light"] { --accent: hsl(217 91% 45%); --accent-hover: hsl(217 91% 37%); --accent-muted: hsl(217 90% 94%); --accent-glow: hsl(217 91% 45% / 0.15); --border-active: hsl(217 91% 45%); }
-html[data-palette="ocean"][data-theme="dark"] { --accent: hsl(212 95% 64%); --accent-hover: hsl(212 95% 74%); --accent-muted: hsl(212 95% 64% / 0.14); --accent-glow: hsl(212 95% 64% / 0.22); --border-active: hsl(212 95% 64%); }
-html[data-palette="emerald"][data-theme="light"] { --accent: hsl(160 84% 34%); --accent-hover: hsl(160 84% 28%); --accent-muted: hsl(160 70% 93%); --accent-glow: hsl(160 84% 34% / 0.15); --border-active: hsl(160 84% 34%); }
-html[data-palette="emerald"][data-theme="dark"] { --accent: hsl(158 75% 52%); --accent-hover: hsl(158 80% 64%); --accent-muted: hsl(158 75% 52% / 0.14); --accent-glow: hsl(158 75% 52% / 0.22); --border-active: hsl(158 75% 52%); }
-html[data-palette="amethyst"][data-theme="light"] { --accent: hsl(270 70% 48%); --accent-hover: hsl(270 70% 40%); --accent-muted: hsl(270 65% 94%); --accent-glow: hsl(270 70% 48% / 0.15); --border-active: hsl(270 70% 48%); }
-html[data-palette="amethyst"][data-theme="dark"] { --accent: hsl(270 85% 68%); --accent-hover: hsl(270 85% 78%); --accent-muted: hsl(270 85% 68% / 0.14); --accent-glow: hsl(270 85% 68% / 0.22); --border-active: hsl(270 85% 68%); }
-html[data-palette="rose"][data-theme="light"] { --accent: hsl(346 77% 46%); --accent-hover: hsl(346 77% 38%); --accent-muted: hsl(346 70% 94%); --accent-glow: hsl(346 77% 46% / 0.15); --border-active: hsl(346 77% 46%); }
-html[data-palette="rose"][data-theme="dark"] { --accent: hsl(346 88% 65%); --accent-hover: hsl(346 90% 75%); --accent-muted: hsl(346 88% 65% / 0.14); --accent-glow: hsl(346 88% 65% / 0.22); --border-active: hsl(346 88% 65%); }
+html[data-palette="ocean"][data-theme="light"] {
+	--accent: hsl(217 91% 45%);
+	--accent-hover: hsl(217 91% 37%);
+	--accent-muted: hsl(217 90% 94%);
+	--accent-glow: hsl(217 91% 45% / 0.15);
+	--border-active: hsl(217 91% 45%);
+}
+html[data-palette="ocean"][data-theme="dark"] {
+	--accent: hsl(212 95% 64%);
+	--accent-hover: hsl(212 95% 74%);
+	--accent-muted: hsl(212 95% 64% / 0.14);
+	--accent-glow: hsl(212 95% 64% / 0.22);
+	--border-active: hsl(212 95% 64%);
+}
+html[data-palette="emerald"][data-theme="light"] {
+	--accent: hsl(160 84% 34%);
+	--accent-hover: hsl(160 84% 28%);
+	--accent-muted: hsl(160 70% 93%);
+	--accent-glow: hsl(160 84% 34% / 0.15);
+	--border-active: hsl(160 84% 34%);
+}
+html[data-palette="emerald"][data-theme="dark"] {
+	--accent: hsl(158 75% 52%);
+	--accent-hover: hsl(158 80% 64%);
+	--accent-muted: hsl(158 75% 52% / 0.14);
+	--accent-glow: hsl(158 75% 52% / 0.22);
+	--border-active: hsl(158 75% 52%);
+}
+html[data-palette="amethyst"][data-theme="light"] {
+	--accent: hsl(270 70% 48%);
+	--accent-hover: hsl(270 70% 40%);
+	--accent-muted: hsl(270 65% 94%);
+	--accent-glow: hsl(270 70% 48% / 0.15);
+	--border-active: hsl(270 70% 48%);
+}
+html[data-palette="amethyst"][data-theme="dark"] {
+	--accent: hsl(270 85% 68%);
+	--accent-hover: hsl(270 85% 78%);
+	--accent-muted: hsl(270 85% 68% / 0.14);
+	--accent-glow: hsl(270 85% 68% / 0.22);
+	--border-active: hsl(270 85% 68%);
+}
+html[data-palette="rose"][data-theme="light"] {
+	--accent: hsl(346 77% 46%);
+	--accent-hover: hsl(346 77% 38%);
+	--accent-muted: hsl(346 70% 94%);
+	--accent-glow: hsl(346 77% 46% / 0.15);
+	--border-active: hsl(346 77% 46%);
+}
+html[data-palette="rose"][data-theme="dark"] {
+	--accent: hsl(346 88% 65%);
+	--accent-hover: hsl(346 90% 75%);
+	--accent-muted: hsl(346 88% 65% / 0.14);
+	--accent-glow: hsl(346 88% 65% / 0.22);
+	--border-active: hsl(346 88% 65%);
+}
 
 @layer base {
-	*, *::before, *::after {
+	*,
+	*::before,
+	*::after {
 		box-sizing: border-box;
 	}
 
@@ -97,7 +147,9 @@ html[data-palette="rose"][data-theme="dark"] { --accent: hsl(346 88% 65%); --acc
 
 	body {
 		background-color: var(--bg);
-		background-image: radial-gradient(circle at 84% -10%, var(--accent-glow), transparent 30rem), linear-gradient(180deg, color-mix(in srgb, var(--bg) 90%, var(--surface)), var(--bg) 42rem);
+		background-image:
+			radial-gradient(circle at 84% -10%, var(--accent-glow), transparent 30rem),
+			linear-gradient(180deg, color-mix(in srgb, var(--bg) 90%, var(--surface)), var(--bg) 42rem);
 		color: var(--text);
 		font-family: var(--font-sans);
 		font-size: 16px;
@@ -111,17 +163,21 @@ html[data-palette="rose"][data-theme="dark"] { --accent: hsl(346 88% 65%); --acc
 	}
 
 	body::before {
-		content: '';
+		content: "";
 		position: fixed;
 		inset: 0;
 		pointer-events: none;
-		background-image: linear-gradient(var(--border-subtle) 1px, transparent 1px), linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+		background-image:
+			linear-gradient(var(--border-subtle) 1px, transparent 1px),
+			linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
 		background-size: 5rem 5rem;
 		mask-image: linear-gradient(to bottom, black, transparent 75%);
 		z-index: -1;
 	}
 
-	a { color: inherit; }
+	a {
+		color: inherit;
+	}
 
 	::selection {
 		background-color: var(--accent);
@@ -150,32 +206,35 @@ html[data-palette="rose"][data-theme="dark"] { --accent: hsl(346 88% 65%); --acc
 }
 
 .section-tag {
-	font-size: .72rem !important;
-	letter-spacing: .14em !important;
+	font-size: 0.72rem !important;
+	letter-spacing: 0.14em !important;
 }
 
-	.content-shell::before {
-	content: '';
+.content-shell::before {
+	content: "";
 	position: absolute;
 	top: 0;
 	right: clamp(1.25rem, 5vw, 3rem);
 	width: 1px;
 	height: 100%;
 	background: linear-gradient(var(--border-subtle), transparent 28%, transparent 72%, var(--border-subtle));
-	opacity: .45;
+	opacity: 0.45;
 	pointer-events: none;
 }
 
 /* Animations */
 @keyframes pulse-dot {
-	0%, 100% {
+	0%,
+	100% {
 		transform: scale(1);
 		opacity: 1;
 		box-shadow: 0 0 0 0 var(--status-live-glow);
 	}
 
 	@media (max-width: 48rem) {
-		.content-shell::before { display: none; }
+		.content-shell::before {
+			display: none;
+		}
 	}
 	50% {
 		transform: scale(1.15);

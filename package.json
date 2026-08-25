@@ -1,46 +1,46 @@
 {
-  "name": "my-portfolio",
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "build:sitemap": "tsx scripts/generate-sitemap.ts",
-    "build:txt": "tsx scripts/generate-txt.ts",
-    "build:pdf": "astro build && tsx scripts/generate-pdf.ts",
-    "build:all": "astro build && tsx scripts/generate-sitemap.ts && tsx scripts/generate-txt.ts && tsx scripts/generate-pdf.ts",
-    "preview": "astro preview",
-    "check": "astro check",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.4",
-    "tailwindcss": "^4.3.3",
-    "tsx": "^4.23.12",
-    "vitest": "^4.1.11",
-    "zod": "^4.4.3"
-  },
-  "devDependencies": {
-    "@eslint/config-inspector": "^3.3.0",
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^26.2.0",
-    "eslint": "^10.9.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^3.1.0",
-    "globals": "^17.11.0",
-    "playwright": "^1.62.1",
-    "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
-    "typescript-eslint": "^8.67.0"
-  }
+	"name": "my-portfolio",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"build:sitemap": "tsx scripts/generate-sitemap.ts",
+		"build:txt": "tsx scripts/generate-txt.ts",
+		"build:pdf": "astro build && tsx scripts/generate-pdf.ts",
+		"build:all": "astro build && tsx scripts/generate-sitemap.ts && tsx scripts/generate-txt.ts && tsx scripts/generate-pdf.ts",
+		"preview": "astro preview",
+		"check": "astro check",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"lint": "eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.9.10",
+		"@tailwindcss/vite": "^4.3.3",
+		"astro": "^7.2.4",
+		"tailwindcss": "^4.3.3",
+		"tsx": "^4.23.12",
+		"vitest": "^4.1.11",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@eslint/config-inspector": "^3.3.0",
+		"@eslint/js": "^10.0.1",
+		"@types/node": "^26.2.0",
+		"eslint": "^10.9.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-astro": "^3.1.0",
+		"globals": "^17.11.0",
+		"playwright": "^1.62.1",
+		"prettier": "^3.9.6",
+		"prettier-plugin-astro": "^0.14.1",
+		"typescript-eslint": "^8.67.0"
+	}
 }

@@ -1,6 +1,7 @@
 # Color Palette Customization System Architecture & Implementation Plan
 
 ## 1. Overview & Objectives
+
 This document details the architectural design and execution plan for introducing a curated, accessible, developer-configurable color palette customization system to the portfolio application.
 
 The solution enhances the existing dual-mode theme system (`data-theme="light|dark"`) by layering a palette dimension (`data-palette="amber|terracotta|emerald|ocean|amethyst"`), persisted in local storage with zero flash-of-unauthenticated/un-styled content (zero-FOUC), with developer defaults configured via single-source-of-truth configuration and full validation.
@@ -10,6 +11,7 @@ The solution enhances the existing dual-mode theme system (`data-theme="light|da
 ## 2. Current Architecture Review & Insights
 
 ### Theme Architecture
+
 - **Root Layout (`src/layouts/Layout.astro`)**: Contains a synchronous zero-FOUC inline `<head>` script reading `localStorage.getItem('theme')` and falling back to `(prefers-color-scheme: dark)`. Sets `data-theme="light|dark"` on `<html>`.
 - **Global Design Tokens (`src/styles/global.css`)**: Defines tokens for `:root` / `html[data-theme="light"]` and `html[data-theme="dark"]`. The primary theme-reactive variables are:
   - `--accent`: Primary interaction and branding color.
@@ -25,53 +27,56 @@ The solution enhances the existing dual-mode theme system (`data-theme="light|da
 ## 3. Data Model, Definitions & Developer Configuration
 
 ### Single Source of Truth: `src/data/theme.ts`
+
 We establish a dedicated typed configuration and palette registry module `src/data/theme.ts` backed by Zod schema validation.
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 export const PaletteTokenGroupSchema = z.object({
-  accent: z.string(),
-  accentHover: z.string(),
-  accentMuted: z.string(),
-  accentGlow: z.string(),
-  borderActive: z.string(),
+	accent: z.string(),
+	accentHover: z.string(),
+	accentMuted: z.string(),
+	accentGlow: z.string(),
+	borderActive: z.string(),
 });
 
 export const PaletteDefinitionSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  light: PaletteTokenGroupSchema,
-  dark: PaletteTokenGroupSchema,
+	id: z.string(),
+	name: z.string(),
+	description: z.string(),
+	light: PaletteTokenGroupSchema,
+	dark: PaletteTokenGroupSchema,
 });
 
 export const ThemeConfigSchema = z.object({
-  defaultPalette: z.string(),
-  palettes: z.record(z.string(), PaletteDefinitionSchema),
+	defaultPalette: z.string(),
+	palettes: z.record(z.string(), PaletteDefinitionSchema),
 });
 ```
 
 ### Curated Palette Catalog (5 Distinct, High-Contrast Harmonized Palettes)
+
 Each palette defines balanced tokens for both `light` and `dark` modes meeting WCAG AA contrast (≥ 4.5:1 against respective surfaces):
 
 1. **Terracotta / Amber (Default - "Warm Ochre / Ember")**
-   - *Light*: `hsl(13 68% 46%)` / hover `hsl(13 68% 38%)` / muted `hsl(13 65% 93%)` / glow `hsl(13 68% 46% / 0.15)` / border `hsl(13 68% 46%)`
-   - *Dark*: `hsl(33 85% 62%)` / hover `hsl(33 90% 72%)` / muted `hsl(33 85% 62% / 0.14)` / glow `hsl(33 85% 62% / 0.22)` / border `hsl(33 85% 62%)`
+   - _Light_: `hsl(13 68% 46%)` / hover `hsl(13 68% 38%)` / muted `hsl(13 65% 93%)` / glow `hsl(13 68% 46% / 0.15)` / border `hsl(13 68% 46%)`
+   - _Dark_: `hsl(33 85% 62%)` / hover `hsl(33 90% 72%)` / muted `hsl(33 85% 62% / 0.14)` / glow `hsl(33 85% 62% / 0.22)` / border `hsl(33 85% 62%)`
 2. **Ocean / Cobalt ("Nordic Slate & Azure")**
-   - *Light*: `hsl(217 91% 45%)` / hover `hsl(217 91% 37%)` / muted `hsl(217 90% 94%)` / glow `hsl(217 91% 45% / 0.15)` / border `hsl(217 91% 45%)`
-   - *Dark*: `hsl(212 95% 64%)` / hover `hsl(212 95% 74%)` / muted `hsl(212 95% 64% / 0.14)` / glow `hsl(212 95% 64% / 0.22)` / border `hsl(212 95% 64%)`
+   - _Light_: `hsl(217 91% 45%)` / hover `hsl(217 91% 37%)` / muted `hsl(217 90% 94%)` / glow `hsl(217 91% 45% / 0.15)` / border `hsl(217 91% 45%)`
+   - _Dark_: `hsl(212 95% 64%)` / hover `hsl(212 95% 74%)` / muted `hsl(212 95% 64% / 0.14)` / glow `hsl(212 95% 64% / 0.22)` / border `hsl(212 95% 64%)`
 3. **Emerald / Jade ("Forest & Mint")**
-   - *Light*: `hsl(160 84% 34%)` / hover `hsl(160 84% 28%)` / muted `hsl(160 70% 93%)` / glow `hsl(160 84% 34% / 0.15)` / border `hsl(160 84% 34%)`
-   - *Dark*: `hsl(158 75% 52%)` / hover `hsl(158 80% 64%)` / muted `hsl(158 75% 52% / 0.14)` / glow `hsl(158 75% 52% / 0.22)` / border `hsl(158 75% 52%)`
+   - _Light_: `hsl(160 84% 34%)` / hover `hsl(160 84% 28%)` / muted `hsl(160 70% 93%)` / glow `hsl(160 84% 34% / 0.15)` / border `hsl(160 84% 34%)`
+   - _Dark_: `hsl(158 75% 52%)` / hover `hsl(158 80% 64%)` / muted `hsl(158 75% 52% / 0.14)` / glow `hsl(158 75% 52% / 0.22)` / border `hsl(158 75% 52%)`
 4. **Amethyst / Violet ("Neon Iris & Berry")**
-   - *Light*: `hsl(270 70% 48%)` / hover `hsl(270 70% 40%)` / muted `hsl(270 65% 94%)` / glow `hsl(270 70% 48% / 0.15)` / border `hsl(270 70% 48%)`
-   - *Dark*: `hsl(270 85% 68%)` / hover `hsl(270 85% 78%)` / muted `hsl(270 85% 68% / 0.14)` / glow `hsl(270 85% 68% / 0.22)` / border `hsl(270 85% 68%)`
+   - _Light_: `hsl(270 70% 48%)` / hover `hsl(270 70% 40%)` / muted `hsl(270 65% 94%)` / glow `hsl(270 70% 48% / 0.15)` / border `hsl(270 70% 48%)`
+   - _Dark_: `hsl(270 85% 68%)` / hover `hsl(270 85% 78%)` / muted `hsl(270 85% 68% / 0.14)` / glow `hsl(270 85% 68% / 0.22)` / border `hsl(270 85% 68%)`
 5. **Rose / Crimson ("Subtle Ruby")**
-   - *Light*: `hsl(346 77% 46%)` / hover `hsl(346 77% 38%)` / muted `hsl(346 70% 94%)` / glow `hsl(346 77% 46% / 0.15)` / border `hsl(346 77% 46%)`
-   - *Dark*: `hsl(346 88% 65%)` / hover `hsl(346 90% 75%)` / muted `hsl(346 88% 65% / 0.14)` / glow `hsl(346 88% 65% / 0.22)` / border `hsl(346 88% 65%)`
+   - _Light_: `hsl(346 77% 46%)` / hover `hsl(346 77% 38%)` / muted `hsl(346 70% 94%)` / glow `hsl(346 77% 46% / 0.15)` / border `hsl(346 77% 46%)`
+   - _Dark_: `hsl(346 88% 65%)` / hover `hsl(346 90% 75%)` / muted `hsl(346 88% 65% / 0.14)` / glow `hsl(346 88% 65% / 0.22)` / border `hsl(346 88% 65%)`
 
 ### Developer Default Configuration
+
 - Exported as `defaultPalette: 'amber'` (or whichever ID is configured) in `themeConfig`.
 - Zod schema validation ensures `palettes[defaultPalette]` exists at build and test time; throws descriptive build error if misconfigured.
 
@@ -80,27 +85,33 @@ Each palette defines balanced tokens for both `light` and `dark` modes meeting W
 ## 4. Token Integration & Cascading Rules
 
 ### CSS Token Architecture in `src/styles/global.css`
+
 Base theme mode provides default variables. Adding `data-palette="[id]"` overrides `--accent`, `--accent-hover`, `--accent-muted`, `--accent-glow`, and `--border-active`:
 
 ```css
 /* Base default fallback */
-html[data-theme="light"], :root { /* ... default amber tokens ... */ }
-html[data-theme="dark"] { /* ... default amber dark tokens ... */ }
+html[data-theme="light"],
+:root {
+	/* ... default amber tokens ... */
+}
+html[data-theme="dark"] {
+	/* ... default amber dark tokens ... */
+}
 
 /* Explicit Palette Overrides */
 html[data-palette="ocean"][data-theme="light"] {
-  --accent: hsl(217 91% 45%);
-  --accent-hover: hsl(217 91% 37%);
-  --accent-muted: hsl(217 90% 94%);
-  --accent-glow: hsl(217 91% 45% / 0.15);
-  --border-active: hsl(217 91% 45%);
+	--accent: hsl(217 91% 45%);
+	--accent-hover: hsl(217 91% 37%);
+	--accent-muted: hsl(217 90% 94%);
+	--accent-glow: hsl(217 91% 45% / 0.15);
+	--border-active: hsl(217 91% 45%);
 }
 html[data-palette="ocean"][data-theme="dark"] {
-  --accent: hsl(212 95% 64%);
-  --accent-hover: hsl(212 95% 74%);
-  --accent-muted: hsl(212 95% 64% / 0.14);
-  --accent-glow: hsl(212 95% 64% / 0.22);
-  --border-active: hsl(212 95% 64%);
+	--accent: hsl(212 95% 64%);
+	--accent-hover: hsl(212 95% 74%);
+	--accent-muted: hsl(212 95% 64% / 0.14);
+	--accent-glow: hsl(212 95% 64% / 0.22);
+	--border-active: hsl(212 95% 64%);
 }
 /* (Repeat for all palettes: emerald, amethyst, rose, etc.) */
 ```
@@ -110,6 +121,7 @@ html[data-palette="ocean"][data-theme="dark"] {
 ## 5. Storage, Resolution Precedence & Zero-FOUC Execution
 
 ### Resolution Precedence
+
 1. **Runtime Interaction**: User clicks a palette in the selector -> Updates `<html>` attribute `data-palette` and saves to `localStorage.setItem('palette', id)`.
 2. **Persisted Preference**: On initial script execution, `localStorage.getItem('palette')` is evaluated. If present and matching one of `['amber', 'ocean', 'emerald', 'amethyst', 'rose']`, it is applied.
 3. **Invalid / Stale Stored Key**: If the stored key no longer exists in predefined valid palettes, the script clears/replaces it with the developer default.
@@ -117,6 +129,7 @@ html[data-palette="ocean"][data-theme="dark"] {
 5. **Reset to Default Action**: Clears `localStorage.removeItem('palette')` and applies `themeConfig.defaultPalette`.
 
 ### Zero-FOUC Implementation in `src/layouts/Layout.astro`
+
 The synchronous `<head>` script is updated to resolve both `data-theme` and `data-palette` prior to first DOM paint:
 
 ```html
@@ -149,6 +162,7 @@ The synchronous `<head>` script is updated to resolve both `data-theme` and `dat
 ## 6. UX / UI Placement & Component Architecture
 
 ### UI Placement Strategy
+
 - Located in `SiteHeader.astro` actions bar, directly next to `ThemeToggle.astro`.
 - Combined into a unified appearance control group:
   - `PaletteSelector.astro`: Popover dropdown button with a compact color swatch icon (`Palette` SVG icon) and indicator badge.
@@ -156,6 +170,7 @@ The synchronous `<head>` script is updated to resolve both `data-theme` and `dat
 - Mobile Navigation Drawer (`nav-mobile`): Contains a dedicated "Theme & Accent" settings section within the mobile drawer for seamless touch navigation.
 
 ### Visual Design of Palette Cards
+
 - **Dimensions & Touch Targets**: Minimum 44x44px hit targets.
 - **Visual Feedback**:
   - Color dot swatch cluster showing light & dark harmony.

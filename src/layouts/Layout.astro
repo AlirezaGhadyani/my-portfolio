@@ -1,9 +1,9 @@
 ---
-import '../styles/global.css';
-import SiteHeader from '../components/SiteHeader.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import { resumeData } from '../data/resume.ts';
-import { themeConfig, paletteIds } from '../data/theme.ts';
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { resumeData } from "../data/resume.ts";
+import { themeConfig, paletteIds } from "../data/theme.ts";
 
 interface Props {
 	title?: string;
@@ -11,12 +11,12 @@ interface Props {
 	image?: string;
 }
 
-const { title = 'Jordan Avery — Full-Stack Software Engineer', description, image } = Astro.props;
+const { title = "Jordan Avery — Full-Stack Software Engineer", description, image } = Astro.props;
 const metaDescription =
 	description ??
-	'Portfolio and engineering resume of Jordan Avery: full-stack TypeScript, React, Astro, and edge hosting.';
+	"Portfolio and engineering resume of Jordan Avery: full-stack TypeScript, React, Astro, and edge hosting.";
 
-const siteUrl = resumeData.identity.website.replace(/\/+$/, '');
+const siteUrl = resumeData.identity.website.replace(/\/+$/, "");
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`;
 ---
@@ -49,39 +49,34 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 		<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette, validPalettes: paletteIds }}>
 			(function () {
 				const root = document.documentElement;
-				if (
-					window.matchMedia &&
-					window.matchMedia('(prefers-reduced-motion: reduce)').matches
-				) {
-					root.setAttribute('data-motion', 'reduced');
+				if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+					root.setAttribute("data-motion", "reduced");
 				}
 				let stored;
 				try {
-					stored = localStorage.getItem('theme');
+					stored = localStorage.getItem("theme");
 				} catch {
 					stored = null;
 				}
 				const dark =
-					stored === 'dark' ||
-					(!stored &&
-						window.matchMedia &&
-						window.matchMedia('(prefers-color-scheme: dark)').matches);
-				root.setAttribute('data-theme', dark ? 'dark' : 'light');
+					stored === "dark" ||
+					(!stored && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+				root.setAttribute("data-theme", dark ? "dark" : "light");
 				let storedPalette;
 				try {
-					storedPalette = localStorage.getItem('palette');
+					storedPalette = localStorage.getItem("palette");
 				} catch {
 					storedPalette = null;
 				}
 				if (!storedPalette || validPalettes.indexOf(storedPalette) === -1) {
 					storedPalette = defaultPalette;
 					try {
-						localStorage.setItem('palette', storedPalette);
+						localStorage.setItem("palette", storedPalette);
 					} catch {
 						/* preference persistence is optional */
 					}
 				}
-				root.setAttribute('data-palette', storedPalette);
+				root.setAttribute("data-palette", storedPalette);
 			})();
 		</script>
 	</head>

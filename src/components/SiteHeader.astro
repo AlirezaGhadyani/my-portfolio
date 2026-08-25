@@ -1,18 +1,22 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
-import PaletteSelector from './PaletteSelector.astro';
-import { resumeData } from '../data/resume.ts';
+import ThemeToggle from "./ThemeToggle.astro";
+import PaletteSelector from "./PaletteSelector.astro";
+import { resumeData } from "../data/resume.ts";
 
 const { identity } = resumeData;
-const initials = identity.name.split(' ').map((part) => part[0]).join('').slice(0, 2);
+const initials = identity.name
+	.split(" ")
+	.map((part) => part[0])
+	.join("")
+	.slice(0, 2);
 
 const nav = [
-	{ href: '/#experience', label: 'Experience' },
-	{ href: '/#projects', label: 'Projects' },
-	{ href: '/#skills', label: 'Skills' },
-	{ href: '/#education', label: 'Education' },
-	{ href: '/print/resume', label: 'Resume', badge: 'PDF' },
-	{ href: '/#contact', label: 'Contact' },
+	{ href: "/#experience", label: "Experience" },
+	{ href: "/#projects", label: "Projects" },
+	{ href: "/#skills", label: "Skills" },
+	{ href: "/#education", label: "Education" },
+	{ href: "/print/resume", label: "Resume", badge: "PDF" },
+	{ href: "/#contact", label: "Contact" },
 ];
 ---
 
@@ -50,8 +54,7 @@ const nav = [
 				data-nav-toggle
 				aria-controls="nav-mobile"
 				aria-expanded="false"
-				aria-label="Open primary navigation"
-			>
+				aria-label="Open primary navigation">
 				<span class="nav-toggle-icon" aria-hidden="true">
 					<span class="bar bar-top"></span>
 					<span class="bar bar-middle"></span>
@@ -88,27 +91,27 @@ const nav = [
 
 <script is:inline>
 	(function () {
-		const toggleButton = document.querySelector('[data-nav-toggle]');
-		const mobileNav = document.getElementById('nav-mobile');
+		const toggleButton = document.querySelector("[data-nav-toggle]");
+		const mobileNav = document.getElementById("nav-mobile");
 		if (toggleButton && mobileNav) {
 			const close = () => {
 				mobileNav.hidden = true;
-				toggleButton.setAttribute('aria-expanded', 'false');
-				toggleButton.setAttribute('aria-label', 'Open primary navigation');
-				document.body.classList.remove('menu-open');
+				toggleButton.setAttribute("aria-expanded", "false");
+				toggleButton.setAttribute("aria-label", "Open primary navigation");
+				document.body.classList.remove("menu-open");
 			};
 
 			const open = () => {
 				mobileNav.hidden = false;
-				toggleButton.setAttribute('aria-expanded', 'true');
-				toggleButton.setAttribute('aria-label', 'Close primary navigation');
-				document.body.classList.add('menu-open');
-				toggleButton.setAttribute('aria-controls', 'nav-mobile');
-				const firstLink = mobileNav.querySelector('a');
+				toggleButton.setAttribute("aria-expanded", "true");
+				toggleButton.setAttribute("aria-label", "Close primary navigation");
+				document.body.classList.add("menu-open");
+				toggleButton.setAttribute("aria-controls", "nav-mobile");
+				const firstLink = mobileNav.querySelector("a");
 				if (firstLink) firstLink.focus();
 			};
 
-			toggleButton.addEventListener('click', () => {
+			toggleButton.addEventListener("click", () => {
 				const isHidden = mobileNav.hidden;
 				if (isHidden) {
 					open();
@@ -118,20 +121,20 @@ const nav = [
 			});
 
 			// Close on link click inside mobile drawer
-			mobileNav.querySelectorAll('a').forEach((link) => {
-				link.addEventListener('click', () => {
+			mobileNav.querySelectorAll("a").forEach((link) => {
+				link.addEventListener("click", () => {
 					close();
 				});
 			});
 
-				document.addEventListener('keydown', (event) => {
-				if (event.key === 'Escape' && !mobileNav.hidden) {
+			document.addEventListener("keydown", (event) => {
+				if (event.key === "Escape" && !mobileNav.hidden) {
 					close();
 					toggleButton.focus();
 				}
 			});
 
-			window.addEventListener('resize', () => {
+			window.addEventListener("resize", () => {
 				if (window.innerWidth > 768 && !mobileNav.hidden) close();
 			});
 		}
@@ -147,7 +150,9 @@ const nav = [
 		backdrop-filter: blur(16px);
 		-webkit-backdrop-filter: blur(16px);
 		border-bottom: 1px solid var(--border-subtle);
-		transition: background-color 0.25s ease, border-color 0.25s ease;
+		transition:
+			background-color 0.25s ease,
+			border-color 0.25s ease;
 	}
 
 	.header-inner {
@@ -181,7 +186,7 @@ const nav = [
 			font-weight: 700;
 			font-size: 0.85rem;
 			letter-spacing: 0.02em;
-			box-shadow: 3px 3px 0 hsl(217 91% 60% / .18);
+			box-shadow: 3px 3px 0 hsl(217 91% 60% / 0.18);
 			transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 		}
 
@@ -288,7 +293,9 @@ const nav = [
 			height: 2px;
 			background-color: var(--text);
 			border-radius: 1px;
-			transition: transform 0.2s ease, opacity 0.2s ease;
+			transition:
+				transform 0.2s ease,
+				opacity 0.2s ease;
 		}
 
 		&[aria-expanded="true"] {
@@ -321,19 +328,23 @@ const nav = [
 			align-items: center;
 			justify-content: space-between;
 			gap: 1rem;
-			margin-bottom: .75rem;
-			padding: .25rem .45rem .75rem;
+			margin-bottom: 0.75rem;
+			padding: 0.25rem 0.45rem 0.75rem;
 			border-bottom: 1px solid var(--border-subtle);
 		}
 
 		.mobile-settings-heading {
 			color: var(--text-muted);
-			font: 600 .7rem var(--font-mono);
-			letter-spacing: .04em;
+			font: 600 0.7rem var(--font-mono);
+			letter-spacing: 0.04em;
 			text-transform: uppercase;
 		}
 
-		.mobile-settings-controls { display: flex; align-items: center; gap: .5rem; }
+		.mobile-settings-controls {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
 
 		ul {
 			display: flex;
@@ -355,8 +366,8 @@ const nav = [
 			font-size: 1rem;
 			font-weight: 500;
 			font-family: var(--font-mono);
-			font-size: .78rem;
-			letter-spacing: .02em;
+			font-size: 0.78rem;
+			letter-spacing: 0.02em;
 			min-height: 44px;
 			transition: var(--transition-fast);
 

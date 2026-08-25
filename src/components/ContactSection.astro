@@ -4,10 +4,8 @@ interface Props {
 	turnstileSiteKey?: string;
 }
 
-const {
-	email = 'jordan.avery@example.com',
-	turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '',
-} = Astro.props;
+const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "" } =
+	Astro.props;
 ---
 
 <section id="contact" class="contact-section" aria-labelledby="contact-title">
@@ -15,7 +13,8 @@ const {
 		<div class="section-tag">Let's Connect</div>
 		<h2 id="contact-title" class="section-title">Get in Touch</h2>
 		<p class="section-subtitle">
-			Have an engineering opportunity, consulting inquiry, or technical challenge to discuss? Reach out through the form below or email me directly at
+			Have an engineering opportunity, consulting inquiry, or technical challenge to discuss? Reach out through the form
+			below or email me directly at
 			<a href={`mailto:${email}`} class="direct-email">{email}</a>.
 		</p>
 	</div>
@@ -25,13 +24,7 @@ const {
 			<!-- Honeypot Field (hidden from screen readers & humans) -->
 			<div class="hp-field" aria-hidden="true">
 				<label for="contact-hp">Leave this field blank</label>
-				<input
-					type="text"
-					id="contact-hp"
-					name="honeypot"
-					tabindex="-1"
-					autocomplete="off"
-				/>
+				<input type="text" id="contact-hp" name="honeypot" tabindex="-1" autocomplete="off" />
 			</div>
 
 			<div class="form-grid">
@@ -92,12 +85,7 @@ const {
 
 			{
 				turnstileSiteKey && (
-					<div
-						class="cf-turnstile"
-						data-sitekey={turnstileSiteKey}
-						data-theme="auto"
-						data-size="flexible"
-					/>
+					<div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto" data-size="flexible" />
 				)
 			}
 
@@ -105,13 +93,31 @@ const {
 				<button type="submit" id="submit-btn" class="btn-submit">
 					<span class="btn-text">
 						<span>Send Message</span>
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<svg
+							width="15"
+							height="15"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
 							<line x1="22" y1="2" x2="11" y2="13"></line>
 							<polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
 						</svg>
 					</span>
 					<span class="btn-loading" aria-hidden="true">
-						<svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<svg
+							class="spinner"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round">
 							<line x1="12" y1="2" x2="12" y2="6"></line>
 							<line x1="12" y1="18" x2="12" y2="22"></line>
 							<line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
@@ -127,58 +133,42 @@ const {
 			</div>
 
 			<!-- Status Announcement Banner / Toast -->
-			<div
-				id="form-status"
-				class="form-status"
-				role="status"
-				aria-live="polite"
-				hidden
-			>
-			</div>
+			<div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
 		</form>
 	</div>
 </section>
 
-{
-	turnstileSiteKey && (
-		<script
-			is:inline
-			src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-			async
-			defer
-		/>
-	)
-}
+{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />}
 
 <script is:inline>
 	(function () {
-		const form = document.getElementById('contact-form');
+		const form = document.getElementById("contact-form");
 		if (!form) return;
 
-		const nameInput = document.getElementById('contact-name');
-		const emailInput = document.getElementById('contact-email');
-		const messageInput = document.getElementById('contact-message');
-		const messageCount = document.getElementById('message-count');
-		const submitBtn = document.getElementById('submit-btn');
-		const formStatus = document.getElementById('form-status');
-		const nameError = document.getElementById('name-error');
-		const emailError = document.getElementById('email-error');
-		const messageError = document.getElementById('message-error');
+		const nameInput = document.getElementById("contact-name");
+		const emailInput = document.getElementById("contact-email");
+		const messageInput = document.getElementById("contact-message");
+		const messageCount = document.getElementById("message-count");
+		const submitBtn = document.getElementById("submit-btn");
+		const formStatus = document.getElementById("form-status");
+		const nameError = document.getElementById("name-error");
+		const emailError = document.getElementById("email-error");
+		const messageError = document.getElementById("message-error");
 
 		if (messageInput && messageCount) {
-			messageInput.addEventListener('input', () => {
+			messageInput.addEventListener("input", () => {
 				messageCount.textContent = `${messageInput.value.length} / 2000`;
 			});
 		}
 
 		function clearErrors() {
-			if (nameError) nameError.textContent = '';
-			if (emailError) emailError.textContent = '';
-			if (messageError) messageError.textContent = '';
+			if (nameError) nameError.textContent = "";
+			if (emailError) emailError.textContent = "";
+			if (messageError) messageError.textContent = "";
 			if (formStatus) {
 				formStatus.hidden = true;
-				formStatus.className = 'form-status';
-				formStatus.textContent = '';
+				formStatus.className = "form-status";
+				formStatus.textContent = "";
 			}
 		}
 
@@ -194,56 +184,54 @@ const {
 			clearErrors();
 
 			if (!nameInput.value || nameInput.value.trim().length < 2) {
-				if (nameError) nameError.textContent = 'Please enter at least 2 characters.';
+				if (nameError) nameError.textContent = "Please enter at least 2 characters.";
 				isValid = false;
 			}
 
 			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailInput.value || !emailPattern.test(emailInput.value.trim())) {
-				if (emailError) emailError.textContent = 'Please enter a valid email address.';
+				if (emailError) emailError.textContent = "Please enter a valid email address.";
 				isValid = false;
 			}
 
 			if (!messageInput.value || messageInput.value.trim().length < 10) {
-				if (messageError)
-					messageError.textContent = 'Message must be at least 10 characters long.';
+				if (messageError) messageError.textContent = "Message must be at least 10 characters long.";
 				isValid = false;
 			}
 
 			return isValid;
 		}
 
-		form.addEventListener('submit', async (e) => {
+		form.addEventListener("submit", async (e) => {
 			e.preventDefault();
 
 			if (!validateClientSide()) {
-				showStatus('Please fix the errors above before submitting.', 'error');
+				showStatus("Please fix the errors above before submitting.", "error");
 				return;
 			}
 
 			const formData = new FormData(form);
 			const turnstileToken =
-				formData.get('cf-turnstile-response')?.toString() ||
-				formData.get('turnstileToken')?.toString();
+				formData.get("cf-turnstile-response")?.toString() || formData.get("turnstileToken")?.toString();
 
 			const payload = {
-				name: formData.get('name')?.toString().trim() || '',
-				email: formData.get('email')?.toString().trim() || '',
-				message: formData.get('message')?.toString().trim() || '',
-				honeypot: formData.get('honeypot')?.toString() || '',
+				name: formData.get("name")?.toString().trim() || "",
+				email: formData.get("email")?.toString().trim() || "",
+				message: formData.get("message")?.toString().trim() || "",
+				honeypot: formData.get("honeypot")?.toString() || "",
 				turnstileToken: turnstileToken || undefined,
 			};
 
 			if (submitBtn) {
 				submitBtn.disabled = true;
-				submitBtn.classList.add('is-loading');
+				submitBtn.classList.add("is-loading");
 			}
 
 			try {
-				const response = await fetch('/api/contact', {
-					method: 'POST',
+				const response = await fetch("/api/contact", {
+					method: "POST",
 					headers: {
-						'Content-Type': 'application/json',
+						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(payload),
 				});
@@ -251,31 +239,21 @@ const {
 				const result = await response.json();
 
 				if (response.ok && result.success) {
-					showStatus(
-						result.message || 'Message sent successfully! I will get back to you soon.',
-						'success',
-					);
+					showStatus(result.message || "Message sent successfully! I will get back to you soon.", "success");
 					form.reset();
-					if (messageCount) messageCount.textContent = '0 / 2000';
+					if (messageCount) messageCount.textContent = "0 / 2000";
 					if (window.turnstile) {
 						window.turnstile.reset();
 					}
 				} else {
-					showStatus(
-						result.error ||
-							'An error occurred while sending your message. Please try again.',
-						'error',
-					);
+					showStatus(result.error || "An error occurred while sending your message. Please try again.", "error");
 				}
 			} catch {
-				showStatus(
-					'Network error. Please check your connection or reach out via direct email.',
-					'error',
-				);
+				showStatus("Network error. Please check your connection or reach out via direct email.", "error");
 			} finally {
 				if (submitBtn) {
 					submitBtn.disabled = false;
-					submitBtn.classList.remove('is-loading');
+					submitBtn.classList.remove("is-loading");
 				}
 			}
 		});
@@ -339,7 +317,7 @@ const {
 		border-radius: var(--radius);
 		padding: clamp(2rem, 5vw, 4rem);
 		border-radius: var(--radius-lg);
-		box-shadow: 0 24px 70px hsl(220 50% 3% / .2);
+		box-shadow: 0 24px 70px hsl(220 50% 3% / 0.2);
 		background: var(--surface);
 	}
 
@@ -393,7 +371,7 @@ const {
 		color: var(--text);
 		font-family: inherit;
 		font-size: 1rem;
-		padding-block: .9rem;
+		padding-block: 0.9rem;
 		transition: var(--transition-fast);
 
 		&:focus {
@@ -493,8 +471,12 @@ const {
 	}
 
 	@keyframes spin {
-		from { transform: rotate(0deg); }
-		to { transform: rotate(360deg); }
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.spinner {
@@ -521,7 +503,7 @@ const {
 		}
 	}
 
-	html[data-theme='dark'] .form-status {
+	html[data-theme="dark"] .form-status {
 		&.status-success {
 			color: hsl(142 71% 55%);
 			background: hsl(142 71% 45% / 0.2);

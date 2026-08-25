@@ -1,5 +1,5 @@
 ---
-import type { SkillCategory, Skill } from '../data/schema.ts';
+import type { SkillCategory, Skill } from "../data/schema.ts";
 
 interface Props {
 	categories: SkillCategory[];
@@ -7,7 +7,7 @@ interface Props {
 
 const { categories } = Astro.props;
 
-const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
+const levelLabel = (level: Exclude<Skill["level"], undefined>): string =>
 	level.charAt(0).toUpperCase() + level.slice(1);
 ---
 
@@ -26,18 +26,16 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 						<span class="skill-count">{category.skills.length}</span>
 					</div>
 					<ul class="skill-list">
-						{
-							category.skills.map((skill) => (
-								<li class={skill.highlighted ? 'skill-tag skill-tag--highlight' : 'skill-tag'}>
-									<span class="skill-name">{skill.name}</span>
-									{skill.level && (
-										<span class="skill-level" aria-hidden="true">
-											{levelLabel(skill.level)}
-										</span>
-									)}
-								</li>
-							))
-						}
+						{category.skills.map((skill) => (
+							<li class={skill.highlighted ? "skill-tag skill-tag--highlight" : "skill-tag"}>
+								<span class="skill-name">{skill.name}</span>
+								{skill.level && (
+									<span class="skill-level" aria-hidden="true">
+										{levelLabel(skill.level)}
+									</span>
+								)}
+							</li>
+						))}
 					</ul>
 				</div>
 			))
@@ -82,8 +80,16 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 
-	@media (max-width: 52rem) { .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-	@media (max-width: 35rem) { .skills-grid { grid-template-columns: 1fr; } }
+	@media (max-width: 52rem) {
+		.skills-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 35rem) {
+		.skills-grid {
+			grid-template-columns: 1fr;
+		}
+	}
 
 	.skill-category {
 		border: 1px solid var(--border-subtle);
@@ -92,7 +98,9 @@ const levelLabel = (level: Exclude<Skill['level'], undefined>): string =>
 		padding: 1.25rem 1.25rem 1.5rem;
 		transition: var(--transition-fast);
 
-		&:hover .skill-category-name { color: var(--accent); }
+		&:hover .skill-category-name {
+			color: var(--accent);
+		}
 
 		.category-header {
 			display: flex;

@@ -8,6 +8,7 @@ description: Advanced CSS styling, Tailwind v4 configurations, fluid typography,
 ## Implementation Guide
 
 ### 1. Theme Variables & Gradients
+
 - Define semantic color palettes with dark/light mode balance:
   - Backgrounds: Canvas, Surface, Elevated Surface, Overlay.
   - Borders: Subtle (`hsl(... / 0.08)`), Default (`hsl(... / 0.15)`), Active/Focus.
@@ -15,35 +16,50 @@ description: Advanced CSS styling, Tailwind v4 configurations, fluid typography,
   - Subtle noise / grid / ambient glow backgrounds for hero sections.
 
 ### 2. Modern Animations & Keyframes
+
 ```css
 @keyframes pulse-subtle {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.08); opacity: 0.75; }
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.08);
+		opacity: 0.75;
+	}
 }
 
 @keyframes float-subtle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-4px);
+	}
 }
 
 @keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 ```
 
 ### 3. Interactive UI Components
+
 - **Buttons**: Smooth transitions (`all 0.2s cubic-bezier(0.16, 1, 0.3, 1)`), hover elevation, subtle inner highlight, active press scale (`0.98`).
 - **Cards**: Hover border glow (`border-color: var(--accent)`), subtle elevation shadow transition, interactive tags.
 - **Badges**: Monospace tags with pill border-radius, soft background tint, accent text color.
 
 ### 4. Resume & Print CSS Excellence
+
 - Print stylesheets must balance aesthetics and ATS machine readability:
   - Elegant typography hierarchy with crisp weights (Bold 700 headers, Medium 500 company names, Regular 400 body).
   - Subtle primary accent borders separating sections.

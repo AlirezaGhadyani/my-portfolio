@@ -1,7 +1,7 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import { resumeData } from '../../data/resume.ts';
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { resumeData } from "../../data/resume.ts";
 
 const { projects } = resumeData;
 
@@ -9,15 +9,26 @@ const techs = [...new Set(projects.flatMap((project) => project.technologies))].
 const slug = (value: string): string =>
 	value
 		.toLowerCase()
-		.replace(/&/g, 'and')
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-+|-+$/g, '');
+		.replace(/&/g, "and")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-+|-+$/g, "");
 ---
 
-<Layout title="Projects & Engineering Work — Jordan Avery" description="An archive of shipped applications, open-source tools, and system architecture case studies.">
+<Layout
+	title="Projects & Engineering Work — Jordan Avery"
+	description="An archive of shipped applications, open-source tools, and system architecture case studies.">
 	<section class="projects-hero" aria-labelledby="projects-title">
 		<a href="/" class="back-link">
-			<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<svg
+				width="15"
+				height="15"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true">
 				<line x1="19" y1="12" x2="5" y2="12"></line>
 				<polyline points="12 19 5 12 12 5"></polyline>
 			</svg>
@@ -25,13 +36,22 @@ const slug = (value: string): string =>
 		</a>
 		<h1 id="projects-title" class="projects-title">Project Archive</h1>
 		<p class="projects-intro">
-			A curated collection of web applications, cloud infrastructure, developer tools, and case studies. Filter by technology stack below.
+			A curated collection of web applications, cloud infrastructure, developer tools, and case studies. Filter by
+			technology stack below.
 		</p>
 	</section>
 
 	<div class="projects-filter" aria-label="Filter projects by technology">
 		<span class="projects-filter-label" aria-hidden="true">
-			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<svg
+				width="14"
+				height="14"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round">
 				<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
 			</svg>
 			<span>Filter by Stack:</span>
@@ -40,26 +60,20 @@ const slug = (value: string): string =>
 			<button type="button" class="projects-chip projects-chip--active" data-filter="all">
 				All ({projects.length})
 			</button>
-			{techs.map((tech) => (
-				<button
-					type="button"
-					class="projects-chip"
-					data-filter={slug(tech)}
-					aria-pressed="false"
-				>
-					{tech}
-				</button>
-			))}
+			{
+				techs.map((tech) => (
+					<button type="button" class="projects-chip" data-filter={slug(tech)} aria-pressed="false">
+						{tech}
+					</button>
+				))
+			}
 		</div>
 	</div>
 
 	<ul class="projects-list" data-projects-list id="projects-list">
 		{
 			projects.map((project) => (
-				<li
-					class="project-entry"
-					data-tech={project.technologies.map(slug).join(' ')}
-				>
+				<li class="project-entry" data-tech={project.technologies.map(slug).join(" ")}>
 					<ProjectCard project={project} />
 				</li>
 			))
@@ -69,25 +83,25 @@ const slug = (value: string): string =>
 
 <script is:inline>
 	(function () {
-		const chips = Array.from(document.querySelectorAll('.projects-chip'));
-		const entries = Array.from(document.querySelectorAll('.project-entry'));
-		const list = document.getElementById('projects-list');
+		const chips = Array.from(document.querySelectorAll(".projects-chip"));
+		const entries = Array.from(document.querySelectorAll(".project-entry"));
+		const list = document.getElementById("projects-list");
 
 		if (list && chips.length && entries.length) {
-			let active = 'all';
+			let active = "all";
 			const apply = () => {
 				entries.forEach((entry) => {
-					const tags = (entry.dataset.tech ?? '').split(' ');
-					entry.hidden = !(active === 'all' || tags.includes(active));
+					const tags = (entry.dataset.tech ?? "").split(" ");
+					entry.hidden = !(active === "all" || tags.includes(active));
 				});
 			};
 			chips.forEach((chip) => {
-				chip.addEventListener('click', () => {
-					active = chip.dataset.filter ?? 'all';
+				chip.addEventListener("click", () => {
+					active = chip.dataset.filter ?? "all";
 					chips.forEach((other) => {
 						const selected = other === chip;
-						other.setAttribute('aria-pressed', String(selected));
-						other.classList.toggle('projects-chip--active', selected);
+						other.setAttribute("aria-pressed", String(selected));
+						other.classList.toggle("projects-chip--active", selected);
 					});
 					apply();
 				});

@@ -1,19 +1,13 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const ContactPayloadSchema = z.object({
-	name: z
-		.string()
-		.trim()
-		.min(2, 'Name must be at least 2 characters')
-		.max(100, 'Name cannot exceed 100 characters'),
-	email: z
-		.email('Please provide a valid email address')
-		.max(254, 'Email address is too long'),
+	name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name cannot exceed 100 characters"),
+	email: z.email("Please provide a valid email address").max(254, "Email address is too long"),
 	message: z
 		.string()
 		.trim()
-		.min(10, 'Message must be at least 10 characters')
-		.max(2000, 'Message cannot exceed 2000 characters'),
+		.min(10, "Message must be at least 10 characters")
+		.max(2000, "Message cannot exceed 2000 characters"),
 	turnstileToken: z.string().optional(),
 	honeypot: z.string().optional(),
 });
@@ -41,9 +35,7 @@ export const memoryRateLimiter: RateLimiter = {
 	async isRateLimited(ip: string, limit = 3, windowSeconds = 600): Promise<boolean> {
 		const now = Date.now();
 		const windowMs = windowSeconds * 1000;
-		const timestamps = (memoryRateLimitMap.get(ip) || []).filter(
-			(t) => now - t < windowMs,
-		);
+		const timestamps = (memoryRateLimitMap.get(ip) || []).filter((t) => now - t < windowMs);
 
 		if (timestamps.length >= limit) {
 			return true;
@@ -55,15 +47,11 @@ export const memoryRateLimiter: RateLimiter = {
 	},
 };
 
-export function createKvRateLimiter(kv: ContactEnv['RATE_LIMIT_KV']): RateLimiter {
+export function createKvRateLimiter(kv: ContactEnv["RATE_LIMIT_KV"]): RateLimiter {
 	if (!kv) return memoryRateLimiter;
 
 	return {
-		async isRateLimited(
-			ip: string,
-			limit = 3,
-			windowSeconds = 600,
-		): Promise<boolean> {
+		async isRateLimited(ip: string, limit = 3, windowSeconds = 600): Promise<boolean> {
 			const key = `ratelimit:${ip}`;
 			const raw = await kv.get(key);
 			const count = raw ? parseInt(raw, 10) : 0;
@@ -85,22 +73,19 @@ export async function verifyTurnstileToken(
 ): Promise<{ success: boolean; errorCodes?: string[] }> {
 	try {
 		const formData = new URLSearchParams();
-		formData.append('secret', secret);
-		formData.append('response', token);
+		formData.append("secret", secret);
+		formData.append("response", token);
 		if (remoteIp) {
-			formData.append('remoteip', remoteIp);
+			formData.append("remoteip", remoteIp);
 		}
 
-		const response = await fetch(
-			'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-			{
-				method: 'POST',
-				body: formData,
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
+		const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+			method: "POST",
+			body: formData,
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
 			},
-		);
+		});
 
 		if (!response.ok) {
 			return { success: false, errorCodes: [`http-${response.status}`] };
@@ -108,16 +93,16 @@ export async function verifyTurnstileToken(
 
 		const data = (await response.json()) as {
 			success: boolean;
-			'error-codes'?: string[];
+			"error-codes"?: string[];
 		};
 		return {
 			success: Boolean(data.success),
-			errorCodes: data['error-codes'],
+			errorCodes: data["error-codes"],
 		};
 	} catch (error) {
 		return {
 			success: false,
-			errorCodes: [error instanceof Error ? error.message : 'network-error'],
+			errorCodes: [error instanceof Error ? error.message : "network-error"],
 		};
 	}
 }
@@ -132,11 +117,11 @@ export async function sendEmailViaResend(options: {
 	html?: string;
 }): Promise<{ success: boolean; id?: string; error?: string }> {
 	try {
-		const res = await fetch('https://api.resend.com/emails', {
-			method: 'POST',
+		const res = await fetch("https://api.resend.com/emails", {
+			method: "POST",
 			headers: {
 				Authorization: `Bearer ${options.apiKey}`,
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
 				from: options.from,
@@ -161,7 +146,7 @@ export async function sendEmailViaResend(options: {
 	} catch (err) {
 		return {
 			success: false,
-			error: err instanceof Error ? err.message : 'Failed to send email',
+			error: err instanceof Error ? err.message : "Failed to send email",
 		};
 	}
 }
@@ -170,41 +155,33 @@ function jsonResponse(body: Record<string, unknown>, status = 200): Response {
 	return new Response(JSON.stringify(body), {
 		status,
 		headers: {
-			'Content-Type': 'application/json; charset=utf-8',
-			'Cache-Control': 'no-store',
+			"Content-Type": "application/json; charset=utf-8",
+			"Cache-Control": "no-store",
 		},
 	});
 }
 
-export async function handleContactRequest(
-	request: Request,
-	env: ContactEnv = {},
-): Promise<Response> {
-	if (request.method !== 'POST') {
+export async function handleContactRequest(request: Request, env: ContactEnv = {}): Promise<Response> {
+	if (request.method !== "POST") {
 		return jsonResponse(
 			{
 				success: false,
-				error: 'Method not allowed. Only POST is supported.',
+				error: "Method not allowed. Only POST is supported.",
 			},
 			405,
 		);
 	}
 
-	const clientIp =
-		request.headers.get('cf-connecting-ip') ||
-		request.headers.get('x-forwarded-for') ||
-		'127.0.0.1';
+	const clientIp = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "127.0.0.1";
 
-	const rateLimiter = env.RATE_LIMIT_KV
-		? createKvRateLimiter(env.RATE_LIMIT_KV)
-		: memoryRateLimiter;
+	const rateLimiter = env.RATE_LIMIT_KV ? createKvRateLimiter(env.RATE_LIMIT_KV) : memoryRateLimiter;
 
 	const isLimited = await rateLimiter.isRateLimited(clientIp, 3, 600);
 	if (isLimited) {
 		return jsonResponse(
 			{
 				success: false,
-				error: 'Too many requests. Please wait a few minutes before trying again.',
+				error: "Too many requests. Please wait a few minutes before trying again.",
 			},
 			429,
 		);
@@ -217,7 +194,7 @@ export async function handleContactRequest(
 		return jsonResponse(
 			{
 				success: false,
-				error: 'Invalid JSON payload in request body.',
+				error: "Invalid JSON payload in request body.",
 			},
 			400,
 		);
@@ -225,13 +202,13 @@ export async function handleContactRequest(
 
 	const parseResult = ContactPayloadSchema.safeParse(payload);
 	if (!parseResult.success) {
-		const firstError = parseResult.error.issues[0]?.message || 'Invalid form data.';
+		const firstError = parseResult.error.issues[0]?.message || "Invalid form data.";
 		return jsonResponse(
 			{
 				success: false,
 				error: firstError,
 				errors: parseResult.error.issues.map((issue) => ({
-					field: issue.path.join('.'),
+					field: issue.path.join("."),
 					message: issue.message,
 				})),
 			},
@@ -244,7 +221,7 @@ export async function handleContactRequest(
 	if (honeypot && honeypot.trim().length > 0) {
 		return jsonResponse({
 			success: true,
-			message: 'Message received successfully.',
+			message: "Message received successfully.",
 		});
 	}
 
@@ -253,23 +230,19 @@ export async function handleContactRequest(
 			return jsonResponse(
 				{
 					success: false,
-					error: 'Bot verification token is missing.',
+					error: "Bot verification token is missing.",
 				},
 				400,
 			);
 		}
 
-		const turnstile = await verifyTurnstileToken(
-			turnstileToken,
-			env.TURNSTILE_SECRET_KEY,
-			clientIp,
-		);
+		const turnstile = await verifyTurnstileToken(turnstileToken, env.TURNSTILE_SECRET_KEY, clientIp);
 
 		if (!turnstile.success) {
 			return jsonResponse(
 				{
 					success: false,
-					error: 'Turnstile challenge verification failed. Please refresh and try again.',
+					error: "Turnstile challenge verification failed. Please refresh and try again.",
 				},
 				400,
 			);
@@ -277,8 +250,8 @@ export async function handleContactRequest(
 	}
 
 	const resendApiKey = env.RESEND_API_KEY;
-	const toEmail = env.CONTACT_TO_EMAIL || 'contact@example.com';
-	const fromEmail = env.CONTACT_FROM_EMAIL || 'Portfolio Contact <onboarding@resend.dev>';
+	const toEmail = env.CONTACT_TO_EMAIL || "contact@example.com";
+	const fromEmail = env.CONTACT_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
 
 	if (resendApiKey) {
 		const emailResult = await sendEmailViaResend({
@@ -300,7 +273,7 @@ export async function handleContactRequest(
 			return jsonResponse(
 				{
 					success: false,
-					error: 'Failed to deliver message. Please try again later or reach out directly.',
+					error: "Failed to deliver message. Please try again later or reach out directly.",
 				},
 				502,
 			);
@@ -309,22 +282,19 @@ export async function handleContactRequest(
 
 	return jsonResponse({
 		success: true,
-		message: 'Thank you! Your message has been sent successfully.',
+		message: "Thank you! Your message has been sent successfully.",
 	});
 }
 
 function escapeHtml(str: string): string {
 	return str
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#039;');
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
 }
 
-export const onRequestPost: (context: {
-	request: Request;
-	env: ContactEnv;
-}) => Promise<Response> = async (context) => {
+export const onRequestPost: (context: { request: Request; env: ContactEnv }) => Promise<Response> = async (context) => {
 	return handleContactRequest(context.request, context.env);
 };

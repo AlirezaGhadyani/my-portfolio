@@ -1,5 +1,5 @@
 ---
-import { resumeData } from '../data/resume.ts';
+import { resumeData } from "../data/resume.ts";
 
 const { identity } = resumeData;
 ---
@@ -18,9 +18,18 @@ const { identity } = resumeData;
 						<li>
 							<a href={url} target="_blank" rel="noreferrer noopener" class="footer-link">
 								<span>{label}</span>
-								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-									<line x1="7" y1="17" x2="17" y2="7"></line>
-									<polyline points="7 7 17 7 17 17"></polyline>
+								<svg
+									width="12"
+									height="12"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									aria-hidden="true">
+									<line x1="7" y1="17" x2="17" y2="7" />
+									<polyline points="7 7 17 7 17 17" />
 								</svg>
 							</a>
 						</li>
@@ -94,7 +103,9 @@ const { identity } = resumeData;
 
 		svg {
 			color: var(--text-subtle);
-			transition: transform 0.2s ease, color 0.2s ease;
+			transition:
+				transform 0.2s ease,
+				color 0.2s ease;
 		}
 
 		&:hover {

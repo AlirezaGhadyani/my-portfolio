@@ -1,5 +1,5 @@
 ---
-import type { Project } from '../data/schema.ts';
+import type { Project } from "../data/schema.ts";
 
 interface Props {
 	project: Project;
@@ -8,49 +8,62 @@ interface Props {
 
 const { project, featured = false } = Astro.props;
 
-const tierLabel = { flagship: 'Flagship', notable: 'Notable', experiment: 'Experiment' }[
-	project.tier
-];
+const tierLabel = { flagship: "Flagship", notable: "Notable", experiment: "Experiment" }[project.tier];
 
-const primaryUrl = project.hasCaseStudy
-	? `/projects/${project.slug}`
-	: (project.liveUrl ?? project.githubUrl);
+const primaryUrl = project.hasCaseStudy ? `/projects/${project.slug}` : (project.liveUrl ?? project.githubUrl);
 const isInternalCaseStudy = project.hasCaseStudy;
-const externalTarget = isInternalCaseStudy ? undefined : '_blank';
-const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
+const externalTarget = isInternalCaseStudy ? undefined : "_blank";
+const externalRel = isInternalCaseStudy ? undefined : "noreferrer noopener";
 ---
 
-<article class:list={['project-card', { 'project-card--featured': featured }]}>
+<article class:list={["project-card", { "project-card--featured": featured }]}>
 	<div class="project-card-head">
 		<div>
 			<h3 class="project-card-title">
-				{primaryUrl ? (
-					<a
-						href={primaryUrl}
-						target={externalTarget}
-						rel={externalRel}
-						class="project-card-link"
-					>
-						<span>{project.title}</span>
-						{isInternalCaseStudy ? (
-							<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="link-arrow" aria-hidden="true">
-								<line x1="5" y1="12" x2="19" y2="12"></line>
-								<polyline points="12 5 19 12 12 19"></polyline>
-							</svg>
-						) : (
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="link-external" aria-hidden="true">
-								<line x1="7" y1="17" x2="17" y2="7"></line>
-								<polyline points="7 7 17 7 17 17"></polyline>
-							</svg>
-						)}
-					</a>
-				) : (
-					project.title
-				)}
+				{
+					primaryUrl ? (
+						<a href={primaryUrl} target={externalTarget} rel={externalRel} class="project-card-link">
+							<span>{project.title}</span>
+							{isInternalCaseStudy ? (
+								<svg
+									width="15"
+									height="15"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="link-arrow"
+									aria-hidden="true">
+									<line x1="5" y1="12" x2="19" y2="12" />
+									<polyline points="12 5 19 12 12 19" />
+								</svg>
+							) : (
+								<svg
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="link-external"
+									aria-hidden="true">
+									<line x1="7" y1="17" x2="17" y2="7" />
+									<polyline points="7 7 17 7 17 17" />
+								</svg>
+							)}
+						</a>
+					) : (
+						project.title
+					)
+				}
 			</h3>
 			<p class="project-card-subtitle">{project.subtitle}</p>
 		</div>
-		<span class:list={['project-card-tier', `tier-${project.tier}`]} aria-hidden="true">
+		<span class:list={["project-card-tier", `tier-${project.tier}`]} aria-hidden="true">
 			{tierLabel}
 		</span>
 	</div>
@@ -58,51 +71,100 @@ const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 	<p class="project-card-role">{project.role}</p>
 	<p class="project-card-description">{project.description}</p>
 
-	{project.impactMetrics && project.impactMetrics.length > 0 && (
-		<ul class="project-card-metrics" aria-label="Impact and metrics">
-			{project.impactMetrics.map((metric) => (
-				<li>
-					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-						<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-						<polyline points="17 6 23 6 23 12"></polyline>
-					</svg>
-					<span>{metric}</span>
-				</li>
-			))}
-		</ul>
-	)}
+	{
+		project.impactMetrics && project.impactMetrics.length > 0 && (
+			<ul class="project-card-metrics" aria-label="Impact and metrics">
+				{project.impactMetrics.map((metric) => (
+					<li>
+						<svg
+							width="12"
+							height="12"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
+							<polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+							<polyline points="17 6 23 6 23 12" />
+						</svg>
+						<span>{metric}</span>
+					</li>
+				))}
+			</ul>
+		)
+	}
 
 	<div class="project-card-foot">
 		<ul class="project-tech" aria-label="Technologies used">
 			{project.technologies.map((tech) => <li>{tech}</li>)}
 		</ul>
 		<div class="project-actions" aria-label={`${project.title} links`}>
-			{project.hasCaseStudy && (
-				<a href={`/projects/${project.slug}`} class="btn-action primary">
-					<span>Case study</span>
-					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-						<line x1="5" y1="12" x2="19" y2="12"></line>
-						<polyline points="12 5 19 12 12 19"></polyline>
-					</svg>
-				</a>
-			)}
-			{project.liveUrl && (
-				<a href={project.liveUrl} target="_blank" rel="noreferrer noopener" class="btn-action" title="View live site">
-					<span>Live</span>
-					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-						<line x1="7" y1="17" x2="17" y2="7"></line>
-						<polyline points="7 7 17 7 17 17"></polyline>
-					</svg>
-				</a>
-			)}
-			{project.githubUrl && (
-				<a href={project.githubUrl} target="_blank" rel="noreferrer noopener" class="btn-action" title="View source repository">
-					<span>Code</span>
-					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-						<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-					</svg>
-				</a>
-			)}
+			{
+				project.hasCaseStudy && (
+					<a href={`/projects/${project.slug}`} class="btn-action primary">
+						<span>Case study</span>
+						<svg
+							width="13"
+							height="13"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
+							<line x1="5" y1="12" x2="19" y2="12" />
+							<polyline points="12 5 19 12 12 19" />
+						</svg>
+					</a>
+				)
+			}
+			{
+				project.liveUrl && (
+					<a href={project.liveUrl} target="_blank" rel="noreferrer noopener" class="btn-action" title="View live site">
+						<span>Live</span>
+						<svg
+							width="13"
+							height="13"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
+							<line x1="7" y1="17" x2="17" y2="7" />
+							<polyline points="7 7 17 7 17 17" />
+						</svg>
+					</a>
+				)
+			}
+			{
+				project.githubUrl && (
+					<a
+						href={project.githubUrl}
+						target="_blank"
+						rel="noreferrer noopener"
+						class="btn-action"
+						title="View source repository">
+						<span>Code</span>
+						<svg
+							width="13"
+							height="13"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
+							<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+						</svg>
+					</a>
+				)
+			}
 		</div>
 	</div>
 </article>
@@ -130,9 +192,17 @@ const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 			border-top-color: var(--accent);
 		}
 	}
-	.project-card--featured { background: linear-gradient(120deg, var(--accent-muted), var(--surface) 48%); border-top-color: var(--accent); }
-	.project-card--featured .project-card-title { font-size: clamp(1.75rem, 4vw, 2.6rem); }
-	.project-card--featured .project-card-description { max-width: 58ch; font-size: 1.05rem; }
+	.project-card--featured {
+		background: linear-gradient(120deg, var(--accent-muted), var(--surface) 48%);
+		border-top-color: var(--accent);
+	}
+	.project-card--featured .project-card-title {
+		font-size: clamp(1.75rem, 4vw, 2.6rem);
+	}
+	.project-card--featured .project-card-description {
+		max-width: 58ch;
+		font-size: 1.05rem;
+	}
 
 	.project-card-head {
 		display: flex;
@@ -157,7 +227,9 @@ const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 				.link-arrow,
 				.link-external {
 					color: var(--text-subtle);
-					transition: transform 0.2s ease, color 0.2s ease;
+					transition:
+						transform 0.2s ease,
+						color 0.2s ease;
 				}
 
 				&:hover {
@@ -209,7 +281,11 @@ const externalRel = isInternalCaseStudy ? undefined : 'noreferrer noopener';
 		margin-top: 0.875rem;
 	}
 
-	.project-card-subtitle { font-family: var(--font-mono); font-size: .78rem !important; letter-spacing: .01em; }
+	.project-card-subtitle {
+		font-family: var(--font-mono);
+		font-size: 0.78rem !important;
+		letter-spacing: 0.01em;
+	}
 
 	.project-card-description {
 		color: var(--text-muted);

@@ -7,45 +7,49 @@
 ### Loop 1 — Architecture & Product Challenge
 
 #### 1. Challenges to Initial Assumptions
+
 - **Is Astro actually best, or is it just the popular SSG choice?**
-  - *Challenge:* Astro islands can introduce mental overhead if UI state is complex.
-  - *Finding:* For a portfolio/resume, state is 95% static and 5% micro-interactions (theme toggle, active-nav spy, variant switcher, contact form). Astro renders 0kb client JS by default and supports islands (React or pure TS web components). Next.js would ship ~85kb of framework JS just to render static text. Astro is genuinely superior here for Core Web Vitals and clean SSG.
+  - _Challenge:_ Astro islands can introduce mental overhead if UI state is complex.
+  - _Finding:_ For a portfolio/resume, state is 95% static and 5% micro-interactions (theme toggle, active-nav spy, variant switcher, contact form). Astro renders 0kb client JS by default and supports islands (React or pure TS web components). Next.js would ship ~85kb of framework JS just to render static text. Astro is genuinely superior here for Core Web Vitals and clean SSG.
 - **Is a Cloudflare Worker actually needed at runtime?**
-  - *Challenge:* If we pre-generate PDFs at build time, do we even need a serverless backend?
-  - *Finding:* A runtime worker is needed *only* for the contact form (to prevent leaking email/API keys, rate-limit, and verify Turnstile tokens). If contact can use a static `mailto:` or static form service (Formspree/Resend webhook), runtime hosting drops to 100% static on Cloudflare Pages.
-  - *Decision:* Keep contact form as an Astro API endpoint / Cloudflare Pages Function (file-based in `/functions/api/contact.ts`), requiring zero separate worker repos or extra infrastructure.
+  - _Challenge:_ If we pre-generate PDFs at build time, do we even need a serverless backend?
+  - _Finding:_ A runtime worker is needed _only_ for the contact form (to prevent leaking email/API keys, rate-limit, and verify Turnstile tokens). If contact can use a static `mailto:` or static form service (Formspree/Resend webhook), runtime hosting drops to 100% static on Cloudflare Pages.
+  - _Decision:_ Keep contact form as an Astro API endpoint / Cloudflare Pages Function (file-based in `/functions/api/contact.ts`), requiring zero separate worker repos or extra infrastructure.
 - **Is Playwright PDF generation viable in CI without huge build slowdowns?**
-  - *Challenge:* Installing full Chromium in CI adds 1-2 minutes and ~400MB download per build.
-  - *Finding:* Running Playwright on every commit is wasteful.
-  - *Decision:* Split PDF generation into:
+  - _Challenge:_ Installing full Chromium in CI adds 1-2 minutes and ~400MB download per build.
+  - _Finding:_ Running Playwright on every commit is wasteful.
+  - _Decision:_ Split PDF generation into:
     1. Local/manual script `pnpm build:pdf` for authoring.
-    2. CI step that runs *only* on changes to `src/data/**` or manual dispatch, committing/caching the generated PDFs or generating them directly during production release builds.
+    2. CI step that runs _only_ on changes to `src/data/**` or manual dispatch, committing/caching the generated PDFs or generating them directly during production release builds.
 - **UX & Creativity vs. Professionalism:**
-  - *Challenge:* "Creative" portfolios often fail recruiters because they bury key skills in canvas animations or scroll-jacked timelines.
-  - *Decision:* The primary layout must be a scannable, high-contrast, semantic document. "Creativity" will live in micro-interactions, layout precision, fluid typography, subtle canvas/SVG particle backgrounds (respecting `prefers-reduced-motion`), and live variant filtering.
+  - _Challenge:_ "Creative" portfolios often fail recruiters because they bury key skills in canvas animations or scroll-jacked timelines.
+  - _Decision:_ The primary layout must be a scannable, high-contrast, semantic document. "Creativity" will live in micro-interactions, layout precision, fluid typography, subtle canvas/SVG particle backgrounds (respecting `prefers-reduced-motion`), and live variant filtering.
 
 ---
 
 ### Loop 2 — Adversarial Review (Breaking the System Across 5 Years)
 
 #### 1. Future Maintenance & Scale
+
 - **What happens with 30+ projects?**
-  - *Issue:* A single page loading 30 rich project cards degrades LCP and overwhelms recruiters.
-  - *Mitigation:* Data model introduces `featured: boolean`, `priority: number`, and `tier: 1 | 2 | 3`. Homepage displays Tier 1 (top 4-6) with interactive filters; a dedicated `/projects` archive lists all with instant client-side tag filtering (using vanilla TS, ~2kb).
+  - _Issue:_ A single page loading 30 rich project cards degrades LCP and overwhelms recruiters.
+  - _Mitigation:_ Data model introduces `featured: boolean`, `priority: number`, and `tier: 1 | 2 | 3`. Homepage displays Tier 1 (top 4-6) with interactive filters; a dedicated `/projects` archive lists all with instant client-side tag filtering (using vanilla TS, ~2kb).
 - **What happens when resume data changes frequently?**
-  - *Issue:* Editing TypeScript AST files can be syntax-error prone.
-  - *Mitigation:* Strong Zod schemas with instant build-time feedback and clear TS autocomplete. Data is organized into clean domain files (`experience.ts`, `skills.ts`, etc.) with strict typed helpers.
+  - _Issue:_ Editing TypeScript AST files can be syntax-error prone.
+  - _Mitigation:_ Strong Zod schemas with instant build-time feedback and clear TS autocomplete. Data is organized into clean domain files (`experience.ts`, `skills.ts`, etc.) with strict typed helpers.
 - **What happens when Astro or Tailwind upgrades?**
-  - *Mitigation:* Keep dependencies minimal: `@astrojs/check`, `tailwindcss` (v4 with standard CSS variables), `zod`, `playwright`. Zero heavy component libraries (no MUI, no heavy UI packages). The design system is built with native semantic HTML and Tailwind tokens.
+  - _Mitigation:_ Keep dependencies minimal: `@astrojs/check`, `tailwindcss` (v4 with standard CSS variables), `zod`, `playwright`. Zero heavy component libraries (no MUI, no heavy UI packages). The design system is built with native semantic HTML and Tailwind tokens.
 
 #### 2. Data Integrity & Variant Consistency
+
 - **Can website and PDF become inconsistent?**
-  - *Issue:* If the PDF uses separate styling/layout logic, it will drift from the website content.
-  - *Mitigation:* The PDF engine renders a dedicated Astro route (`/print/resume?variant=...`) directly via Playwright in print emulation mode (`media: 'print'`). Both website and PDF consume the exact same Zod-validated data queries and shared markup components.
+  - _Issue:_ If the PDF uses separate styling/layout logic, it will drift from the website content.
+  - _Mitigation:_ The PDF engine renders a dedicated Astro route (`/print/resume?variant=...`) directly via Playwright in print emulation mode (`media: 'print'`). Both website and PDF consume the exact same Zod-validated data queries and shared markup components.
 - **Can an ATS variant hide vital info?**
-  - *Mitigation:* Zod schema ensures base required fields (company, title, dates, bullets) cannot be omitted by variants. Variants can only filter projects/skills or reorder sections, never mutate verified employment history.
+  - _Mitigation:_ Zod schema ensures base required fields (company, title, dates, bullets) cannot be omitted by variants. Variants can only filter projects/skills or reorder sections, never mutate verified employment history.
 
 #### 3. Security, Privacy & Compliance
+
 - Contact form endpoint has:
   1. Honeypot field (hidden from screen readers via `aria-hidden="true"` and CSS `display:none`).
   2. Cloudflare Turnstile token validation.
@@ -58,6 +62,7 @@
 ### Loop 3 — Final Architecture Review & Synthesis
 
 #### Summary of Refinements from Loops 1 & 2
+
 1. **Single Monorepo / Package:** No separated worker repos. Cloudflare Pages + Pages Functions (`/functions/api/contact.ts`) handles static hosting and the single dynamic endpoint in one place.
 2. **Unified PDF Pipeline:** Playwright prints the live Astro `/print/[variant]` page to PDF. Single styling system (Tailwind Print utilities + `@page` CSS rules).
 3. **Multi-tier Project Model:** Prevents portfolio bloat over years of career growth.
@@ -69,17 +74,17 @@
 
 ### 1. Final Technology Stack
 
-| Layer | Technology | Purpose | Justification |
-|---|---|---|---|
-| **Framework** | **Astro 5.x** | Static Site Generation & Island Architecture | Zero runtime JS baseline, instant page loads, built-in Content Collections & routing. |
-| **Language** | **TypeScript 5.x** (Strict) | Type safety across data & UI | Catches schema mismatches at compile time; strict type guards. |
-| **Styling** | **Tailwind CSS v4** | Design-token styling | CSS variable-first architecture, zero runtime overhead, instant dark/light theming. |
-| **Schema/Validation** | **Zod 3.x** | Data modeling & runtime validation | Validates resume JSON/TS files during build; fails CI immediately on data error. |
-| **Export Engine** | **Playwright + Chromium** | Build-time PDF/PNG generation | Uses real browser engine to render print stylesheets to pixel-perfect vector PDFs. |
-| **Backend/Edge** | **Cloudflare Pages Functions** | Serverless contact API | Zero-config edge handler running in the same repo/deployment. |
-| **Email Service** | **Resend API** | Transactional contact emails | Clean REST API, high deliverability, generous free tier (3,000 emails/mo). |
-| **Spam Protection** | **Cloudflare Turnstile** | Bot protection | Privacy-preserving, frictionless CAPTCHA alternative. |
-| **Testing** | **Vitest + Playwright** | Unit, validation, and E2E testing | Fast schema tests with Vitest; visual & export checks with Playwright. |
+| Layer                 | Technology                     | Purpose                                      | Justification                                                                         |
+| --------------------- | ------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **Framework**         | **Astro 5.x**                  | Static Site Generation & Island Architecture | Zero runtime JS baseline, instant page loads, built-in Content Collections & routing. |
+| **Language**          | **TypeScript 5.x** (Strict)    | Type safety across data & UI                 | Catches schema mismatches at compile time; strict type guards.                        |
+| **Styling**           | **Tailwind CSS v4**            | Design-token styling                         | CSS variable-first architecture, zero runtime overhead, instant dark/light theming.   |
+| **Schema/Validation** | **Zod 3.x**                    | Data modeling & runtime validation           | Validates resume JSON/TS files during build; fails CI immediately on data error.      |
+| **Export Engine**     | **Playwright + Chromium**      | Build-time PDF/PNG generation                | Uses real browser engine to render print stylesheets to pixel-perfect vector PDFs.    |
+| **Backend/Edge**      | **Cloudflare Pages Functions** | Serverless contact API                       | Zero-config edge handler running in the same repo/deployment.                         |
+| **Email Service**     | **Resend API**                 | Transactional contact emails                 | Clean REST API, high deliverability, generous free tier (3,000 emails/mo).            |
+| **Spam Protection**   | **Cloudflare Turnstile**       | Bot protection                               | Privacy-preserving, frictionless CAPTCHA alternative.                                 |
+| **Testing**           | **Vitest + Playwright**        | Unit, validation, and E2E testing            | Fast schema tests with Vitest; visual & export checks with Playwright.                |
 
 ---
 
@@ -121,85 +126,93 @@
 Located in `src/data/schema.ts`:
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 export const LinkSchema = z.object({
-  label: z.string(),
-  url: z.string().url(),
-  icon: z.string().optional(),
-  printHidden: z.boolean().default(false),
+	label: z.string(),
+	url: z.string().url(),
+	icon: z.string().optional(),
+	printHidden: z.boolean().default(false),
 });
 
 export const ExperienceItemSchema = z.object({
-  id: z.string(),
-  company: z.string(),
-  location: z.string(),
-  role: z.string(),
-  startDate: z.string(), // YYYY-MM
-  endDate: z.string().optional(), // undefined = "Present"
-  summary: z.string(),
-  highlights: z.array(z.string()),
-  technologies: z.array(z.string()),
-  featured: z.boolean().default(true),
-  tier: z.enum(['primary', 'secondary']).default('primary'),
+	id: z.string(),
+	company: z.string(),
+	location: z.string(),
+	role: z.string(),
+	startDate: z.string(), // YYYY-MM
+	endDate: z.string().optional(), // undefined = "Present"
+	summary: z.string(),
+	highlights: z.array(z.string()),
+	technologies: z.array(z.string()),
+	featured: z.boolean().default(true),
+	tier: z.enum(["primary", "secondary"]).default("primary"),
 });
 
 export const ProjectSchema = z.object({
-  slug: z.string(),
-  title: z.string(),
-  subtitle: z.string(),
-  description: z.string(),
-  role: z.string(),
-  impactMetrics: z.array(z.string()).optional(), // e.g. ["+45% LCP", "10k DAU"]
-  technologies: z.array(z.string()),
-  githubUrl: z.string().url().optional(),
-  liveUrl: z.string().url().optional(),
-  featured: z.boolean().default(false),
-  tier: z.enum(['flagship', 'notable', 'experiment']).default('notable'),
-  hasCaseStudy: z.boolean().default(false),
+	slug: z.string(),
+	title: z.string(),
+	subtitle: z.string(),
+	description: z.string(),
+	role: z.string(),
+	impactMetrics: z.array(z.string()).optional(), // e.g. ["+45% LCP", "10k DAU"]
+	technologies: z.array(z.string()),
+	githubUrl: z.string().url().optional(),
+	liveUrl: z.string().url().optional(),
+	featured: z.boolean().default(false),
+	tier: z.enum(["flagship", "notable", "experiment"]).default("notable"),
+	hasCaseStudy: z.boolean().default(false),
 });
 
 export const SkillCategorySchema = z.object({
-  name: z.string(), // e.g. "Languages", "Frontend & UI", "Backend & Cloud"
-  skills: z.array(z.object({
-    name: z.string(),
-    level: z.enum(['expert', 'proficient', 'familiar']).optional(),
-    highlighted: z.boolean().default(false),
-  })),
+	name: z.string(), // e.g. "Languages", "Frontend & UI", "Backend & Cloud"
+	skills: z.array(
+		z.object({
+			name: z.string(),
+			level: z.enum(["expert", "proficient", "familiar"]).optional(),
+			highlighted: z.boolean().default(false),
+		}),
+	),
 });
 
 export const ResumeDataSchema = z.object({
-  identity: z.object({
-    name: z.string(),
-    title: z.string(),
-    tagline: z.string(),
-    email: z.string().email(),
-    phone: z.string().optional(),
-    location: z.string(),
-    website: z.string().url(),
-    links: z.array(LinkSchema),
-  }),
-  summary: z.object({
-    short: z.string(), // for 1-page PDF / ATS
-    full: z.string(),  // for Web & 2-page PDF
-  }),
-  skills: z.array(SkillCategorySchema),
-  experience: z.array(ExperienceItemSchema),
-  projects: z.array(ProjectSchema),
-  education: z.array(z.object({
-    institution: z.string(),
-    degree: z.string(),
-    field: z.string(),
-    startDate: z.string(),
-    endDate: z.string(),
-    honors: z.string().optional(),
-  })),
-  certifications: z.array(z.object({
-    name: z.string(),
-    issuer: z.string(),
-    date: z.string(),
-    url: z.string().url().optional(),
-  })).optional(),
+	identity: z.object({
+		name: z.string(),
+		title: z.string(),
+		tagline: z.string(),
+		email: z.string().email(),
+		phone: z.string().optional(),
+		location: z.string(),
+		website: z.string().url(),
+		links: z.array(LinkSchema),
+	}),
+	summary: z.object({
+		short: z.string(), // for 1-page PDF / ATS
+		full: z.string(), // for Web & 2-page PDF
+	}),
+	skills: z.array(SkillCategorySchema),
+	experience: z.array(ExperienceItemSchema),
+	projects: z.array(ProjectSchema),
+	education: z.array(
+		z.object({
+			institution: z.string(),
+			degree: z.string(),
+			field: z.string(),
+			startDate: z.string(),
+			endDate: z.string(),
+			honors: z.string().optional(),
+		}),
+	),
+	certifications: z
+		.array(
+			z.object({
+				name: z.string(),
+				issuer: z.string(),
+				date: z.string(),
+				url: z.string().url().optional(),
+			}),
+		)
+		.optional(),
 });
 ```
 
@@ -210,53 +223,53 @@ export const ResumeDataSchema = z.object({
 Variants are declared in `src/data/variants.ts` as pure transformation filters over the canonical data:
 
 ```typescript
-export type ResumeVariant = 'fullstack' | 'frontend' | 'ats' | 'brief';
+export type ResumeVariant = "fullstack" | "frontend" | "ats" | "brief";
 
 export interface VariantConfig {
-  id: ResumeVariant;
-  label: string;
-  pdfPages: 1 | 2;
-  titleOverride?: string;
-  summaryOverride?: 'short' | 'full';
-  featuredSkillsFirst: string[];
-  maxProjects: number;
-  excludedSections?: ('certifications' | 'achievements')[];
+	id: ResumeVariant;
+	label: string;
+	pdfPages: 1 | 2;
+	titleOverride?: string;
+	summaryOverride?: "short" | "full";
+	featuredSkillsFirst: string[];
+	maxProjects: number;
+	excludedSections?: ("certifications" | "achievements")[];
 }
 
 export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
-  fullstack: {
-    id: 'fullstack',
-    label: 'Full-Stack Software Engineer',
-    pdfPages: 2,
-    summaryOverride: 'full',
-    featuredSkillsFirst: ['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'Astro', 'Tailwind CSS'],
-    maxProjects: 6,
-  },
-  frontend: {
-    id: 'frontend',
-    label: 'Senior Frontend / UI Engineer',
-    pdfPages: 2,
-    summaryOverride: 'full',
-    featuredSkillsFirst: ['React', 'Next.js', 'Astro', 'TypeScript', 'Tailwind CSS', 'Web Performance'],
-    maxProjects: 6,
-  },
-  brief: {
-    id: 'brief',
-    label: 'One-Page Executive Summary',
-    pdfPages: 1,
-    summaryOverride: 'short',
-    featuredSkillsFirst: ['Architecture', 'TypeScript', 'Full-Stack', 'Performance'],
-    maxProjects: 3,
-    excludedSections: ['certifications'],
-  },
-  ats: {
-    id: 'ats',
-    label: 'Standard ATS Format',
-    pdfPages: 1,
-    summaryOverride: 'short',
-    featuredSkillsFirst: ['Full-Stack Development', 'System Architecture'],
-    maxProjects: 4,
-  },
+	fullstack: {
+		id: "fullstack",
+		label: "Full-Stack Software Engineer",
+		pdfPages: 2,
+		summaryOverride: "full",
+		featuredSkillsFirst: ["TypeScript", "React", "Node.js", "PostgreSQL", "Astro", "Tailwind CSS"],
+		maxProjects: 6,
+	},
+	frontend: {
+		id: "frontend",
+		label: "Senior Frontend / UI Engineer",
+		pdfPages: 2,
+		summaryOverride: "full",
+		featuredSkillsFirst: ["React", "Next.js", "Astro", "TypeScript", "Tailwind CSS", "Web Performance"],
+		maxProjects: 6,
+	},
+	brief: {
+		id: "brief",
+		label: "One-Page Executive Summary",
+		pdfPages: 1,
+		summaryOverride: "short",
+		featuredSkillsFirst: ["Architecture", "TypeScript", "Full-Stack", "Performance"],
+		maxProjects: 3,
+		excludedSections: ["certifications"],
+	},
+	ats: {
+		id: "ats",
+		label: "Standard ATS Format",
+		pdfPages: 1,
+		summaryOverride: "short",
+		featuredSkillsFirst: ["Full-Stack Development", "System Architecture"],
+		maxProjects: 4,
+	},
 };
 ```
 
@@ -265,6 +278,7 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 ### 5. Design System & Visual Strategy
 
 #### Color Palette (Tailwind v4 CSS Variables)
+
 - **Light Mode:**
   - Background: `hsl(210 20% 98%)` (Crisp, warm slate-white)
   - Surface: `hsl(0 0% 100%)`
@@ -282,11 +296,13 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
   - Accent Primary: `hsl(215 90% 60%)`
 
 #### Typography System
+
 - **Display / Headings:** `Geist Sans` or `Plus Jakarta Sans` (variable font, self-hosted in `public/fonts/`).
 - **Body / Content:** `Inter` or `Geist Sans` (high x-height, clear readability at 14-16px).
 - **Code / Metrics / Technical badges:** `Geist Mono` or `JetBrains Mono`.
 
 #### Spacing, Elevation & Motion
+
 - **Grid:** 8pt spatial rhythm (8px, 16px, 24px, 32px, 48px, 64px, 96px).
 - **Borders & Radii:** Subtle 8px / 12px radii with ultra-fine `1px solid var(--border)` borders.
 - **Motion:** Spring micro-interactions (under 200ms) for buttons and active nav. Zero scroll-jacking. Strict `@media (prefers-reduced-motion: reduce)` killswitch disabling all CSS transitions.
@@ -296,28 +312,29 @@ export const VARIANTS: Record<ResumeVariant, VariantConfig> = {
 ### 6. Export Architecture (Playwright + Print CSS)
 
 #### The Generation Flow:
+
 1. Astro renders dedicated print pages: `/print/resume?variant=fullstack` and `/print/resume?variant=brief`.
 2. A build script (`scripts/generate-pdf.ts`) spins up local Chromium via Playwright:
    ```typescript
    const page = await browser.newPage();
-   await page.goto('http://localhost:4321/print/resume?variant=fullstack', { waitUntil: 'networkidle' });
-   await page.emulateMedia({ media: 'print' });
+   await page.goto("http://localhost:4321/print/resume?variant=fullstack", { waitUntil: "networkidle" });
+   await page.emulateMedia({ media: "print" });
    await page.pdf({
-     path: 'public/downloads/resume-fullstack.pdf',
-     format: 'A4',
-     printBackground: true,
-     margin: { top: '0mm', bottom: '0mm', left: '0mm', right: '0mm' },
+   	path: "public/downloads/resume-fullstack.pdf",
+   	format: "A4",
+   	printBackground: true,
+   	margin: { top: "0mm", bottom: "0mm", left: "0mm", right: "0mm" },
    });
    ```
 3. CSS Paged Media rules inside `print.css`:
    ```css
    @page {
-     size: A4 portrait;
-     margin: 12mm 14mm 12mm 14mm;
+   	size: A4 portrait;
+   	margin: 12mm 14mm 12mm 14mm;
    }
    .page-break-inside-avoid {
-     break-inside: avoid;
-     page-break-inside: avoid;
+   	break-inside: avoid;
+   	page-break-inside: avoid;
    }
    ```
 4. Plain-text generator writes `public/downloads/resume-ats.txt` with formatted markdown/ascii layout directly from the validated Zod data.
@@ -390,6 +407,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 ### Detailed Phase Breakdown
 
 #### Phase 1: Project Scaffolding & Tooling
+
 - **Objective:** Establish isolated workspace with strict TypeScript, Astro 5, Tailwind v4, Vitest, and ESLint/Prettier.
 - **Inputs:** Plan specifications.
 - **Tasks:**
@@ -400,6 +418,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** `pnpm build`, `pnpm check`, and `pnpm test` execute cleanly with 0 warnings.
 
 #### Phase 2: Canonical Data Model & Sample Data
+
 - **Objective:** Create the single source of truth data architecture.
 - **Tasks:**
   - Create `src/data/schema.ts` with all Zod schemas.
@@ -409,6 +428,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** 100% test coverage on resume data loader and variant transformations.
 
 #### Phase 3: Design System & Shared Layout Shell
+
 - **Objective:** Build layout, responsive navigation, footer, theme switcher, and typography tokens.
 - **Tasks:**
   - Create `src/layouts/RootLayout.astro` with metadata, font preloads, and theme script.
@@ -418,6 +438,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** Accessible keyboard navigation, zero theme flicker on page refresh, 100% semantic HTML.
 
 #### Phase 4: Core Presentation Components
+
 - **Objective:** Build the interactive resume and portfolio home experience.
 - **Tasks:**
   - Hero section with title, value proposition, and quick links.
@@ -427,6 +448,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** Fully responsive across mobile, tablet, and desktop viewports.
 
 #### Phase 5: Projects & Case Studies
+
 - **Objective:** Showcase technical engineering depth with flagship case studies.
 - **Tasks:**
   - Flagship project cards with architectural highlights, tech badges, and metrics.
@@ -435,6 +457,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** Case study pages render with fast LCP; project links are keyboard navigable.
 
 #### Phase 6: Print & PDF Export Engine
+
 - **Objective:** Build the automated document generation pipeline.
 - **Tasks:**
   - Create dedicated `/print/resume` route with `@media print` CSS.
@@ -445,6 +468,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** Generated PDFs are selectable text, exactly 1 or 2 pages without awkward element splits, and pass ATS text extraction checks.
 
 #### Phase 7: Edge Contact API & Security
+
 - **Objective:** Serverless contact form handling with spam protection.
 - **Tasks:**
   - Create `functions/api/contact.ts` Cloudflare Pages function.
@@ -454,6 +478,7 @@ Phase 8: Production Verification (Audits, SEO, A11y, Security, CI/CD)
 - **Acceptance Criteria:** Valid messages send an email via Resend; invalid/bot submissions are rejected with HTTP 400/429.
 
 #### Phase 8: Production Verification & Hardening
+
 - **Objective:** Final quality gates before release.
 - **Tasks:**
   - Run Lighthouse CI audit (Target: 100 on Performance, A11y, Best Practices, SEO).

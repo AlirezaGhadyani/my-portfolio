@@ -1,5 +1,5 @@
 ---
-import type { EducationItem, Certification } from '../data/schema.ts';
+import type { EducationItem, Certification } from "../data/schema.ts";
 
 interface Props {
 	education: EducationItem[];
@@ -36,8 +36,17 @@ const { education, certifications = [] } = Astro.props;
 							</div>
 							{item.honors && (
 								<p class="edu-honors">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-										<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+									<svg
+										width="14"
+										height="14"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										aria-hidden="true">
+										<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
 									</svg>
 									<span>{item.honors}</span>
 								</p>
@@ -49,20 +58,29 @@ const { education, certifications = [] } = Astro.props;
 		</div>
 
 		<!-- Certifications -->
-		{certifications.length > 0 && (
-			<div class="edu-column">
-				<h3 class="column-subtitle">Professional Certifications</h3>
-				<ul class="cert-list">
-					{
-						certifications.map((cert) => (
+		{
+			certifications.length > 0 && (
+				<div class="edu-column">
+					<h3 class="column-subtitle">Professional Certifications</h3>
+					<ul class="cert-list">
+						{certifications.map((cert) => (
 							<li class="cert-card">
 								<div class="cert-head">
 									{cert.url ? (
 										<a href={cert.url} target="_blank" rel="noreferrer noopener" class="cert-link">
 											<span>{cert.name}</span>
-											<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-												<line x1="7" y1="17" x2="17" y2="7"></line>
-												<polyline points="7 7 17 7 17 17"></polyline>
+											<svg
+												width="13"
+												height="13"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												aria-hidden="true">
+												<line x1="7" y1="17" x2="17" y2="7" />
+												<polyline points="7 7 17 7 17 17" />
 											</svg>
 										</a>
 									) : (
@@ -72,11 +90,11 @@ const { education, certifications = [] } = Astro.props;
 								</div>
 								<p class="cert-issuer">{cert.issuer}</p>
 							</li>
-						))
-					}
-				</ul>
-			</div>
-		)}
+						))}
+					</ul>
+				</div>
+			)
+		}
 	</div>
 </section>
 
@@ -118,7 +136,9 @@ const { education, certifications = [] } = Astro.props;
 	}
 
 	@media (max-width: 48rem) {
-		.edu-grid { grid-template-columns: 1fr; }
+		.edu-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.edu-column {
@@ -152,7 +172,10 @@ const { education, certifications = [] } = Astro.props;
 		padding: 1.25rem;
 		transition: var(--transition-fast);
 
-		&:hover .edu-institution, &:hover .cert-name { color: var(--accent); }
+		&:hover .edu-institution,
+		&:hover .cert-name {
+			color: var(--accent);
+		}
 	}
 
 	.edu-head,
@@ -182,7 +205,9 @@ const { education, certifications = [] } = Astro.props;
 
 			svg {
 				color: var(--text-subtle);
-				transition: transform 0.2s ease, color 0.2s ease;
+				transition:
+					transform 0.2s ease,
+					color 0.2s ease;
 			}
 
 			&:hover {

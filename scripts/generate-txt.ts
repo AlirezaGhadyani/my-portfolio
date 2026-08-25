@@ -1,24 +1,24 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { resumeData } from '../src/data/resume.ts';
-import { applyVariant } from '../src/data/variants.ts';
-import { formatMonthYear } from '../src/lib/formatDate.ts';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { resumeData } from "../src/data/resume.ts";
+import { applyVariant } from "../src/data/variants.ts";
+import { formatMonthYear } from "../src/lib/formatDate.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, '..');
-const downloadsDir = path.join(projectRoot, 'public', 'downloads');
-const distDir = path.join(projectRoot, 'dist');
+const projectRoot = path.resolve(__dirname, "..");
+const downloadsDir = path.join(projectRoot, "public", "downloads");
+const distDir = path.join(projectRoot, "dist");
 
-export function generatePlainTextResume(variantKey: 'ats' | 'fullstack' | 'brief' = 'ats'): string {
+export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief" = "ats"): string {
 	const data = applyVariant(resumeData, variantKey);
 	const { identity, summary, experience, skills, education, certifications, projects, documentTitle } = data;
 
 	const lines: string[] = [];
 
-	const hr = '='.repeat(72);
-	const subHr = '-'.repeat(72);
+	const hr = "=".repeat(72);
+	const subHr = "-".repeat(72);
 
 	// Header
 	lines.push(hr);
@@ -28,31 +28,31 @@ export function generatePlainTextResume(variantKey: 'ats' | 'fullstack' | 'brief
 	lines.push(`Email:    ${identity.email}`);
 	if (identity.phone) lines.push(`Phone:    ${identity.phone}`);
 	lines.push(`Website:  ${identity.website}`);
-	const printLinks = identity.links.filter(l => !l.printHidden).map(l => `${l.label}: ${l.url}`);
+	const printLinks = identity.links.filter((l) => !l.printHidden).map((l) => `${l.label}: ${l.url}`);
 	if (printLinks.length > 0) {
-		lines.push(`Links:    ${printLinks.join(' | ')}`);
+		lines.push(`Links:    ${printLinks.join(" | ")}`);
 	}
-	lines.push('');
+	lines.push("");
 
 	// Summary
-	lines.push('SUMMARY');
+	lines.push("SUMMARY");
 	lines.push(subHr);
 	lines.push(summary.full);
-	lines.push('');
+	lines.push("");
 
 	// Technical Skills
-	lines.push('TECHNICAL SKILLS');
+	lines.push("TECHNICAL SKILLS");
 	lines.push(subHr);
 	for (const cat of skills) {
-		lines.push(`${cat.name}: ${cat.skills.map(s => s.name).join(', ')}`);
+		lines.push(`${cat.name}: ${cat.skills.map((s) => s.name).join(", ")}`);
 	}
-	lines.push('');
+	lines.push("");
 
 	// Experience
-	lines.push('EXPERIENCE');
+	lines.push("EXPERIENCE");
 	lines.push(subHr);
 	for (const exp of experience) {
-		const dates = `${formatMonthYear(exp.startDate)} – ${exp.endDate ? formatMonthYear(exp.endDate) : 'Present'}`;
+		const dates = `${formatMonthYear(exp.startDate)} – ${exp.endDate ? formatMonthYear(exp.endDate) : "Present"}`;
 		lines.push(`${exp.role} | ${exp.company} | ${exp.location}`);
 		lines.push(`Dates: ${dates}`);
 		lines.push(exp.summary);
@@ -60,14 +60,14 @@ export function generatePlainTextResume(variantKey: 'ats' | 'fullstack' | 'brief
 			lines.push(`  * ${h}`);
 		}
 		if (exp.technologies.length > 0) {
-			lines.push(`Technologies: ${exp.technologies.join(', ')}`);
+			lines.push(`Technologies: ${exp.technologies.join(", ")}`);
 		}
-		lines.push('');
+		lines.push("");
 	}
 
 	// Projects
 	if (projects.length > 0) {
-		lines.push('SELECTED PROJECTS');
+		lines.push("SELECTED PROJECTS");
 		lines.push(subHr);
 		for (const proj of projects) {
 			lines.push(`${proj.title} — ${proj.role}`);
@@ -75,34 +75,34 @@ export function generatePlainTextResume(variantKey: 'ats' | 'fullstack' | 'brief
 			if (proj.githubUrl) lines.push(`Code: ${proj.githubUrl}`);
 			lines.push(proj.description);
 			if (proj.impactMetrics && proj.impactMetrics.length > 0) {
-				lines.push(`Impact: ${proj.impactMetrics.join(' | ')}`);
+				lines.push(`Impact: ${proj.impactMetrics.join(" | ")}`);
 			}
-			lines.push(`Technologies: ${proj.technologies.join(', ')}`);
-			lines.push('');
+			lines.push(`Technologies: ${proj.technologies.join(", ")}`);
+			lines.push("");
 		}
 	}
 
 	// Education
-	lines.push('EDUCATION');
+	lines.push("EDUCATION");
 	lines.push(subHr);
 	for (const edu of education) {
 		lines.push(`${edu.degree} in ${edu.field} — ${edu.institution}`);
 		lines.push(`Dates: ${edu.startDate} – ${edu.endDate}`);
 		if (edu.honors) lines.push(`Honors: ${edu.honors}`);
-		lines.push('');
+		lines.push("");
 	}
 
 	// Certifications
 	if (certifications && certifications.length > 0) {
-		lines.push('CERTIFICATIONS');
+		lines.push("CERTIFICATIONS");
 		lines.push(subHr);
 		for (const cert of certifications) {
 			lines.push(`${cert.name} — ${cert.issuer} (${cert.date})`);
 		}
-		lines.push('');
+		lines.push("");
 	}
 
-	return lines.join('\n');
+	return lines.join("\n");
 }
 
 export function writePlainTextResumes(): void {
@@ -110,18 +110,18 @@ export function writePlainTextResumes(): void {
 		fs.mkdirSync(downloadsDir, { recursive: true });
 	}
 
-	const atsContent = generatePlainTextResume('ats');
-	const atsPath = path.join(downloadsDir, 'resume-ats.txt');
-	fs.writeFileSync(atsPath, atsContent, 'utf-8');
+	const atsContent = generatePlainTextResume("ats");
+	const atsPath = path.join(downloadsDir, "resume-ats.txt");
+	fs.writeFileSync(atsPath, atsContent, "utf-8");
 	console.log(`[txt] Generated: ${atsPath}`);
 
 	// Mirror to dist/downloads if dist directory exists
 	if (fs.existsSync(distDir)) {
-		const distDownloadsDir = path.join(distDir, 'downloads');
+		const distDownloadsDir = path.join(distDir, "downloads");
 		if (!fs.existsSync(distDownloadsDir)) {
 			fs.mkdirSync(distDownloadsDir, { recursive: true });
 		}
-		const distAtsPath = path.join(distDownloadsDir, 'resume-ats.txt');
+		const distAtsPath = path.join(distDownloadsDir, "resume-ats.txt");
 		fs.copyFileSync(atsPath, distAtsPath);
 	}
 }

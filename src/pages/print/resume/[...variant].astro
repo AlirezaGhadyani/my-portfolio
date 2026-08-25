@@ -1,15 +1,15 @@
 ---
-import '../../../styles/global.css';
-import '../../../styles/print.css';
-import { resumeData } from '../../../data/resume.ts';
-import { applyVariant, VARIANTS, type ResumeVariant } from '../../../data/variants.ts';
-import { formatMonthYear } from '../../../lib/formatDate.ts';
+import "../../../styles/global.css";
+import "../../../styles/print.css";
+import { resumeData } from "../../../data/resume.ts";
+import { applyVariant, VARIANTS, type ResumeVariant } from "../../../data/variants.ts";
+import { formatMonthYear } from "../../../lib/formatDate.ts";
 
 export function getStaticPaths() {
 	const variants = Object.keys(VARIANTS) as ResumeVariant[];
 	return [
 		// default /print/resume
-		{ params: { variant: undefined }, props: { variant: 'fullstack' as ResumeVariant } },
+		{ params: { variant: undefined }, props: { variant: "fullstack" as ResumeVariant } },
 		...variants.map((v) => ({
 			params: { variant: v },
 			props: { variant: v },
@@ -19,8 +19,8 @@ export function getStaticPaths() {
 
 const { variant: propVariant } = Astro.props as { variant?: ResumeVariant };
 const variantParam = Astro.params.variant as ResumeVariant | undefined;
-const resolvedVariantKey: ResumeVariant = propVariant || variantParam || 'fullstack';
-const variantKey: ResumeVariant = resolvedVariantKey in VARIANTS ? resolvedVariantKey : 'fullstack';
+const resolvedVariantKey: ResumeVariant = propVariant || variantParam || "fullstack";
+const variantKey: ResumeVariant = resolvedVariantKey in VARIANTS ? resolvedVariantKey : "fullstack";
 
 const activeVariant = applyVariant(resumeData, variantKey);
 const variantConfig = VARIANTS[variantKey];
@@ -43,23 +43,35 @@ const { identity, summary, experience, skills, education, certifications, projec
 			<div class="toolbar-inner">
 				<div class="toolbar-info">
 					<span class="toolbar-badge">{variantConfig.label}</span>
-					<span class="toolbar-pages">{variantConfig.pdfPages} Page{variantConfig.pdfPages > 1 ? 's' : ''} Target</span>
+					<span class="toolbar-pages">{variantConfig.pdfPages} Page{variantConfig.pdfPages > 1 ? "s" : ""} Target</span>
 				</div>
 				<nav class="variant-links" aria-label="Resume variants">
 					{
 						(Object.keys(VARIANTS) as ResumeVariant[]).map((vKey) => (
 							<a
-								href={vKey === 'fullstack' ? '/print/resume' : `/print/resume/${vKey}`}
-								class:list={['variant-btn', { active: vKey === variantKey }]}
-							>
-								{VARIANTS[vKey].label.split(' ')[0]}
+								href={vKey === "fullstack" ? "/print/resume" : `/print/resume/${vKey}`}
+								class:list={["variant-btn", { active: vKey === variantKey }]}>
+								{VARIANTS[vKey].label.split(" ")[0]}
 							</a>
 						))
 					}
 				</nav>
 				<div class="toolbar-actions">
-					<a href={`/downloads/resume-${variantKey}.pdf`} download class="action-btn primary" title="Download compiled vector PDF">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<a
+						href={`/downloads/resume-${variantKey}.pdf`}
+						download
+						class="action-btn primary"
+						title="Download compiled vector PDF">
+						<svg
+							width="15"
+							height="15"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
 							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
 							<polyline points="7 10 12 15 17 10"></polyline>
 							<line x1="12" y1="15" x2="12" y2="3"></line>
@@ -70,7 +82,16 @@ const { identity, summary, experience, skills, education, certifications, projec
 						<span>TXT</span>
 					</a>
 					<button type="button" class="action-btn" onclick="window.print()" title="Print via Browser">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<svg
+							width="15"
+							height="15"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
 							<polyline points="6 9 6 2 18 2 18 9"></polyline>
 							<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
 							<rect x="6" y="14" width="12" height="8"></rect>
@@ -78,7 +99,16 @@ const { identity, summary, experience, skills, education, certifications, projec
 						<span>Print</span>
 					</button>
 					<a href="/" class="action-btn home-btn">
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<svg
+							width="14"
+							height="14"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true">
 							<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
 							<polyline points="9 22 9 12 15 12 15 22"></polyline>
 						</svg>
@@ -101,22 +131,28 @@ const { identity, summary, experience, skills, education, certifications, projec
 						<span>{identity.location}</span>
 						<span class="sep">•</span>
 						<a href={`mailto:${identity.email}`}>{identity.email}</a>
-						{identity.phone && (
-							<>
-								<span class="sep">•</span>
-								<span>{identity.phone}</span>
-							</>
-						)}
+						{
+							identity.phone && (
+								<>
+									<span class="sep">•</span>
+									<span>{identity.phone}</span>
+								</>
+							)
+						}
 					</div>
 					<div class="contact-links">
-						<a href={identity.website} target="_blank" rel="noreferrer noopener">{identity.website.replace(/^https?:\/\//, '')}</a>
+						<a href={identity.website} target="_blank" rel="noreferrer noopener"
+							>{identity.website.replace(/^https?:\/\//, "")}</a
+						>
 						{
 							identity.links
-								.filter(link => !link.printHidden)
-								.map(link => (
+								.filter((link) => !link.printHidden)
+								.map((link) => (
 									<>
 										<span class="sep">•</span>
-										<a href={link.url} target="_blank" rel="noreferrer noopener">{link.label}</a>
+										<a href={link.url} target="_blank" rel="noreferrer noopener">
+											{link.label}
+										</a>
 									</>
 								))
 						}
@@ -135,12 +171,10 @@ const { identity, summary, experience, skills, education, certifications, projec
 				<h2 id="section-skills" class="section-title">Technical Expertise</h2>
 				<div class="skills-list">
 					{
-						skills.map(category => (
+						skills.map((category) => (
 							<div class="skill-category-row">
 								<span class="category-name">{category.name}:</span>
-								<span class="category-items">
-									{category.skills.map(s => s.name).join(', ')}
-								</span>
+								<span class="category-items">{category.skills.map((s) => s.name).join(", ")}</span>
 							</div>
 						))
 					}
@@ -152,7 +186,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 				<h2 id="section-experience" class="section-title">Work Experience</h2>
 				<div class="experience-list">
 					{
-						experience.map(item => (
+						experience.map((item) => (
 							<article class="experience-item page-break-inside-avoid">
 								<div class="item-header">
 									<div class="item-role-group">
@@ -161,20 +195,20 @@ const { identity, summary, experience, skills, education, certifications, projec
 									</div>
 									<div class="item-meta">
 										<span class="item-date">
-											{formatMonthYear(item.startDate)} – {item.endDate ? formatMonthYear(item.endDate) : 'Present'}
+											{formatMonthYear(item.startDate)} – {item.endDate ? formatMonthYear(item.endDate) : "Present"}
 										</span>
 										<span class="item-location"> | {item.location}</span>
 									</div>
 								</div>
 								<p class="item-summary">{item.summary}</p>
 								<ul class="item-highlights">
-									{item.highlights.map(h => (
+									{item.highlights.map((h) => (
 										<li>{h}</li>
 									))}
 								</ul>
 								{item.technologies.length > 0 && (
 									<p class="item-tech">
-										<span class="tech-label">Stack:</span> {item.technologies.join(', ')}
+										<span class="tech-label">Stack:</span> {item.technologies.join(", ")}
 									</p>
 								)}
 							</article>
@@ -184,12 +218,14 @@ const { identity, summary, experience, skills, education, certifications, projec
 			</section>
 
 			<!-- Projects -->
-			{projects.length > 0 && (
-				<section class="resume-section" aria-labelledby="section-projects">
-					<h2 id="section-projects" class="section-title">Key Projects & Systems</h2>
-					<div class="projects-list">
-						{
-							projects.map(project => (
+			{
+				projects.length > 0 && (
+					<section class="resume-section" aria-labelledby="section-projects">
+						<h2 id="section-projects" class="section-title">
+							Key Projects & Systems
+						</h2>
+						<div class="projects-list">
+							{projects.map((project) => (
 								<article class="project-item page-break-inside-avoid">
 									<div class="item-header">
 										<div class="item-role-group">
@@ -199,7 +235,7 @@ const { identity, summary, experience, skills, education, certifications, projec
 										<div class="item-meta">
 											{project.liveUrl && (
 												<a href={project.liveUrl} class="project-link" target="_blank" rel="noreferrer noopener">
-													{project.liveUrl.replace(/^https?:\/\//, '')}
+													{project.liveUrl.replace(/^https?:\/\//, "")}
 												</a>
 											)}
 										</div>
@@ -207,32 +243,36 @@ const { identity, summary, experience, skills, education, certifications, projec
 									<p class="item-summary">{project.description}</p>
 									{project.impactMetrics && project.impactMetrics.length > 0 && (
 										<p class="project-metrics">
-											<span class="tech-label">Impact:</span> {project.impactMetrics.join(' • ')}
+											<span class="tech-label">Impact:</span> {project.impactMetrics.join(" • ")}
 										</p>
 									)}
 									<p class="item-tech">
-										<span class="tech-label">Technologies:</span> {project.technologies.join(', ')}
+										<span class="tech-label">Technologies:</span> {project.technologies.join(", ")}
 									</p>
 								</article>
-							))
-						}
-					</div>
-				</section>
-			)}
+							))}
+						</div>
+					</section>
+				)
+			}
 
 			<!-- Education -->
 			<section class="resume-section page-break-inside-avoid" aria-labelledby="section-education">
 				<h2 id="section-education" class="section-title">Education</h2>
 				<div class="education-list">
 					{
-						education.map(edu => (
+						education.map((edu) => (
 							<div class="education-item">
 								<div class="item-header">
 									<div class="item-role-group">
-										<h3 class="item-role">{edu.degree} in {edu.field}</h3>
+										<h3 class="item-role">
+											{edu.degree} in {edu.field}
+										</h3>
 										<span class="item-company"> — {edu.institution}</span>
 									</div>
-									<span class="item-date">{edu.startDate} – {edu.endDate}</span>
+									<span class="item-date">
+										{edu.startDate} – {edu.endDate}
+									</span>
 								</div>
 								{edu.honors && <p class="edu-honors">{edu.honors}</p>}
 							</div>
@@ -242,23 +282,27 @@ const { identity, summary, experience, skills, education, certifications, projec
 			</section>
 
 			<!-- Certifications -->
-			{certifications && certifications.length > 0 && (
-				<section class="resume-section page-break-inside-avoid" aria-labelledby="section-certifications">
-					<h2 id="section-certifications" class="section-title">Certifications</h2>
-					<div class="certifications-list">
-						{
-							certifications.map(cert => (
+			{
+				certifications && certifications.length > 0 && (
+					<section class="resume-section page-break-inside-avoid" aria-labelledby="section-certifications">
+						<h2 id="section-certifications" class="section-title">
+							Certifications
+						</h2>
+						<div class="certifications-list">
+							{certifications.map((cert) => (
 								<div class="cert-item">
 									<div class="item-header">
-										<span class="cert-name"><strong>{cert.name}</strong> — {cert.issuer}</span>
+										<span class="cert-name">
+											<strong>{cert.name}</strong> — {cert.issuer}
+										</span>
 										<span class="item-date">{cert.date}</span>
 									</div>
 								</div>
-							))
-						}
-					</div>
-				</section>
-			)}
+							))}
+						</div>
+					</section>
+				)
+			}
 		</main>
 	</body>
 </html>
@@ -397,7 +441,9 @@ const { identity, summary, experience, skills, education, certifications, projec
 		margin: 2rem auto;
 		padding: 14mm 16mm;
 		background: #ffffff;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+		box-shadow:
+			0 10px 30px rgba(0, 0, 0, 0.12),
+			0 1px 3px rgba(0, 0, 0, 0.05);
 		border-radius: 6px;
 		box-sizing: border-box;
 	}
