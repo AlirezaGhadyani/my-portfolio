@@ -10,10 +10,12 @@ export function getStaticPaths() {
 	return [
 		// default /print/resume
 		{ params: { variant: undefined }, props: { variant: "fullstack" as ResumeVariant } },
-		...variants.filter((v) => v !== "fullstack").map((v) => ({
-			params: { variant: v },
-			props: { variant: v },
-		})),
+		...variants
+			.filter((v) => v !== "fullstack")
+			.map((v) => ({
+				params: { variant: v },
+				props: { variant: v },
+			})),
 	];
 }
 
@@ -25,7 +27,8 @@ const variantKey: ResumeVariant = resolvedVariantKey in VARIANTS ? resolvedVaria
 const activeVariant = applyVariant(resumeData, variantKey);
 const variantConfig = VARIANTS[variantKey];
 
-const { identity, experience, skills, education, certifications, projects, documentTitle, activeSummary } = activeVariant;
+const { identity, experience, skills, education, certifications, projects, documentTitle, activeSummary } =
+	activeVariant;
 ---
 
 <!doctype html>
@@ -194,9 +197,7 @@ const { identity, experience, skills, education, certifications, projects, docum
 										<span class="item-company"> — {item.company}</span>
 									</div>
 									<div class="item-meta">
-										<span class="item-date">
-											{dateRange(item.startDate, item.endDate)}
-										</span>
+										<span class="item-date">{dateRange(item.startDate, item.endDate)}</span>
 										<span class="item-location"> | {item.location}</span>
 									</div>
 								</div>
@@ -270,9 +271,7 @@ const { identity, experience, skills, education, certifications, projects, docum
 										</h3>
 										<span class="item-company"> — {edu.institution}</span>
 									</div>
-									<span class="item-date">
-										{educationLine(edu).dates}
-									</span>
+									<span class="item-date">{educationLine(edu).dates}</span>
 								</div>
 								{edu.honors && <p class="edu-honors">{edu.honors}</p>}
 							</div>
@@ -295,7 +294,7 @@ const { identity, experience, skills, education, certifications, projects, docum
 										<span class="cert-name">
 											<strong>{cert.name}</strong> — {cert.issuer}
 										</span>
-									<span class="item-date">{certificationLine(cert).date}</span>
+										<span class="item-date">{certificationLine(cert).date}</span>
 									</div>
 								</div>
 							))}

@@ -314,11 +314,9 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 	.contact-card {
 		background: var(--surface);
 		border: 1px solid var(--border);
-		border-radius: var(--radius);
-		padding: clamp(2rem, 5vw, 4rem);
 		border-radius: var(--radius-lg);
-		box-shadow: 0 24px 70px hsl(220 50% 3% / 0.2);
-		background: var(--surface);
+		padding: clamp(2rem, 5vw, 4rem);
+		box-shadow: var(--shadow-lg);
 	}
 
 	.contact-form {
@@ -359,7 +357,7 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 	}
 
 	.required {
-		color: #ef4444;
+		color: var(--danger);
 	}
 
 	.form-input {
@@ -398,7 +396,7 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 	}
 
 	.field-error {
-		color: #ef4444;
+		color: var(--danger);
 		font-size: 0.82rem;
 		min-height: 1.2em;
 		font-weight: 500;
@@ -491,29 +489,15 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 		font-weight: 500;
 
 		&.status-success {
-			background: hsl(142 71% 45% / 0.12);
-			border: 1px solid hsl(142 71% 45% / 0.35);
-			color: hsl(142 71% 35%);
+			background: color-mix(in srgb, var(--status-success) 12%, transparent);
+			border: 1px solid color-mix(in srgb, var(--status-success) 35%, transparent);
+			color: var(--status-success);
 		}
 
 		&.status-error {
-			background: hsl(0 84% 60% / 0.12);
-			border: 1px solid hsl(0 84% 60% / 0.35);
-			color: hsl(0 84% 45%);
-		}
-	}
-
-	html[data-theme="dark"] .form-status {
-		&.status-success {
-			color: hsl(142 71% 55%);
-			background: hsl(142 71% 45% / 0.2);
-			border-color: hsl(142 71% 45% / 0.4);
-		}
-
-		&.status-error {
-			color: hsl(0 84% 65%);
-			background: hsl(0 84% 60% / 0.2);
-			border-color: hsl(0 84% 60% / 0.4);
+			background: color-mix(in srgb, var(--danger) 12%, transparent);
+			border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+			color: var(--danger);
 		}
 	}
 </style>

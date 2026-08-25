@@ -93,7 +93,7 @@ const levelLabel = (level: Exclude<Skill["level"], undefined>): string =>
 
 	.skill-category {
 		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius);
+		border-radius: var(--radius-md);
 		background: color-mix(in srgb, var(--surface) 52%, transparent);
 		padding: 1.25rem 1.25rem 1.5rem;
 		transition: var(--transition-fast);
@@ -141,7 +141,7 @@ const levelLabel = (level: Exclude<Skill["level"], undefined>): string =>
 				align-items: center;
 				gap: 0.4rem;
 				border: 1px solid var(--border);
-				border-radius: 5px;
+				border-radius: var(--radius-sm);
 				padding: 0.35rem 0.75rem;
 				background: var(--surface-muted);
 				color: var(--text);

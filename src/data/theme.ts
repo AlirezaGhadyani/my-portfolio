@@ -77,11 +77,11 @@ const config = {
 			name: "Forest & Mint",
 			description: "Emerald / Jade",
 			light: {
-				accent: "hsl(160 84% 28%)",
-				accentHover: "hsl(160 84% 22%)",
+				accent: "hsl(160 84% 24%)",
+				accentHover: "hsl(160 84% 18%)",
 				accentMuted: "hsl(160 70% 93%)",
-				accentGlow: "hsl(160 84% 28% / 0.15)",
-				borderActive: "hsl(160 84% 28%)",
+				accentGlow: "hsl(160 84% 24% / 0.15)",
+				borderActive: "hsl(160 84% 24%)",
 			},
 			dark: {
 				accent: "hsl(158 75% 52%)",

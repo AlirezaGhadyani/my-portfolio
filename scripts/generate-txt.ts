@@ -115,7 +115,6 @@ export function writePlainTextResumes(): void {
 	const atsPath = path.join(downloadsDir, "resume-ats.txt");
 	fs.writeFileSync(atsPath, atsContent, "utf-8");
 	console.log(`[txt] Generated: ${atsPath}`);
-
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

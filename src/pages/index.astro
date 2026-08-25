@@ -231,7 +231,7 @@ const ldJson = {
 	.live-status-dot {
 		width: 0.55rem;
 		height: 0.55rem;
-		border-radius: 999px;
+		border-radius: var(--radius-full);
 		background: var(--status-live);
 		animation: pulse-dot 2.2s infinite ease-in-out;
 		flex-shrink: 0;
@@ -303,7 +303,7 @@ const ldJson = {
 		display: block;
 		width: 0.45rem;
 		height: 0.45rem;
-		border-radius: 50%;
+		border-radius: var(--radius-full);
 		background: var(--border);
 	}
 	.window-dots i:first-child {
@@ -330,10 +330,10 @@ const ldJson = {
 		color: var(--accent);
 	}
 	.code-string {
-		color: hsl(145 48% 62%);
+		color: var(--syntax-string);
 	}
 	.code-number {
-		color: hsl(29 92% 70%);
+		color: var(--syntax-number);
 	}
 	.code-caption {
 		display: flex;
@@ -506,13 +506,13 @@ const ldJson = {
 			gap: 2.75rem;
 		}
 		.hero-visual {
-			max-width: 38rem;
+			max-width: 42rem;
 			width: 100%;
 			margin-inline: auto;
 		}
 	}
 
-	@media (max-width: 30rem) {
+	@media (max-width: 35rem) {
 		.hero-title {
 			font-size: clamp(3.25rem, 17vw, 5rem);
 		}

@@ -1,10 +1,4 @@
-import type {
-	Certification,
-	EducationItem,
-	ExperienceItem,
-	Project,
-	SkillCategory,
-} from "../data/schema.ts";
+import type { Certification, EducationItem, ExperienceItem, Project, SkillCategory } from "../data/schema.ts";
 
 const monthPattern = /^(\d{4})-(0[1-9]|1[0-2])$/;
 

@@ -41,12 +41,21 @@ describe("presentation adapter", () => {
 		expect(
 			skillLine({
 				name: "Languages",
-				skills: [{ name: "TypeScript", highlighted: false }, { name: "React", highlighted: false }],
+				skills: [
+					{ name: "TypeScript", highlighted: false },
+					{ name: "React", highlighted: false },
+				],
 			}),
-		).toBe(
-			"TypeScript, React",
-		);
-		expect(educationLine({ degree: "MEng", field: "Computer Science", institution: "Cambridge", startDate: "2015-09", endDate: "2019-06" })).toEqual({
+		).toBe("TypeScript, React");
+		expect(
+			educationLine({
+				degree: "MEng",
+				field: "Computer Science",
+				institution: "Cambridge",
+				startDate: "2015-09",
+				endDate: "2019-06",
+			}),
+		).toEqual({
 			heading: "MEng in Computer Science — Cambridge",
 			dates: "Sept 2015 – Jun 2019",
 		});

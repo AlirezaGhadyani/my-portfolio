@@ -33,9 +33,7 @@ const certificationDisplay = certifications.map(certificationLine);
 										{item.degree} in {item.field}
 									</p>
 								</div>
-								<span class="edu-dates">
-									{educationDisplay[education.indexOf(item)].dates}
-								</span>
+								<span class="edu-dates">{educationDisplay[education.indexOf(item)].dates}</span>
 							</div>
 							{item.honors && (
 								<p class="edu-honors">
@@ -170,7 +168,7 @@ const certificationDisplay = certifications.map(certificationLine);
 	.edu-card,
 	.cert-card {
 		border: 1px solid var(--border-subtle);
-		border-radius: var(--radius);
+		border-radius: var(--radius-md);
 		background: color-mix(in srgb, var(--surface) 58%, transparent);
 		padding: 1.25rem;
 		transition: var(--transition-fast);
@@ -254,7 +252,7 @@ const certificationDisplay = certifications.map(certificationLine);
 		border-top: 1px solid var(--border-subtle);
 
 		svg {
-			color: hsl(45 95% 50%);
+			color: var(--status-warning);
 		}
 	}
 

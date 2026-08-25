@@ -58,14 +58,7 @@ describe("Theme contrast validation (WCAG AA >= 4.5)", () => {
 	const palettes = ["amber", "ocean", "emerald", "amethyst", "rose"] as const;
 	const modes = ["light", "dark"] as const;
 
-	function extractToken(palette: string, theme: "light" | "dark", tokenName: string): string {
-		const selector =
-			palette === "amber"
-				? theme === "light"
-					? ':root,\nhtml[data-theme="light"]'
-					: 'html[data-theme="dark"]'
-				: `html[data-palette="${palette}"][data-theme="${theme}"]`;
-
+	function extractToken(tokenName: string, selector: string): string {
 		const selectorIdx = cssContent.indexOf(selector);
 		if (selectorIdx === -1) {
 			throw new Error(`Selector not found in global.css: ${selector}`);
@@ -73,7 +66,6 @@ describe("Theme contrast validation (WCAG AA >= 4.5)", () => {
 		const blockStart = cssContent.indexOf("{", selectorIdx);
 		const blockEnd = cssContent.indexOf("}", blockStart);
 		const blockContent = cssContent.slice(blockStart + 1, blockEnd);
-
 		const match = blockContent.match(new RegExp(`--${tokenName}:\\s*([^;]+);`));
 		if (!match) {
 			throw new Error(`Token --${tokenName} not found in ${selector}`);
@@ -81,14 +73,51 @@ describe("Theme contrast validation (WCAG AA >= 4.5)", () => {
 		return match[1].trim();
 	}
 
+	const baseSelector = (theme: "light" | "dark") =>
+		theme === "light" ? ':root,\nhtml[data-theme="light"]' : 'html[data-theme="dark"]';
+	const paletteSelector = (palette: string, theme: "light" | "dark") =>
+		`html[data-palette="${palette}"][data-theme="${theme}"]`;
+
+	const themeToken = (theme: "light" | "dark", token: string) => extractToken(token, baseSelector(theme));
+
+	for (const theme of modes) {
+		it(`asserts core text tokens clear AA on --bg (${theme})`, () => {
+			const bg = themeToken(theme, "bg");
+			expect(getContrastRatio(themeToken(theme, "text"), bg)).toBeGreaterThanOrEqual(4.5);
+			expect(getContrastRatio(themeToken(theme, "text-muted"), bg)).toBeGreaterThanOrEqual(4.5);
+			expect(getContrastRatio(themeToken(theme, "text-subtle"), bg)).toBeGreaterThanOrEqual(4.5);
+		});
+
+		it(`asserts --danger clears AA on --bg and --surface (${theme})`, () => {
+			const danger = themeToken(theme, "danger");
+			expect(getContrastRatio(danger, themeToken(theme, "bg"))).toBeGreaterThanOrEqual(4.5);
+			expect(getContrastRatio(danger, themeToken(theme, "surface"))).toBeGreaterThanOrEqual(4.5);
+		});
+
+		it(`asserts --status-success clears AA on --bg and --surface (${theme})`, () => {
+			const success = themeToken(theme, "status-success");
+			expect(getContrastRatio(success, themeToken(theme, "bg"))).toBeGreaterThanOrEqual(4.5);
+			expect(getContrastRatio(success, themeToken(theme, "surface"))).toBeGreaterThanOrEqual(4.5);
+		});
+
+		it(`asserts syntax colours clear AA on --surface (${theme})`, () => {
+			const surface = themeToken(theme, "surface");
+			expect(getContrastRatio(themeToken(theme, "syntax-string"), surface)).toBeGreaterThanOrEqual(4.5);
+			expect(getContrastRatio(themeToken(theme, "syntax-number"), surface)).toBeGreaterThanOrEqual(4.5);
+		});
+	}
+
 	for (const palette of palettes) {
 		for (const theme of modes) {
 			it(`asserts contrast(--on-accent, --accent) >= 4.5 for ${palette} in ${theme} mode`, () => {
-				const accent = extractToken(palette, theme, "accent");
-				const onAccent = extractToken(palette, theme, "on-accent");
-				const ratio = getContrastRatio(onAccent, accent);
+				const accent = extractToken("accent", paletteSelector(palette, theme));
+				const onAccent = extractToken("on-accent", paletteSelector(palette, theme));
+				expect(getContrastRatio(onAccent, accent)).toBeGreaterThanOrEqual(4.5);
+			});
 
-				expect(ratio).toBeGreaterThanOrEqual(4.5);
+			it(`asserts --accent used as text clears AA on --bg for ${palette} in ${theme} mode`, () => {
+				const accent = extractToken("accent", paletteSelector(palette, theme));
+				expect(getContrastRatio(accent, themeToken(theme, "bg"))).toBeGreaterThanOrEqual(4.5);
 			});
 		}
 	}

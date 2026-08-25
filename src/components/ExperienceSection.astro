@@ -51,9 +51,7 @@ const ordered = orderedExperience(items);
 										<line x1="8" y1="2" x2="8" y2="6" />
 										<line x1="3" y1="10" x2="21" y2="10" />
 									</svg>
-									<span>
-										{dateRange(item.startDate, item.endDate)}
-									</span>
+									<span>{dateRange(item.startDate, item.endDate)}</span>
 								</div>
 							</div>
 
@@ -162,7 +160,7 @@ const ordered = orderedExperience(items);
 		.marker-dot {
 			width: 0.875rem;
 			height: 0.875rem;
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			background: var(--surface);
 			border: 2px solid var(--accent);
 			box-shadow: 0 0 0 3px var(--bg);
@@ -180,7 +178,7 @@ const ordered = orderedExperience(items);
 	.experience-card {
 		flex: 1;
 		border: 1px solid var(--border);
-		border-radius: var(--radius);
+		border-radius: var(--radius-md);
 		background: var(--surface);
 		padding: clamp(1.5rem, 3vw, 2.5rem);
 		box-shadow: var(--shadow-sm);
@@ -321,7 +319,7 @@ const ordered = orderedExperience(items);
 		}
 	}
 
-	@media (max-width: 40rem) {
+	@media (max-width: 42rem) {
 		.timeline-list::before {
 			display: none;
 		}

@@ -51,7 +51,9 @@ export function verifyCrossRendererOutputs(distRoot = path.join(projectRoot, "di
 	const text = fs.readFileSync(textPath, "utf8");
 	const companies = orderedExperience(resumeData.experience).map((item) => item.company);
 	const html = fs.readFileSync(path.join(distRoot, "index.html"), "utf8");
-	const pdfs = (Object.keys(VARIANTS) as ResumeVariant[]).map((key) => pdfText(path.join(distRoot, "downloads", `resume-${key}.pdf`)));
+	const pdfs = (Object.keys(VARIANTS) as ResumeVariant[]).map((key) =>
+		pdfText(path.join(distRoot, "downloads", `resume-${key}.pdf`)),
+	);
 
 	for (const company of companies) {
 		if (!html.includes(company) || !text.includes(company) || pdfs.some((pdf) => !pdf.includes(company))) {
@@ -60,14 +62,22 @@ export function verifyCrossRendererOutputs(distRoot = path.join(projectRoot, "di
 	}
 	for (const output of [html, text, ...pdfs]) {
 		const positions = companies.map((company) => output.indexOf(company));
-		if (positions.some((position) => position < 0) || positions.some((position, index) => index > 0 && position < positions[index - 1])) {
+		if (
+			positions.some((position) => position < 0) ||
+			positions.some((position, index) => index > 0 && position < positions[index - 1])
+		) {
 			throw new Error("Experience order differs across renderer outputs");
 		}
 	}
 	if (/\b\d{4}-\d{2}\b/.test(text) || pdfs.some((pdf) => /\b\d{4}-\d{2}\b/.test(pdf))) {
 		throw new Error("Raw ISO month found in a generated resume output");
 	}
-	if ([...text].some((character) => character.charCodeAt(0) > 0x7e || (character.charCodeAt(0) < 0x20 && character !== "\n" && character !== "\t"))) {
+	if (
+		[...text].some(
+			(character) =>
+				character.charCodeAt(0) > 0x7e || (character.charCodeAt(0) < 0x20 && character !== "\n" && character !== "\t"),
+		)
+	) {
 		throw new Error("ATS text output is not ASCII");
 	}
 

@@ -4,7 +4,7 @@ import { z as zod } from "zod";
 
 const caseStudies = defineCollection({
 	loader: glob({
-	pattern: "src/content/case-studies/**/*.md",
+		pattern: "src/content/case-studies/**/*.md",
 		base: "./",
 		generateId: ({ entry }) => {
 			const file = entry.split("/").pop() ?? entry;

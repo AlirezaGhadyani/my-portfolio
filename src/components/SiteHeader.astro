@@ -135,7 +135,10 @@ const nav = [
 			});
 
 			window.addEventListener("resize", () => {
-				if (window.innerWidth > 768 && !mobileNav.hidden) close();
+				// Mirrors the 48rem nav-collapse breakpoint in CSS, scaled to the
+				// user's root font size so the two never desync (a11y setting).
+				const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+				if (window.innerWidth > 48 * rootFontSize && !mobileNav.hidden) close();
 			});
 		}
 	})();
@@ -186,7 +189,7 @@ const nav = [
 			font-weight: 700;
 			font-size: 0.85rem;
 			letter-spacing: 0.02em;
-			box-shadow: 3px 3px 0 hsl(217 91% 60% / 0.18);
+			box-shadow: 3px 3px 0 var(--accent-glow);
 			transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 		}
 
@@ -292,7 +295,7 @@ const nav = [
 			width: 16px;
 			height: 2px;
 			background-color: var(--text);
-			border-radius: 1px;
+			border-radius: var(--radius-sm);
 			transition:
 				transform 0.2s ease,
 				opacity 0.2s ease;
@@ -319,7 +322,7 @@ const nav = [
 
 		.nav-mobile-inner {
 			padding: 1rem clamp(1.25rem, 5vw, 3rem) 1.5rem;
-			max-width: 76rem;
+			max-width: var(--content-width);
 			margin-inline: auto;
 		}
 
