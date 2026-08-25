@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
 
 jobs:
@@ -13,13 +13,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Type check
         run: pnpm check
@@ -29,6 +36,9 @@ jobs:
 
       - name: Lint
         run: pnpm lint
+
+      - name: Check formatting
+        run: pnpm format:check
 
       - name: Build site + exports
         run: pnpm build:all
@@ -41,11 +51,15 @@ jobs:
           test -f dist/_headers
           test -f dist/og-image.svg
           test -f dist/downloads/resume-ats.txt
+          test -f dist/downloads/resume-fullstack.pdf
+          test -f dist/downloads/resume-frontend.pdf
+          test -f dist/downloads/resume-brief.pdf
+          test -f dist/downloads/resume-ats.pdf
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
       - name: Placeholder for Cloudflare Pages deployment
         run: echo "Deploy dist/ to Cloudflare Pages via your Git integration or API token."
