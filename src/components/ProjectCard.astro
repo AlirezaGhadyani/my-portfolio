@@ -175,14 +175,12 @@ const externalRel = isInternalCaseStudy ? undefined : "noreferrer noopener";
 		flex-direction: column;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
-		background: var(--surface);
 		padding: clamp(1.5rem, 3vw, 2rem);
 		box-shadow: var(--shadow-sm);
 		transition: var(--transition-fast);
 		position: relative;
 		overflow: hidden;
 		min-height: 23rem;
-		background: var(--surface);
 		border-top: 2px solid var(--border);
 
 		&:hover {
@@ -248,12 +246,6 @@ const externalRel = isInternalCaseStudy ? undefined : "noreferrer noopener";
 			}
 		}
 
-		.project-card-subtitle {
-			color: var(--text-muted);
-			font-size: 0.9rem;
-			margin-top: 0.25rem;
-		}
-
 		.project-card-tier {
 			flex-shrink: 0;
 			border-radius: var(--radius-full);
@@ -282,14 +274,15 @@ const externalRel = isInternalCaseStudy ? undefined : "noreferrer noopener";
 	}
 
 	.project-card-subtitle {
+		color: var(--text-muted);
+		margin-top: 0.25rem;
 		font-family: var(--font-mono);
-		font-size: 0.78rem !important;
+		font-size: 0.78rem;
 		letter-spacing: 0.01em;
 	}
 
 	.project-card-description {
 		color: var(--text-muted);
-		line-height: 1.6;
 		font-size: 1rem;
 		line-height: 1.7;
 		margin-top: 0.35rem;
