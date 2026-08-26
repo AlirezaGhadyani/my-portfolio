@@ -1,5 +1,6 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import { CONTACT_LIMITS } from "../lib/validation.ts";
 
 interface Props {
 	email?: string;
@@ -38,11 +39,13 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 						id="contact-name"
 						name="name"
 						required
-						minlength="2"
-						maxlength="100"
+						minlength={CONTACT_LIMITS.nameMin}
+						maxlength={CONTACT_LIMITS.nameMax}
 						autocomplete="name"
 						placeholder="Jane Doe"
 						class="form-input"
+						aria-describedby="name-error"
+						aria-invalid="false"
 					/>
 					<span class="field-error" id="name-error" aria-live="polite"></span>
 				</div>
@@ -56,10 +59,12 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 						id="contact-email"
 						name="email"
 						required
-						maxlength="254"
+						maxlength={CONTACT_LIMITS.emailMax}
 						autocomplete="email"
 						placeholder="jane@example.com"
 						class="form-input"
+						aria-describedby="email-error"
+						aria-invalid="false"
 					/>
 					<span class="field-error" id="email-error" aria-live="polite"></span>
 				</div>
@@ -73,14 +78,16 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 					id="contact-message"
 					name="message"
 					required
-					minlength="10"
-					maxlength="2000"
+					minlength={CONTACT_LIMITS.messageMin}
+					maxlength={CONTACT_LIMITS.messageMax}
 					rows="5"
 					placeholder="Tell me about your project scope, timeline, or engineering role..."
-					class="form-input form-textarea"></textarea>
+					class="form-input form-textarea"
+					aria-describedby="message-error"
+					aria-invalid="false"></textarea>
 				<div class="field-meta">
 					<span class="field-error" id="message-error" aria-live="polite"></span>
-					<span class="char-count" id="message-count">0 / 2000</span>
+					<span class="char-count" id="message-count">0 / {CONTACT_LIMITS.messageMax}</span>
 				</div>
 			</div>
 
@@ -134,7 +141,7 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 			</div>
 
 			<!-- Status Announcement Banner / Toast -->
-			<div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+			<div id="form-status" class="form-status" role="status" aria-live="polite"></div>
 		</form>
 	</div>
 </section>
@@ -158,16 +165,22 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 
 		if (messageInput && messageCount) {
 			messageInput.addEventListener("input", () => {
-				messageCount.textContent = `${messageInput.value.length} / 2000`;
+				messageCount.textContent = `${messageInput.value.length} / ${messageInput.maxLength}`;
 			});
 		}
 
 		function clearErrors() {
-			if (nameError) nameError.textContent = "";
-			if (emailError) emailError.textContent = "";
-			if (messageError) messageError.textContent = "";
+			const fields = [nameInput, emailInput, messageInput];
+			const errors = [nameError, emailError, messageError];
+			fields.forEach((field) => {
+				if (field) {
+					field.setAttribute("aria-invalid", "false");
+				}
+			});
+			errors.forEach((error) => {
+				if (error) error.textContent = "";
+			});
 			if (formStatus) {
-				formStatus.hidden = true;
 				formStatus.className = "form-status";
 				formStatus.textContent = "";
 			}
@@ -177,29 +190,36 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 			if (!formStatus) return;
 			formStatus.textContent = message;
 			formStatus.className = `form-status status-${type}`;
-			formStatus.hidden = false;
 		}
 
 		function validateClientSide() {
 			let isValid = true;
+			let firstInvalid = null;
 			clearErrors();
 
 			if (!nameInput.value || nameInput.value.trim().length < 2) {
 				if (nameError) nameError.textContent = "Please enter at least 2 characters.";
+				nameInput.setAttribute("aria-invalid", "true");
 				isValid = false;
+				firstInvalid = firstInvalid || nameInput;
 			}
 
 			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailInput.value || !emailPattern.test(emailInput.value.trim())) {
 				if (emailError) emailError.textContent = "Please enter a valid email address.";
+				emailInput.setAttribute("aria-invalid", "true");
 				isValid = false;
+				firstInvalid = firstInvalid || emailInput;
 			}
 
 			if (!messageInput.value || messageInput.value.trim().length < 10) {
 				if (messageError) messageError.textContent = "Message must be at least 10 characters long.";
+				messageInput.setAttribute("aria-invalid", "true");
 				isValid = false;
+				firstInvalid = firstInvalid || messageInput;
 			}
 
+			if (firstInvalid) firstInvalid.focus();
 			return isValid;
 		}
 
@@ -242,7 +262,7 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 				if (response.ok && result.success) {
 					showStatus(result.message || "Message sent successfully! I will get back to you soon.", "success");
 					form.reset();
-					if (messageCount) messageCount.textContent = "0 / 2000";
+					if (messageCount) messageCount.textContent = `0 / ${messageInput.maxLength}`;
 					if (window.turnstile) {
 						window.turnstile.reset();
 					}

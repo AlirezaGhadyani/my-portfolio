@@ -1,13 +1,18 @@
 import { z } from "zod";
+import { CONTACT_LIMITS } from "../../src/lib/validation.ts";
 
 export const ContactPayloadSchema = z.object({
-	name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name cannot exceed 100 characters"),
-	email: z.email("Please provide a valid email address").max(254, "Email address is too long"),
+	name: z
+		.string()
+		.trim()
+		.min(CONTACT_LIMITS.nameMin, `Name must be at least ${CONTACT_LIMITS.nameMin} characters`)
+		.max(CONTACT_LIMITS.nameMax, `Name cannot exceed ${CONTACT_LIMITS.nameMax} characters`),
+	email: z.email("Please provide a valid email address").max(CONTACT_LIMITS.emailMax, "Email address is too long"),
 	message: z
 		.string()
 		.trim()
-		.min(10, "Message must be at least 10 characters")
-		.max(2000, "Message cannot exceed 2000 characters"),
+		.min(CONTACT_LIMITS.messageMin, `Message must be at least ${CONTACT_LIMITS.messageMin} characters`)
+		.max(CONTACT_LIMITS.messageMax, `Message cannot exceed ${CONTACT_LIMITS.messageMax} characters`),
 	turnstileToken: z.string().optional(),
 	honeypot: z.string().optional(),
 });
