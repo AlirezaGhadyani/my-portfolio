@@ -10,13 +10,13 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 ## Quick routing
 
-| Task type | Load these files | Then run |
-| --- | --- | --- |
-| Resume data / schema change | `knowledge/data-model.md` → `src/data/schema.ts` → `src/domain/present.ts` → all 3 renderers | `/resume-check` |
-| UI / component change | `knowledge/design-system.md` → `knowledge/conventions.md` → the component | `/tokens` → `/a11y` |
-| Print / PDF change | `knowledge/document-pipeline.md` → `src/pages/print/resume/[...variant].astro` → `scripts/generate-pdf.ts` | `/resume-check` |
-| Contact / headers change | `knowledge/edge-and-secrets.md` → `functions/api/contact.ts` → `contact.test.ts` → `public/_headers` | `pnpm test` |
-| Anything else | `knowledge/architecture.md` | `/plan` |
+| Task type                   | Load these files                                                                                           | Then run            |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------- |
+| Resume data / schema change | `knowledge/data-model.md` → `src/data/schema.ts` → `src/domain/present.ts` → all 3 renderers               | `/resume-check`     |
+| UI / component change       | `knowledge/design-system.md` → `knowledge/conventions.md` → the component                                  | `/tokens` → `/a11y` |
+| Print / PDF change          | `knowledge/document-pipeline.md` → `src/pages/print/resume/[...variant].astro` → `scripts/generate-pdf.ts` | `/resume-check`     |
+| Contact / headers change    | `knowledge/edge-and-secrets.md` → `functions/api/contact.ts` → `contact.test.ts` → `public/_headers`       | `pnpm test`         |
+| Anything else               | `knowledge/architecture.md`                                                                                | `/plan`             |
 
 ## Invariants (never violate)
 
@@ -37,12 +37,12 @@ pnpm check && pnpm test && pnpm lint && pnpm format:check && pnpm build:all && f
 
 ## Agents
 
-| Agent | Owns |
-| --- | --- |
-| `data-steward` | `src/data/**`, `src/domain/present.ts`, content-collection integrity |
-| `frontend` | `src/components/**`, `src/pages/**` (non-print), `src/styles/`, `src/layouts/**` |
-| `document-engineer` | `pages/print/**`, `styles/print.css`, `scripts/generate-{pdf,txt}.ts` |
-| `edge-security` | `functions/**`, `public/_headers`, `wrangler.toml`, `.env.example` |
+| Agent               | Owns                                                                             |
+| ------------------- | -------------------------------------------------------------------------------- |
+| `data-steward`      | `src/data/**`, `src/domain/present.ts`, content-collection integrity             |
+| `frontend`          | `src/components/**`, `src/pages/**` (non-print), `src/styles/`, `src/layouts/**` |
+| `document-engineer` | `pages/print/**`, `styles/print.css`, `scripts/generate-{pdf,txt}.ts`            |
+| `edge-security`     | `functions/**`, `public/_headers`, `wrangler.toml`, `.env.example`               |
 
 ## Documentation
 

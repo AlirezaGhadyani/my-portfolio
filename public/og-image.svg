@@ -1,5 +1,5 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Jordan Avery — Full-Stack Software Engineer">
-	<title>Jordan Avery — Full-Stack Software Engineer</title>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="alireza Ghadyani — Full-Stack Software Engineer">
+	<title>alireza Ghadyani — Full-Stack Software Engineer</title>
 	<rect width="1200" height="630" fill="#0e1423"/>
 	<g opacity="0.06">
 		<line x1="0" y1="0" x2="1200" y2="630" stroke="#ffffff" stroke-width="1"/>
@@ -10,12 +10,12 @@
 	</g>
 	<rect x="0" y="0" width="1200" height="8" fill="#3b82f6"/>
 	<rect x="72" y="120" width="64" height="6" rx="3" fill="#3b82f6"/>
-	<text x="72" y="176" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#f8fafc" letter-spacing="-1">Jordan Avery</text>
+	<text x="72" y="176" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#f8fafc" letter-spacing="-1">alireza Ghadyani</text>
 	<text x="72" y="228" font-family="system-ui, sans-serif" font-size="34" font-weight="500" fill="#94a3b8">Full-Stack Software Engineer</text>
 	<text x="72" y="272" font-family="system-ui, sans-serif" font-size="22" fill="#64748b">Fast, accessible web platforms with clean architecture and edge hosting.</text>
 	<polygon points="72,505 128,505 150,475 172,505 142,478 98,472" fill="#3b82f6" opacity="0.9"/>
-	<text x="72" y="540" font-family="system-ui, sans-serif" font-size="24" fill="#cbd5e1">jordan.avery@example.com</text>
-	<text x="72" y="578" font-family="system-ui, sans-serif" font-size="24" fill="#cbd5e1">Cambridge, UK</text>
+	<text x="72" y="540" font-family="system-ui, sans-serif" font-size="24" fill="#cbd5e1">p.alirezaghadyani@gmail.com</text>
+	<text x="72" y="578" font-family="system-ui, sans-serif" font-size="24" fill="#cbd5e1">Tehran, Iran</text>
 	<rect x="1010" y="500" width="70" height="70" rx="14" stroke="#3b82f6" stroke-width="2" fill="none"/>
 	<text x="1025" y="548" font-family="system-ui, sans-serif" font-size="44" fill="#3b82f6">A</text>
 </svg>

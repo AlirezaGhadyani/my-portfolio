@@ -24,14 +24,14 @@ ordering, and display strings.
 A themeable/responsive/interactive document and a fixed-palette A4 artifact have fundamentally
 opposed requirements:
 
-| Concern | Web | Print |
-| --- | --- | --- |
-| Colors | 5 palettes × 2 themes via CSS tokens | Fixed 49 hardcoded values |
-| Layout | Responsive, fluid | Fixed A4 dimensions |
-| Interactivity | JS-powered (theme toggle, palette selector, mobile nav) | Zero JS |
-| Typography | Variable fonts, clamp() | Fixed point sizes |
-| Page breaks | N/A | `break-inside: avoid` |
-| Margins | `var(--gutter)` | `@page` + Playwright contract |
+| Concern       | Web                                                     | Print                         |
+| ------------- | ------------------------------------------------------- | ----------------------------- |
+| Colors        | 5 palettes × 2 themes via CSS tokens                    | Fixed 49 hardcoded values     |
+| Layout        | Responsive, fluid                                       | Fixed A4 dimensions           |
+| Interactivity | JS-powered (theme toggle, palette selector, mobile nav) | Zero JS                       |
+| Typography    | Variable fonts, clamp()                                 | Fixed point sizes             |
+| Page breaks   | N/A                                                     | `break-inside: avoid`         |
+| Margins       | `var(--gutter)`                                         | `@page` + Playwright contract |
 
 Unifying these into a configuration-driven component yields something harder to maintain than
 two clear, purpose-built renderers. The configuration surface area would exceed the code it replaces.

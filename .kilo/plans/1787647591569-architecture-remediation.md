@@ -1117,14 +1117,14 @@ Five decisions that are currently implicit, which is how they got silently rever
 
 ## Phase 6 — Cleanup
 
-### [ ] T6.1 — Rewrite `README.md`
+### [x] T6.1 — Rewrite `README.md`
 
 Currently the **untouched Astro starter template** ("Astro Starter Kit: Basics", "🧑‍🚀 Seasoned
 astronaut? Delete this file"), documenting a file tree that no longer exists. Replace with: what this
 project is, the six outputs it produces, the real command table (including `build:all`), the
 environment-variable contract (T0.4), and a pointer to `.kilo/knowledge/`.
 
-### [ ] T6.2 — Replace `docs/phase-status.md`
+### [x] T6.2 — Replace `docs/phase-status.md`
 
 It is a build log containing at least five false or stale claims:
 
@@ -1139,7 +1139,7 @@ It is a build log containing at least five false or stale claims:
 Replace with a short link to `.kilo/knowledge/` and `.kilo/plans/`. Keep the genuinely useful
 "Notes / Deviations" content by migrating it into the T5.4 ADRs.
 
-### [ ] T6.3 — Dependency hygiene
+### [x] T6.3 — Dependency hygiene
 
 | Change                                                     | Reason                                                    |
 | ---------------------------------------------------------- | --------------------------------------------------------- |
@@ -1148,12 +1148,12 @@ Replace with a short link to `.kilo/knowledge/` and `.kilo/plans/`. Keep the gen
 | Remove `@eslint/config-inspector`                          | A dev inspection UI for a 4-line ESLint config            |
 | Add `@vitest/coverage-v8` + a `test:coverage` script       | Makes the previously-fabricated coverage claim measurable |
 
-### [ ] T6.4 — Delete remaining dead code
+### [x] T6.4 — Delete remaining dead code
 
 `.print-only`, `.page-break-before-always` (`print.css:28,37`) and `.animate-fade-in`
 (`global.css:198`) — **0 uses each**. Keep the `fade-in-up` keyframe; it is used by `.nav-mobile`.
 
-### [ ] T6.5 — Replace placeholder identity `[do last]`
+### [x] T6.5 — Replace placeholder identity `[do last]`
 
 Real name, email, phone, location, and domain in `src/data/resume.ts`. The `website` field drives
 canonical URLs, OG tags, the sitemap and `robots.txt`, so `https://example.com` currently propagates

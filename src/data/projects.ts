@@ -61,6 +61,6 @@ export const projects: Project[] = ProjectSchema.array()
 			technologies: ["Astro", "Tailwind CSS", "Playwright", "Cloudflare Pages"],
 			featured: true,
 			tier: "notable",
-			liveUrl: "https://example.com",
+			liveUrl: "https://alirezaghadyani.com",
 		},
 	]);

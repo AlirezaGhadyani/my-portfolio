@@ -355,10 +355,6 @@ html[data-palette="amber"][data-theme="dark"] {
 	}
 }
 
-.animate-fade-in {
-	animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
 /*
   Prefers-reduced-motion killswitch: disables all CSS transitions for users who
   request reduced motion. Structure-first, motion is decorative only.

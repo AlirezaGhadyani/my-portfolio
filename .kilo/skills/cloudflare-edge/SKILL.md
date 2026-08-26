@@ -40,14 +40,14 @@ description: Patterns for Cloudflare Pages Functions, security headers, environm
 
 ## Environment variables
 
-| Variable | Scope | Required |
-| --- | --- | --- |
-| `PUBLIC_TURNSTILE_SITE_KEY` | build-time | Yes (widget not rendered without) |
-| `TURNSTILE_SECRET_KEY` | runtime | **Yes (503 if missing)** |
-| `RESEND_API_KEY` | runtime | **Yes (503 if missing)** |
-| `CONTACT_TO_EMAIL` | runtime | No (falls back to example.com) |
-| `CONTACT_FROM_EMAIL` | runtime | No (falls back to resend.dev) |
-| `RATE_LIMIT_KV` | runtime binding | No (falls back to memory) |
+| Variable                    | Scope           | Required                          |
+| --------------------------- | --------------- | --------------------------------- |
+| `PUBLIC_TURNSTILE_SITE_KEY` | build-time      | Yes (widget not rendered without) |
+| `TURNSTILE_SECRET_KEY`      | runtime         | **Yes (503 if missing)**          |
+| `RESEND_API_KEY`            | runtime         | **Yes (503 if missing)**          |
+| `CONTACT_TO_EMAIL`          | runtime         | No (falls back to example.com)    |
+| `CONTACT_FROM_EMAIL`        | runtime         | No (falls back to resend.dev)     |
+| `RATE_LIMIT_KV`             | runtime binding | No (falls back to memory)         |
 
 ## Validation required
 

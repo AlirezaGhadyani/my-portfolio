@@ -25,18 +25,9 @@
 		display: none !important;
 	}
 
-	.print-only {
-		display: block !important;
-	}
-
 	.page-break-inside-avoid {
 		break-inside: avoid !important;
 		page-break-inside: avoid !important;
-	}
-
-	.page-break-before-always {
-		break-before: page !important;
-		page-break-before: always !important;
 	}
 
 	a {

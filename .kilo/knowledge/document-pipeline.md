@@ -14,6 +14,7 @@ pnpm build:all
 ```
 
 This order is load-bearing:
+
 - PDF generation starts a static server on `dist/` — it must exist first
 - Sitemap reads `resumeData.identity.website` for the base URL
 - TXT generation reads `resumeData` directly (no build dependency)
@@ -38,6 +39,7 @@ Changing any one of these breaks pagination. The screen view uses `padding: 14mm
 `generate-pdf.ts` calls `assertPdfPageCount()` immediately after each `page.pdf()`.
 
 **Never relax `pdfPages` to make the check pass.** Fix the content to fit:
+
 - Reduce `maxProjects`
 - Tighten section margins under `data-variant` attribute
 - Remove sections via `excludedSections`
@@ -54,6 +56,7 @@ Current counts: fullstack=2, frontend=2, brief=1, ats=1.
 ## ATS text rules
 
 `scripts/generate-txt.ts` generates `resume-ats.txt`:
+
 - Pure ASCII enforced by `verify-outputs.ts` (`/^[\x09\x0a\x20-\x7e]*$/`)
 - En/em dashes normalized to ASCII hyphens at `generate-txt.ts:95`: `.replace(/[–—]/g, "-")`
 - No decorative rule lines (was `===` / `---` — removed in T4.7)
@@ -63,6 +66,7 @@ Current counts: fullstack=2, frontend=2, brief=1, ats=1.
 ## Print page architecture
 
 `src/pages/print/resume/[...variant].astro`:
+
 - Static routes: `/print/resume` (fullstack), `/print/resume/frontend`, `/print/resume/brief`, `/print/resume/ats`
 - Screen-only toolbar with variant switcher, PDF/TXT download links, print button
 - `data-variant` attribute on `<html>` drives variant-specific CSS tightening
@@ -71,6 +75,7 @@ Current counts: fullstack=2, frontend=2, brief=1, ats=1.
 
 ## Dead weight (do not reintroduce)
 
-- `.print-only` — 0 uses
-- `.page-break-before-always` — 0 uses
+- `.print-only` — removed in T6.4 (was 0 uses)
+- `.page-break-before-always` — removed in T6.4 (was 0 uses)
+- `.animate-fade-in` — removed in T6.4 (was 0 uses; keep the `fade-in-up` keyframe, used by `.nav-mobile`)
 - Keep `.page-break-inside-avoid` — used extensively

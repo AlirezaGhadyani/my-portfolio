@@ -30,6 +30,7 @@ src/data/theme.ts       ← PaletteDefinition + ThemeConfig
 Four variants: `fullstack`, `frontend`, `brief`, `ats`.
 
 Each `VariantConfig` has:
+
 - `id` — the variant key
 - `label` — human label for the variant itself (UI only, never printed as job title)
 - `shortLabel` — compact switcher text (e.g. "ATS", "1-Page")
@@ -41,6 +42,7 @@ Each `VariantConfig` has:
 - `excludedSections` — sections to omit (e.g. `["certifications"]`)
 
 `applyVariant(data, variantId)` returns a `VariantResume` with:
+
 - `variant` — the variant key
 - `documentTitle` — set to `variant.jobTitle` (never `label`)
 - `activeSummary` — selected from `summary.short` or `summary.full`

@@ -4,14 +4,14 @@ Environment variables, the fail-open prohibition, KV limitations, and CSP ration
 
 ## Environment variables
 
-| Variable | Scope | Consumer | Effect if missing |
-| --- | --- | --- | --- |
-| `PUBLIC_TURNSTILE_SITE_KEY` | **build-time** | `ContactSection.astro` | Widget not rendered |
-| `TURNSTILE_SECRET_KEY` | runtime | `contact.ts:218` | **503 (fail closed)** |
-| `RESEND_API_KEY` | runtime | `contact.ts:252` | **503 (fail closed)** |
-| `CONTACT_TO_EMAIL` | runtime | `contact.ts:263` | Falls back to `contact@example.com` |
-| `CONTACT_FROM_EMAIL` | runtime | `contact.ts:264` | Falls back to `onboarding@resend.dev` |
-| `RATE_LIMIT_KV` | runtime binding | `contact.ts` | Falls back to memory limiter |
+| Variable                    | Scope           | Consumer               | Effect if missing                     |
+| --------------------------- | --------------- | ---------------------- | ------------------------------------- |
+| `PUBLIC_TURNSTILE_SITE_KEY` | **build-time**  | `ContactSection.astro` | Widget not rendered                   |
+| `TURNSTILE_SECRET_KEY`      | runtime         | `contact.ts:218`       | **503 (fail closed)**                 |
+| `RESEND_API_KEY`            | runtime         | `contact.ts:252`       | **503 (fail closed)**                 |
+| `CONTACT_TO_EMAIL`          | runtime         | `contact.ts:263`       | Falls back to `contact@example.com`   |
+| `CONTACT_FROM_EMAIL`        | runtime         | `contact.ts:264`       | Falls back to `onboarding@resend.dev` |
+| `RATE_LIMIT_KV`             | runtime binding | `contact.ts`           | Falls back to memory limiter          |
 
 **Critical:** A build without `PUBLIC_TURNSTILE_SITE_KEY` deployed against a runtime that has
 `TURNSTILE_SECRET_KEY` set makes every submission fail with "Bot verification token is missing".
@@ -24,6 +24,7 @@ generic message "Contact form is temporarily unavailable. Please email me direct
 Never silently disable protection. Never leak which variable is missing to the client.
 
 Previous bugs (fixed in T1.1):
+
 - Absent `RESEND_API_KEY` → messages silently discarded, user told "success"
 - Absent `TURNSTILE_SECRET_KEY` → verification skipped, unauthenticated mail relay
 
@@ -70,6 +71,7 @@ style-src 'self' 'unsafe-inline'
 ```
 
 `unsafe-inline` in `script-src` is required for:
+
 1. The theme bootstrap script in `Layout.astro` (FOUC prevention — must run before paint)
 2. `is:inline` scripts in components (PaletteSelector, ThemeToggle)
 

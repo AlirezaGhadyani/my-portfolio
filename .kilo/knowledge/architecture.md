@@ -32,11 +32,11 @@ src/domain/present.ts       ← presentation adapter (dates, ordering, display)
 One resume fact is rendered by three independent code paths. This is the defining architectural
 decision (ADR-0001). Share the data adapter (`present.ts`), not markup.
 
-| Renderer | Files | Sorts experience? | Formats dates? |
-| --- | --- | --- | --- |
-| Web | `src/components/*.astro` + `src/pages/index.astro` | yes (via `present.ts`) | via `present.ts` |
-| Print | `src/pages/print/resume/[...variant].astro` | yes (via `present.ts`) | via `present.ts` |
-| Text | `scripts/generate-txt.ts` | yes (via `present.ts`) | via `present.ts` |
+| Renderer | Files                                              | Sorts experience?      | Formats dates?   |
+| -------- | -------------------------------------------------- | ---------------------- | ---------------- |
+| Web      | `src/components/*.astro` + `src/pages/index.astro` | yes (via `present.ts`) | via `present.ts` |
+| Print    | `src/pages/print/resume/[...variant].astro`        | yes (via `present.ts`) | via `present.ts` |
+| Text     | `scripts/generate-txt.ts`                          | yes (via `present.ts`) | via `present.ts` |
 
 ## Layer rules
 

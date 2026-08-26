@@ -1,13 +1,14 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import { CONTACT_LIMITS } from "../lib/validation.ts";
+import { resumeData } from "../data/resume.ts";
 
 interface Props {
 	email?: string;
 	turnstileSiteKey?: string;
 }
 
-const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "" } =
+const { email = resumeData.identity.email, turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "" } =
 	Astro.props;
 ---
 

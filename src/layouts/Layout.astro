@@ -14,10 +14,15 @@ interface Props {
 	jsonLd?: unknown;
 }
 
-const { title = "Jordan Avery — Full-Stack Software Engineer", description, image, jsonLd } = Astro.props;
+const {
+	title = `${resumeData.identity.name} — ${resumeData.identity.title}`,
+	description,
+	image,
+	jsonLd,
+} = Astro.props;
 const metaDescription =
 	description ??
-	"Portfolio and engineering resume of Jordan Avery: full-stack TypeScript, React, Astro, and edge hosting.";
+	`Portfolio and engineering resume of ${resumeData.identity.name}: full-stack TypeScript, React, Astro, and edge hosting.`;
 
 const siteUrl = resumeData.identity.website.replace(/\/+$/, "");
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
@@ -38,7 +43,7 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.png`
 		<link rel="preload" href={monoWoff2} as="font" type="font/woff2" crossorigin />
 		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Jordan Avery" />
+		<meta property="og:site_name" content={resumeData.identity.name} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={metaDescription} />
 		<meta property="og:url" content={canonicalUrl} />

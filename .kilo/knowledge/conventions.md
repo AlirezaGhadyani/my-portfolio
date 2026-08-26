@@ -24,6 +24,7 @@ public/                 # Static assets (copied to dist/)
 ## Tabs vs spaces
 
 **Tabs for indentation.** This is the majority convention in the codebase:
+
 - All `.astro` files use tabs
 - `src/data/theme.ts` uses tabs
 - `global.css` uses tabs
@@ -49,10 +50,12 @@ unless absolutely necessary (and document why).
 ## `is:inline` scripts
 
 Use `is:inline` only when the script must:
+
 1. Run before any paint (theme bootstrap in `Layout.astro`)
 2. Bind to dynamically rendered markup without a framework component
 
 `is:inline` scripts are:
+
 - Not type-checked by TypeScript
 - Not linted by ESLint
 - Not minified by the bundler

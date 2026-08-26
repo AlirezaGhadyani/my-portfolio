@@ -33,14 +33,14 @@ Owns the runtime code: Cloudflare Pages Functions, security headers, and environ
 
 ## Environment variables
 
-| Variable | Scope | Consumer | Effect if missing |
-| --- | --- | --- | --- |
-| `PUBLIC_TURNSTILE_SITE_KEY` | build-time | `ContactSection.astro` | Widget not rendered |
-| `TURNSTILE_SECRET_KEY` | runtime | `contact.ts` | 503 (fail closed) |
-| `RESEND_API_KEY` | runtime | `contact.ts` | 503 (fail closed) |
-| `CONTACT_TO_EMAIL` | runtime | `contact.ts` | Falls back to `contact@example.com` |
-| `CONTACT_FROM_EMAIL` | runtime | `contact.ts` | Falls back to `onboarding@resend.dev` |
-| `RATE_LIMIT_KV` | runtime binding | `contact.ts` | Falls back to memory limiter |
+| Variable                    | Scope           | Consumer               | Effect if missing                     |
+| --------------------------- | --------------- | ---------------------- | ------------------------------------- |
+| `PUBLIC_TURNSTILE_SITE_KEY` | build-time      | `ContactSection.astro` | Widget not rendered                   |
+| `TURNSTILE_SECRET_KEY`      | runtime         | `contact.ts`           | 503 (fail closed)                     |
+| `RESEND_API_KEY`            | runtime         | `contact.ts`           | 503 (fail closed)                     |
+| `CONTACT_TO_EMAIL`          | runtime         | `contact.ts`           | Falls back to `contact@example.com`   |
+| `CONTACT_FROM_EMAIL`        | runtime         | `contact.ts`           | Falls back to `onboarding@resend.dev` |
+| `RATE_LIMIT_KV`             | runtime binding | `contact.ts`           | Falls back to memory limiter          |
 
 ## Verification
 

@@ -48,15 +48,15 @@ const { experience } = resumeData;
 ---
 
 <div class="my-component">
-  <!-- Template: markup with expressions -->
-  {experience.map((item) => <p>{item.company}</p>)}
+	<!-- Template: markup with expressions -->
+	{experience.map((item) => <p>{item.company}</p>)}
 </div>
 
 <style>
-  /* Scoped styles — automatically scoped by Astro */
-  .my-component {
-    color: var(--text);
-  }
+	/* Scoped styles — automatically scoped by Astro */
+	.my-component {
+		color: var(--text);
+	}
 </style>
 ```
 

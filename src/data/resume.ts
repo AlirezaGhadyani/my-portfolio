@@ -6,16 +6,16 @@ import { projects } from "./projects.ts";
 
 export const resumeData: ResumeData = ResumeDataSchema.parse({
 	identity: {
-		name: "Jordan Avery",
+		name: "Alireza Ghadyani",
 		title: "Full-Stack Software Engineer",
 		tagline: "I design and ship fast, accessible web platforms with clean architecture.",
-		email: "jordan.avery@example.com",
-		phone: "+44 7700 900123",
-		location: "Cambridge, UK",
-		website: "https://example.com",
+		email: "p.alirezaghadyani@gmail.com",
+		phone: "09305391129",
+		location: "Tehran, Iran",
+		website: "https://alirezaghadyani.com",
 		links: [
-			{ label: "GitHub", url: "https://github.com/", icon: "github" },
-			{ label: "LinkedIn", url: "https://linkedin.com/", icon: "linkedin" },
+			{ label: "GitHub", url: "https://github.com/alirezaGhadyani", icon: "github" },
+			{ label: "LinkedIn", url: "https://www.linkedin.com/in/alireza-ghadyani/", icon: "linkedin" },
 		],
 	},
 	summary: {

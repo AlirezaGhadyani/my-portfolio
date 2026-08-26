@@ -31,8 +31,8 @@ with `client:load` or similar).
 - **Not linted.** ESLint does not process inline script blocks.
 - **Not minified.** Scripts are emitted at full size.
 - **Duplicated per instance.** If a component renders twice (e.g. desktop + mobile ThemeToggle),
-   its `is:inline` script is emitted twice. This was mitigated by hoisting scripts to `Layout.astro`
-   (T4.1), reducing duplication from 3,048 bytes to zero.
+  its `is:inline` script is emitted twice. This was mitigated by hoisting scripts to `Layout.astro`
+  (T4.1), reducing duplication from 3,048 bytes to zero.
 
 ## Mitigations
 

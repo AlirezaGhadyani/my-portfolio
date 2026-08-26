@@ -14,13 +14,26 @@ requirements, and palette rules, load `skills/design-tokens/` first.
 
 ```css
 @keyframes pulse-subtle {
-	0%, 100% { transform: scale(1); opacity: 1; }
-	50% { transform: scale(1.08); opacity: 0.75; }
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.08);
+		opacity: 0.75;
+	}
 }
 
 @keyframes fade-in-up {
-	from { opacity: 0; transform: translateY(12px); }
-	to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 ```
 

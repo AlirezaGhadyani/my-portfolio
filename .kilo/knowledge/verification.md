@@ -16,15 +16,15 @@ tsx scripts/verify-outputs.ts     # cross-renderer consistency
 
 ## What each command catches
 
-| Command | Catches | Failure means |
-| --- | --- | --- |
-| `pnpm check` | Type errors in `.astro` files, missing imports, wrong props | Broken component wiring |
-| `pnpm test` | Schema validation, variant logic, date formatting, contrast ratios, token compliance, contact endpoint | Data model or logic regression |
-| `pnpm lint` | ESLint rules across all files including `.astro` | Code quality / style violation |
-| `pnpm format:check` | Prettier formatting | Inconsistent formatting |
-| `pnpm build:all` | Full build pipeline including PDF generation | Build breakage, PDF pagination failure |
-| `find dist -name "*.js"` | Client-side JavaScript | Zero-JS invariant violated |
-| `verify-outputs.ts` | Cross-renderer consistency | Resume data divergence |
+| Command                  | Catches                                                                                                | Failure means                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------ | -------------------------------------- |
+| `pnpm check`             | Type errors in `.astro` files, missing imports, wrong props                                            | Broken component wiring                |
+| `pnpm test`              | Schema validation, variant logic, date formatting, contrast ratios, token compliance, contact endpoint | Data model or logic regression         |
+| `pnpm lint`              | ESLint rules across all files including `.astro`                                                       | Code quality / style violation         |
+| `pnpm format:check`      | Prettier formatting                                                                                    | Inconsistent formatting                |
+| `pnpm build:all`         | Full build pipeline including PDF generation                                                           | Build breakage, PDF pagination failure |
+| `find dist -name "*.js"` | Client-side JavaScript                                                                                 | Zero-JS invariant violated             |
+| `verify-outputs.ts`      | Cross-renderer consistency                                                                             | Resume data divergence                 |
 
 ## verify-outputs.ts checks
 
