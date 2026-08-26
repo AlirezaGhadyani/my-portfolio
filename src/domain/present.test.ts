@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
 	certificationLine,
 	dateRange,
+	duration,
 	educationLine,
 	monthYear,
 	orderedExperience,
@@ -19,6 +20,20 @@ describe("presentation adapter", () => {
 	it("rejects malformed month values", () => {
 		expect(() => monthYear("2024-13")).toThrow();
 		expect(() => monthYear("not-a-date")).toThrow();
+	});
+
+	it("calculates human-readable durations", () => {
+		expect(duration("2024-08", "2026-08")).toBe("2 yrs 1 mo");
+		expect(duration("2022-08", "2024-08")).toBe("2 yrs 1 mo");
+		expect(duration("2023-09", "2024-08")).toBe("1 yr");
+		expect(duration("2021-08", "2023-03")).toBe("1 yr 8 mos");
+		expect(duration("2021-02", "2022-01")).toBe("1 yr");
+		expect(duration("2024-01")).toMatch(/^\d+ yr/);
+	});
+
+	it("rejects malformed dates in duration", () => {
+		expect(() => duration("bad")).toThrow();
+		expect(() => duration("2024-01", "bad")).toThrow();
 	});
 
 	it("preserves stable ordering policies", () => {

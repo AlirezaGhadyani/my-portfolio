@@ -1,5 +1,5 @@
 ---
-import { dateRange, orderedExperience } from "../domain/present.ts";
+import { dateRange, duration, orderedExperience } from "../domain/present.ts";
 import type { ExperienceItem } from "../data/schema.ts";
 import SectionHeader from "./SectionHeader.astro";
 
@@ -50,6 +50,7 @@ const ordered = orderedExperience(items);
 										<line x1="3" y1="10" x2="21" y2="10" />
 									</svg>
 									<span>{dateRange(item.startDate, item.endDate)}</span>
+									<span class="duration">· {duration(item.startDate, item.endDate)}</span>
 								</div>
 							</div>
 
@@ -217,6 +218,11 @@ const ordered = orderedExperience(items);
 			border-radius: var(--radius-sm);
 			padding: 0.3rem 0.6rem;
 			white-space: nowrap;
+
+			.duration {
+				color: var(--text-muted);
+				opacity: 0.75;
+			}
 		}
 	}
 

@@ -3,7 +3,7 @@ import "../../../styles/global.css";
 import "../../../styles/print.css";
 import { resumeData } from "../../../data/resume.ts";
 import { applyVariant, VARIANTS, type ResumeVariant } from "../../../data/variants.ts";
-import { certificationLine, dateRange, educationLine, orderedExperience, skillLine } from "../../../domain/present.ts";
+import { certificationLine, dateRange, duration, educationLine, orderedExperience, skillLine } from "../../../domain/present.ts";
 
 export function getStaticPaths() {
 	const variants = Object.keys(VARIANTS) as ResumeVariant[];
@@ -198,7 +198,7 @@ const { identity, experience, skills, education, certifications, projects, docum
 										<span class="item-company"> — {item.company}</span>
 									</div>
 									<div class="item-meta">
-										<span class="item-date">{dateRange(item.startDate, item.endDate)}</span>
+										<span class="item-date">{dateRange(item.startDate, item.endDate)} · {duration(item.startDate, item.endDate)}</span>
 										<span class="item-location"> | {item.location}</span>
 									</div>
 								</div>

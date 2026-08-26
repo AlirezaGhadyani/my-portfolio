@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { resumeData } from "../src/data/resume.ts";
 import { applyVariant, type ResumeVariant } from "../src/data/variants.ts";
-import { certificationLine, dateRange, educationLine, orderedExperience, skillLine } from "../src/domain/present.ts";
+import { certificationLine, dateRange, duration, educationLine, orderedExperience, skillLine } from "../src/domain/present.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,7 +45,7 @@ export function generatePlainTextResume(variantKey: ResumeVariant = "ats"): stri
 	for (const exp of orderedExperience(experience)) {
 		const dates = dateRange(exp.startDate, exp.endDate);
 		lines.push(`${exp.role} | ${exp.company} | ${exp.location}`);
-		lines.push(`Dates: ${dates}`);
+		lines.push(`Dates: ${dates} (${duration(exp.startDate, exp.endDate)})`);
 		lines.push(exp.summary);
 		for (const h of exp.highlights) {
 			lines.push(`  * ${h}`);

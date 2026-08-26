@@ -18,6 +18,35 @@ export function dateRange(start: string, end?: string): string {
 	return `${monthYear(start)} – ${end ? monthYear(end) : "Present"}`;
 }
 
+/** Calculates a human-readable duration between two YYYY-MM dates (e.g., "2 yrs 1 mo"). */
+export function duration(start: string, end?: string): string {
+	const [, startYear, startMonth] = monthPattern.exec(start) ?? [];
+	if (!startYear || !startMonth) throw new Error(`Invalid start date: ${start}`);
+
+	let endYear: number;
+	let endMonth: number;
+	if (end) {
+		const [, ey, em] = monthPattern.exec(end) ?? [];
+		if (!ey || !em) throw new Error(`Invalid end date: ${end}`);
+		endYear = Number(ey);
+		endMonth = Number(em);
+	} else {
+		const now = new Date();
+		endYear = now.getUTCFullYear();
+		endMonth = now.getUTCMonth() + 1;
+	}
+
+	let months = (endYear - Number(startYear)) * 12 + (endMonth - Number(startMonth)) + 1;
+	if (months < 0) months = 0;
+
+	const years = Math.floor(months / 12);
+	const remaining = months % 12;
+
+	if (years === 0) return `${remaining} mo${remaining !== 1 ? "s" : ""}`;
+	if (remaining === 0) return `${years} yr${years !== 1 ? "s" : ""}`;
+	return `${years} yr${years !== 1 ? "s" : ""} ${remaining} mo${remaining !== 1 ? "s" : ""}`;
+}
+
 /** Primary experience first, then newest start date, without mutating the input. */
 export function orderedExperience(items: ExperienceItem[]): ExperienceItem[] {
 	return [...items].sort((a, b) => {
