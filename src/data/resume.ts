@@ -7,7 +7,7 @@ import { projects } from "./projects.ts";
 export const resumeData: ResumeData = ResumeDataSchema.parse({
 	identity: {
 		name: "Alireza Ghadyani",
-		title: "Full-Stack Software Engineer",
+		title: "Senior Frontend Engineer",
 		tagline: "I design and ship fast, accessible web platforms with clean architecture.",
 		email: "p.alirezaghadyani@gmail.com",
 		phone: "09305391129",
