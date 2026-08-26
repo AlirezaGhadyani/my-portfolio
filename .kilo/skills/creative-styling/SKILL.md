@@ -1,67 +1,46 @@
 ---
 name: creative-styling
-description: Advanced CSS styling, Tailwind v4 configurations, fluid typography, dark/light theme perfection, glow/glass effects, animations, micro-interactions, and premium document/print styling.
+description: Advanced CSS styling, animations, micro-interactions, and premium document/print styling. Project-specific guidance in design-tokens skill.
 ---
 
 # Creative Styling & Animation Skill
 
-## Implementation Guide
+## Philosophy
 
-### 1. Theme Variables & Gradients
+This skill provides generic CSS styling guidance. For project-specific token usage, contrast
+requirements, and palette rules, load `skills/design-tokens/` first.
 
-- Define semantic color palettes with dark/light mode balance:
-  - Backgrounds: Canvas, Surface, Elevated Surface, Overlay.
-  - Borders: Subtle (`hsl(... / 0.08)`), Default (`hsl(... / 0.15)`), Active/Focus.
-  - Accents: Primary brand gradient, subtle badge backgrounds (`hsl(accent / 0.1)`), glowing hover halos.
-  - Subtle noise / grid / ambient glow backgrounds for hero sections.
-
-### 2. Modern Animations & Keyframes
+## Animations & Keyframes
 
 ```css
 @keyframes pulse-subtle {
-	0%,
-	100% {
-		transform: scale(1);
-		opacity: 1;
-	}
-	50% {
-		transform: scale(1.08);
-		opacity: 0.75;
-	}
-}
-
-@keyframes float-subtle {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-4px);
-	}
+	0%, 100% { transform: scale(1); opacity: 1; }
+	50% { transform: scale(1.08); opacity: 0.75; }
 }
 
 @keyframes fade-in-up {
-	from {
-		opacity: 0;
-		transform: translateY(12px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+	from { opacity: 0; transform: translateY(12px); }
+	to { opacity: 1; transform: translateY(0); }
 }
 ```
 
-### 3. Interactive UI Components
+**Never nest `@media` inside `@keyframes`** — CSS parsers silently drop it.
 
-- **Buttons**: Smooth transitions (`all 0.2s cubic-bezier(0.16, 1, 0.3, 1)`), hover elevation, subtle inner highlight, active press scale (`0.98`).
-- **Cards**: Hover border glow (`border-color: var(--accent)`), subtle elevation shadow transition, interactive tags.
-- **Badges**: Monospace tags with pill border-radius, soft background tint, accent text color.
+## Interactive UI Components
 
-### 4. Resume & Print CSS Excellence
+- **Buttons**: Smooth transitions (`all 0.2s cubic-bezier(0.16, 1, 0.3, 1)`), hover elevation, active press scale (`0.98`).
+- **Cards**: Hover border glow, subtle elevation shadow transition.
+- **Badges**: Monospace tags with pill border-radius, soft background tint.
 
-- Print stylesheets must balance aesthetics and ATS machine readability:
-  - Elegant typography hierarchy with crisp weights (Bold 700 headers, Medium 500 company names, Regular 400 body).
-  - Subtle primary accent borders separating sections.
-  - Clean two-column meta items (Role / Date / Location).
-  - Compact bullets with refined line-height (1.4 - 1.45).
+## Print & Document CSS
+
+- Print stylesheets must balance aesthetics and ATS readability.
+- Elegant typography hierarchy with crisp weights.
+- Subtle primary accent borders separating sections.
+- Compact bullets with refined line-height (1.4 - 1.45).
+- **The print page uses a fixed palette — do not use theme tokens.**
+
+## Reduced Motion
+
+Always respect `prefers-reduced-motion`. This project has a killswitch in `global.css:366-376`
+that disables all CSS transitions and animations.
