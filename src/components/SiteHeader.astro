@@ -21,7 +21,7 @@ const nav = [
 
 const pathname = Astro.url.pathname.replace(/\/$/, "");
 const isCurrent = (href: string): "page" | undefined =>
-	href.split("#")[0].replace(/\/$/, "") === pathname ? "page" : undefined;
+	href.includes("#") ? undefined : href.split("#")[0].replace(/\/$/, "") === pathname ? "page" : undefined;
 ---
 
 <header class="site-header">

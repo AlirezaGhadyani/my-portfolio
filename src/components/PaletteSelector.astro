@@ -10,7 +10,7 @@ const { id = "palette-menu" } = Astro.props;
 const palettes = paletteIds.map((pid) => themeConfig.palettes[pid]);
 ---
 
-<div class="palette-selector" data-palette-selector>
+<div class="palette-selector">
 	<details class="palette-popup" data-palette-popup id={id}>
 		<summary class="palette-trigger" data-palette-trigger>
 			<span class="palette-trigger-swatch" aria-hidden="true"></span>

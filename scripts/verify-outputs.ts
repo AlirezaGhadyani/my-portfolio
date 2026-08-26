@@ -55,6 +55,10 @@ export function verifyCrossRendererOutputs(distRoot = path.join(projectRoot, "di
 		pdfText(path.join(distRoot, "downloads", `resume-${key}.pdf`)),
 	);
 
+	if (!fs.existsSync(path.join(distRoot, "og-image.png"))) {
+		throw new Error("OG PNG not generated; dist/og-image.png is missing");
+	}
+
 	for (const company of companies) {
 		if (!html.includes(company) || !text.includes(company) || pdfs.some((pdf) => !pdf.includes(company))) {
 			throw new Error(`Company missing from a renderer output: ${company}`);

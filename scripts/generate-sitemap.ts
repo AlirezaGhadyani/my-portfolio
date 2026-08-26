@@ -21,23 +21,16 @@ function collectPaths(): string[] {
 	return [...paths].sort();
 }
 
-const dateOnly = (value: Date) => value.toISOString().slice(0, 10);
-
-function lastmodFor(pathname: string): string {
-	if (pathname.startsWith("/projects/")) {
-		const slug = pathname.split("/")[2];
-		const mdPath = path.join(projectRoot, "src", "content", "case-studies", `${slug}.md`);
-		if (fs.existsSync(mdPath)) return dateOnly(fs.statSync(mdPath).mtime);
-	}
-	const resumePath = path.join(projectRoot, "src", "data", "resume.ts");
-	return dateOnly(fs.statSync(resumePath).mtime);
-}
+// Stable publish date for the site; a per-item `updated` frontmatter field would
+// override this in future. Kept deterministic (not filesystem mtime) so the
+// sitemap is reproducible across local/CI/deploy environments.
+const SITE_LAST_MODIFIED = "2026-08-25";
 
 function buildSitemap(paths: string[]): string {
 	const urls = paths
 		.map(
 			(pathname) =>
-				`  <url>\n    <loc>${absolute(pathname)}</loc>\n    <lastmod>${lastmodFor(pathname)}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`,
+				`  <url>\n    <loc>${absolute(pathname)}</loc>\n    <lastmod>${SITE_LAST_MODIFIED}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`,
 		)
 		.join("\n");
 	return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;

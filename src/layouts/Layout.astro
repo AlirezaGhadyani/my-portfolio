@@ -51,7 +51,11 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.png`
 		<meta name="twitter:description" content={metaDescription} />
 		<meta name="twitter:image" content={ogImage} />
 		<title>{title}</title>
-		{jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+		{
+			jsonLd && (
+				<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />
+			)
+		}
 		<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette, validPalettes: paletteIds }}>
 			(function () {
 				const root = document.documentElement;
