@@ -7,74 +7,64 @@ interface Props {
 
 const { id = "palette-menu" } = Astro.props;
 
-const palettes = paletteIds.map((id) => themeConfig.palettes[id]);
+const palettes = paletteIds.map((pid) => themeConfig.palettes[pid]);
 ---
 
 <div class="palette-selector" data-palette-selector>
-	<button
-		type="button"
-		class="palette-trigger"
-		data-palette-trigger
-		aria-haspopup="dialog"
-		aria-expanded="false"
-		aria-controls={id}
-		title="Choose accent palette">
-		<span class="palette-trigger-swatch" aria-hidden="true"></span>
-		<span class="palette-trigger-label">Palette</span>
-		<svg
-			aria-hidden="true"
-			viewBox="0 0 24 24"
-			width="16"
-			height="16"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg
-		>
-	</button>
-	<div id={id} class="palette-menu" data-palette-menu role="dialog" aria-label="Choose accent palette" hidden>
-		<div class="palette-menu-heading"><strong>Accent palette</strong><span>Choose a mood for the site</span></div>
-		<div class="palette-options" role="listbox" aria-label="Accent palettes">
-			{
-				palettes.map((palette) => (
-					<button
-						type="button"
-						class="palette-option"
-						data-palette-option={palette.id}
-						role="option"
-						aria-selected="false">
-						<span
-							class="palette-swatch"
-							style={`--palette-light: ${palette.light.accent}; --palette-dark: ${palette.dark.accent}`}
-							aria-hidden="true"
-						/>
-						<span class="palette-option-copy">
-							<>
-								<strong>{palette.name}</strong>
-								<small>{palette.description}</small>
-							</>
-						</span>
-						{palette.id === themeConfig.defaultPalette && <span class="palette-default">Default</span>}
-						<svg
-							class="palette-check"
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							width="17"
-							height="17"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2.5"
-							stroke-linecap="round"
-							stroke-linejoin="round">
-							<path d="m5 12 4 4L19 6" />
-						</svg>
-					</button>
-				))
-			}
+	<details class="palette-popup" data-palette-popup id={id}>
+		<summary class="palette-trigger" data-palette-trigger>
+			<span class="palette-trigger-swatch" aria-hidden="true"></span>
+			<span class="palette-trigger-label">Palette</span>
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				width="16"
+				height="16"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg
+			>
+		</summary>
+		<div class="palette-menu">
+			<div class="palette-menu-heading"><strong>Accent palette</strong><span>Choose a mood for the site</span></div>
+			<div class="palette-options">
+				{
+					palettes.map((palette) => (
+						<button type="button" class="palette-option" data-palette-option={palette.id} aria-pressed="false">
+							<span
+								class="palette-swatch"
+								style={`--palette-light: ${palette.light.accent}; --palette-dark: ${palette.dark.accent}`}
+								aria-hidden="true"
+							/>
+							<span class="palette-option-copy">
+								<>
+									<strong>{palette.name}</strong>
+									<small>{palette.description}</small>
+								</>
+							</span>
+							{palette.id === themeConfig.defaultPalette && <span class="palette-default">Default</span>}
+							<svg
+								class="palette-check"
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								width="17"
+								height="17"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.5"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path d="m5 12 4 4L19 6" />
+							</svg>
+						</button>
+					))
+				}
+			</div>
+			<button type="button" class="palette-reset" data-palette-reset>Reset to default</button>
 		</div>
-		<button type="button" class="palette-reset" data-palette-reset>Reset to default</button>
-	</div>
+	</details>
 </div>
 
 <style>
@@ -94,6 +84,10 @@ const palettes = paletteIds.map((id) => themeConfig.palettes[id]);
 		cursor: pointer;
 		box-shadow: var(--shadow-sm);
 		transition: var(--transition-fast);
+		list-style: none;
+	}
+	.palette-trigger::-webkit-details-marker {
+		display: none;
 	}
 	.palette-trigger:hover {
 		border-color: var(--accent);
@@ -165,7 +159,7 @@ const palettes = paletteIds.map((id) => themeConfig.palettes[id]);
 		cursor: pointer;
 	}
 	.palette-option:hover,
-	.palette-option[aria-selected="true"] {
+	.palette-option[aria-pressed="true"] {
 		border-color: var(--border-active);
 		background: var(--accent-muted);
 	}
@@ -189,7 +183,7 @@ const palettes = paletteIds.map((id) => themeConfig.palettes[id]);
 		display: none;
 		color: var(--accent);
 	}
-	.palette-option[aria-selected="true"] .palette-check {
+	.palette-option[aria-pressed="true"] .palette-check {
 		display: block;
 	}
 	.palette-reset {
