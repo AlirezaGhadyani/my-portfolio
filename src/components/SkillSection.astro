@@ -28,9 +28,12 @@ const levelLabel = (level: Exclude<Skill["level"], undefined>): string =>
 							<li class={skill.highlighted ? "skill-tag skill-tag--highlight" : "skill-tag"}>
 								<span class="skill-name">{skill.name}</span>
 								{skill.level && (
-									<span class="skill-level" aria-hidden="true">
-										{levelLabel(skill.level)}
-									</span>
+									<>
+										<span class="skill-level" aria-hidden="true">
+											{levelLabel(skill.level)}
+										</span>
+										<span class="sr-only">— {levelLabel(skill.level)} level</span>
+									</>
 								)}
 							</li>
 						))}

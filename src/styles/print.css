@@ -41,6 +41,14 @@
 
 	a {
 		color: inherit !important;
-		text-decoration: none !important;
+		text-decoration: underline !important;
+		text-underline-offset: 2px;
+	}
+
+	a[href^="http"]::after {
+		content: " (" attr(href) ")";
+		font-size: 0.8em;
+		color: #6b7280;
+		text-decoration: none;
 	}
 }

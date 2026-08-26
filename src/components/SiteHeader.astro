@@ -18,6 +18,10 @@ const nav = [
 	{ href: "/print/resume", label: "Resume", badge: "PDF" },
 	{ href: "/#contact", label: "Contact" },
 ];
+
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+const isCurrent = (href: string): "page" | undefined =>
+	href.split("#")[0].replace(/\/$/, "") === pathname ? "page" : undefined;
 ---
 
 <header class="site-header">
@@ -35,7 +39,7 @@ const nav = [
 				{
 					nav.map(({ href, label, badge }) => (
 						<li>
-							<a href={href} class="nav-link">
+							<a href={href} class="nav-link" aria-current={isCurrent(href)}>
 								{label}
 								{badge && <span class="nav-badge">{badge}</span>}
 							</a>
@@ -77,7 +81,7 @@ const nav = [
 				{
 					nav.map(({ href, label, badge }) => (
 						<li>
-							<a href={href} class="mobile-nav-link">
+							<a href={href} class="mobile-nav-link" aria-current={isCurrent(href)}>
 								<span>{label}</span>
 								{badge && <span class="nav-badge">{badge}</span>}
 							</a>
@@ -91,56 +95,69 @@ const nav = [
 
 <script is:inline>
 	(function () {
-		const toggleButton = document.querySelector("[data-nav-toggle]");
-		const mobileNav = document.getElementById("nav-mobile");
-		if (toggleButton && mobileNav) {
-			const close = () => {
-				mobileNav.hidden = true;
-				toggleButton.setAttribute("aria-expanded", "false");
-				toggleButton.setAttribute("aria-label", "Open primary navigation");
-				document.body.classList.remove("menu-open");
-			};
+		document.addEventListener("DOMContentLoaded", () => {
+			const toggleButton = document.querySelector("[data-nav-toggle]");
+			const mobileNav = document.getElementById("nav-mobile");
+			if (toggleButton && mobileNav) {
+				const backgroundEls = () =>
+					[...document.querySelectorAll("main, footer")].filter((el) => el instanceof HTMLElement && el !== mobileNav);
+				const showBackground = (inert) => {
+					backgroundEls().forEach((el) => {
+						el.inert = inert;
+					});
+				};
 
-			const open = () => {
-				mobileNav.hidden = false;
-				toggleButton.setAttribute("aria-expanded", "true");
-				toggleButton.setAttribute("aria-label", "Close primary navigation");
-				document.body.classList.add("menu-open");
-				toggleButton.setAttribute("aria-controls", "nav-mobile");
-				const firstLink = mobileNav.querySelector("a");
-				if (firstLink) firstLink.focus();
-			};
+				const close = () => {
+					mobileNav.hidden = true;
+					toggleButton.setAttribute("aria-expanded", "false");
+					toggleButton.setAttribute("aria-label", "Open primary navigation");
+					document.body.classList.remove("menu-open");
+					showBackground(false);
+				};
 
-			toggleButton.addEventListener("click", () => {
-				const isHidden = mobileNav.hidden;
-				if (isHidden) {
-					open();
-				} else {
-					close();
-				}
-			});
+				const open = () => {
+					mobileNav.hidden = false;
+					toggleButton.setAttribute("aria-expanded", "true");
+					toggleButton.setAttribute("aria-label", "Close primary navigation");
+					document.body.classList.add("menu-open");
+					toggleButton.setAttribute("aria-controls", "nav-mobile");
+					showBackground(true);
+					const firstLink = mobileNav.querySelector("a");
+					if (firstLink) firstLink.focus();
+				};
 
-			// Close on link click inside mobile drawer
-			mobileNav.querySelectorAll("a").forEach((link) => {
-				link.addEventListener("click", () => {
-					close();
+				toggleButton.addEventListener("click", () => {
+					const isHidden = mobileNav.hidden;
+					if (isHidden) {
+						open();
+					} else {
+						close();
+					}
 				});
-			});
 
-			document.addEventListener("keydown", (event) => {
-				if (event.key === "Escape" && !mobileNav.hidden) {
-					close();
-					toggleButton.focus();
-				}
-			});
+				// Close on link click inside mobile drawer
+				mobileNav.querySelectorAll("a").forEach((link) => {
+					link.addEventListener("click", () => {
+						close();
+					});
+				});
 
-			window.addEventListener("resize", () => {
-				// Mirrors the 48rem nav-collapse breakpoint in CSS, scaled to the
-				// user's root font size so the two never desync (a11y setting).
-				const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-				if (window.innerWidth > 48 * rootFontSize && !mobileNav.hidden) close();
-			});
-		}
+				document.addEventListener("keydown", (event) => {
+					if (event.key === "Escape" && !mobileNav.hidden) {
+						close();
+						toggleButton.focus();
+					}
+				});
+
+				// Mirrors the 48rem nav-collapse breakpoint in CSS via matchMedia so the two
+				// can never desync, including under root-font-size changes (a11y setting).
+				const desktopQuery = window.matchMedia("(min-width: 48rem)");
+				const onBreakpointChange = () => {
+					if (desktopQuery.matches && !mobileNav.hidden) close();
+				};
+				desktopQuery.addEventListener("change", onBreakpointChange);
+			}
+		});
 	})();
 </script>
 

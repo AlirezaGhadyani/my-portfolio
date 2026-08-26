@@ -93,7 +93,7 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 		<SiteFooter />
 
 		<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette }}>
-			(function () {
+			document.addEventListener("DOMContentLoaded", () => {
 				const root = document.documentElement;
 				const buttons = Array.from(document.querySelectorAll("[data-theme-toggle]"));
 				const syncLabels = () => {
@@ -118,8 +118,8 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 					});
 				});
 				syncLabels();
-			})();
-			(function () {
+			});
+			document.addEventListener("DOMContentLoaded", () => {
 				const root = document.documentElement;
 				const options = Array.from(document.querySelectorAll("[data-palette-option]"));
 				const sync = () => {
@@ -162,7 +162,7 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 				});
 				document.addEventListener("palettechange", sync);
 				sync();
-			})();
+			});
 		</script>
 	</body>
 </html>

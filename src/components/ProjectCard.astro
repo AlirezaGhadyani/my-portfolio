@@ -100,7 +100,7 @@ const externalRel = isInternalCaseStudy ? undefined : "noreferrer noopener";
 		<ul class="project-tech" aria-label="Technologies used">
 			{project.technologies.map((tech) => <li>{tech}</li>)}
 		</ul>
-		<div class="project-actions" aria-label={`${project.title} links`}>
+		<div class="project-actions" role="group" aria-label={`${project.title} links`}>
 			{
 				project.hasCaseStudy && (
 					<a href={`/projects/${project.slug}`} class="btn-action primary">

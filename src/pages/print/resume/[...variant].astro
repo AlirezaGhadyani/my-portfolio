@@ -53,7 +53,8 @@ const { identity, experience, skills, education, certifications, projects, docum
 						(Object.keys(VARIANTS) as ResumeVariant[]).map((vKey) => (
 							<a
 								href={vKey === "fullstack" ? "/print/resume" : `/print/resume/${vKey}`}
-								class:list={["variant-btn", { active: vKey === variantKey }]}>
+								class:list={["variant-btn", { active: vKey === variantKey }]}
+								aria-current={vKey === variantKey ? "page" : undefined}>
 								{VARIANTS[vKey].shortLabel}
 							</a>
 						))

@@ -41,7 +41,7 @@ const slug = (value: string): string =>
 		</p>
 	</section>
 
-	<div class="projects-filter" aria-label="Filter projects by technology">
+	<div class="projects-filter" role="group" aria-label="Filter projects by technology">
 		<span class="projects-filter-label" aria-hidden="true">
 			<svg
 				width="14"
@@ -57,7 +57,7 @@ const slug = (value: string): string =>
 			<span>Filter by Stack:</span>
 		</span>
 		<div class="projects-chips" role="group" aria-label="Technology filters">
-			<button type="button" class="projects-chip projects-chip--active" data-filter="all">
+			<button type="button" class="projects-chip projects-chip--active" data-filter="all" aria-pressed="true">
 				All ({projects.length})
 			</button>
 			{
@@ -68,6 +68,7 @@ const slug = (value: string): string =>
 				))
 			}
 		</div>
+		<p class="sr-only" role="status" aria-live="polite" id="projects-count-live"></p>
 	</div>
 
 	<ul class="projects-list" data-projects-list id="projects-list">
@@ -86,14 +87,21 @@ const slug = (value: string): string =>
 		const chips = Array.from(document.querySelectorAll(".projects-chip"));
 		const entries = Array.from(document.querySelectorAll(".project-entry"));
 		const list = document.getElementById("projects-list");
+		const liveRegion = document.getElementById("projects-count-live");
 
 		if (list && chips.length && entries.length) {
 			let active = "all";
 			const apply = () => {
+				let visible = 0;
 				entries.forEach((entry) => {
 					const tags = (entry.dataset.tech ?? "").split(" ");
-					entry.hidden = !(active === "all" || tags.includes(active));
+					const show = active === "all" || tags.includes(active);
+					entry.hidden = !show;
+					if (show) visible++;
 				});
+				if (liveRegion) {
+					liveRegion.textContent = `${visible} of ${entries.length} projects shown`;
+				}
 			};
 			chips.forEach((chip) => {
 				chip.addEventListener("click", () => {
