@@ -13,8 +13,13 @@ export const experience: ExperienceItem[] = ExperienceItemSchema.array()
 			summary:
 				"Leading frontend development for a streaming platform, building performant and accessible user interfaces with modern React tooling.",
 			highlights: [
-				"Delivered key features for the streaming platform with focus on performance and UX.",
-				"Collaborated with cross-functional teams in a hybrid work environment.",
+				"Consolidated multiple standalone backoffices into a unified Module Federation architecture, enabling independent deployments while sharing a common shell.",
+				"Managed Turborepo-based monorepo across a large cross-functional team, establishing package boundaries and build caching strategies.",
+				"Led refactoring and feature development on legacy backoffice codebases under tight deadlines, improving maintainability and reducing tech debt.",
+				"Designed and product-managed internal tooling for processing, editing, and creating clips from archived video libraries, streamlining the content pipeline.",
+				"Integrated AI capabilities across projects including skill extraction, command parsing, and sub-agent orchestration for automated workflows.",
+				"Embedded monitoring and error-tracking services (e.g., Sentry) into production apps, improving incident response and observability.",
+				"Implemented Semantic Release with GitLab CI, automating versioning and changelog generation across the monorepo.",
 			],
 			technologies: [
 				"Next.js",
@@ -45,9 +50,14 @@ export const experience: ExperienceItem[] = ExperienceItemSchema.array()
 			summary:
 				"Led the frontend team at a software company, progressing from engineer to team lead over two years. Owned architecture decisions, mentored junior developers, and drove adoption of modern frontend practices.",
 			highlights: [
-				"Promoted from Frontend Engineer to Frontend Team Lead within one year.",
-				"Led frontend architecture decisions and code quality improvements.",
-				"Mentored junior developers and established frontend best practices.",
+				"Led a small frontend team, conducting code reviews, setting sprint priorities, and mentoring junior developers through pair programming and knowledge-sharing sessions.",
+				"Architected the frontend rewrite of a large-scale legacy application, defining module boundaries, state management strategy, and migration path to minimise user disruption.",
+				"Maintained and evolved a high-traffic production application serving a large user base, ensuring stability while shipping incremental improvements.",
+				"Triaged customer-reported bugs and feature requests, translating them into actionable sprint items and balancing roadmap priorities with urgent fixes.",
+				"Solved performance bottlenecks in big-data and large-file workflows, implementing virtualisation, chunked uploads, and lazy-loading strategies.",
+				"Improved UI/UX quality and frontend performance through design audits, accessibility reviews, and close collaboration with UI/UX designers.",
+				"Partnered with backend engineers to define API contracts, optimise data-fetching patterns, and align on release coordination.",
+				"Consulted product owners and managers on technical feasibility, effort estimation, and trade-offs to inform roadmap decisions.",
 			],
 			technologies: [
 				"React",
@@ -70,8 +80,12 @@ export const experience: ExperienceItem[] = ExperienceItemSchema.array()
 			summary:
 				"Built and maintained frontend features for a remote-first product team, shipping responsive interfaces and improving component reusability.",
 			highlights: [
-				"Developed responsive UI components and improved code maintainability.",
-				"Collaborated effectively in a fully remote work environment.",
+				"Built three distinct applications for shipment tracking, driver management, and company administration within a fast-paced startup environment.",
+				"Implemented complex UI/UX designs including interactive map views with Leaflet, real-time shipment tracking, and multi-step workflows.",
+				"Developed robust authentication and authorisation flows using JWT, including role-based access control across multiple applications.",
+				"Integrated GraphQL and REST APIs alongside third-party services (maps, notifications), solving cross-service data synchronisation challenges.",
+				"Collaborated with product designers on feasibility and interaction patterns, translating design specs into production-ready components.",
+				"Delivered features iteratively under Agile/Scrum methodology, participating in sprint planning, stand-ups, and retrospectives.",
 			],
 			technologies: [
 				"React",
