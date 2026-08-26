@@ -24,6 +24,8 @@ pnpm-debug.log*
 public/downloads/
 public/sitemap.xml
 public/robots.txt
+test-results/
+playwright-report/
 
 # coverage output
 coverage/
