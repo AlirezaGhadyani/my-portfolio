@@ -149,8 +149,6 @@ const isCurrent = (href: string): "page" | undefined =>
 					}
 				});
 
-				// Mirrors the 48rem nav-collapse breakpoint in CSS via matchMedia so the two
-				// can never desync, including under root-font-size changes (a11y setting).
 				const desktopQuery = window.matchMedia("(min-width: 48rem)");
 				const onBreakpointChange = () => {
 					if (desktopQuery.matches && !mobileNav.hidden) close();

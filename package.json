@@ -11,7 +11,7 @@
 		"build:sitemap": "tsx scripts/generate-sitemap.ts",
 		"build:txt": "tsx scripts/generate-txt.ts",
 		"build:pdf": "astro build && tsx scripts/generate-pdf.ts",
-		"build:all": "astro build && tsx scripts/generate-sitemap.ts && tsx scripts/generate-txt.ts && tsx scripts/generate-pdf.ts",
+		"build:all": "astro build && tsx scripts/generate-sitemap.ts && tsx scripts/generate-txt.ts && tsx scripts/generate-pdf.ts && tsx scripts/generate-og-image.ts",
 		"preview": "astro preview",
 		"check": "astro check",
 		"test": "vitest run",

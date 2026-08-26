@@ -16,9 +16,21 @@ const { Content } = await render(entry);
 const { data } = entry;
 const project = resumeData.projects.find((item) => item.slug === data.projectSlug);
 if (!project) throw new Error(`Project not found for case study: ${data.projectSlug}`);
+
+const siteUrl = resumeData.identity.website.replace(/\/+$/, "");
+const articleUrl = `${siteUrl}/projects/${project.slug}/`;
+const articleJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Article",
+	headline: data.title,
+	description: data.summary,
+	url: articleUrl,
+	about: project.technologies,
+	author: { "@type": "Person", name: resumeData.identity.name },
+};
 ---
 
-<Layout title={`${data.title} — Technical Case Study`} description={data.summary}>
+<Layout title={`${data.title} — Technical Case Study`} description={data.summary} jsonLd={articleJsonLd}>
 	<article class="case-study">
 		<a class="case-back" href="/projects">
 			<svg

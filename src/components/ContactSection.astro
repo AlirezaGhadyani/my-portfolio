@@ -146,12 +146,26 @@ const { email = "jordan.avery@example.com", turnstileSiteKey = import.meta.env.P
 	</div>
 </section>
 
-{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />}
+{turnstileSiteKey && <div data-turnstile-lazy />}
 
 <script is:inline>
 	(function () {
 		const form = document.getElementById("contact-form");
 		if (!form) return;
+
+		// Lazy-load the Turnstile widget script on first form interaction so its
+		// ~50-80 KB of third-party JS is not part of the initial page load.
+		const loadTurnstile = () => {
+			if (!document.querySelector(".cf-turnstile") || document.querySelector("script[data-turnstile]")) return;
+			const script = document.createElement("script");
+			script.dataset.turnstile = "";
+			script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+			script.async = true;
+			script.defer = true;
+			document.head.appendChild(script);
+		};
+		form.addEventListener("focusin", loadTurnstile);
+		form.addEventListener("submit", loadTurnstile);
 
 		const nameInput = document.getElementById("contact-name");
 		const emailInput = document.getElementById("contact-email");

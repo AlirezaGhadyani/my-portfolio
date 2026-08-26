@@ -14,9 +14,10 @@ const sameAs = identity.links.map((link) => link.url);
 const featuredProject = projects.find((project) => project.tier === "flagship") ?? projects[0];
 const proofMetrics = featuredProject.impactMetrics ?? [];
 
+const personId = `${websiteUrl}/#person`;
 const personSchema = {
 	"@type": "Person",
-	"@id": `${websiteUrl}/#person`,
+	"@id": personId,
 	name: identity.name,
 	jobTitle: identity.title,
 	description: summary.short,
@@ -40,15 +41,15 @@ const ldJson = {
 			"@id": `${websiteUrl}/#profile`,
 			name: identity.name,
 			url: `${websiteUrl}/`,
-			about: personSchema,
-			mainEntity: { "@id": `${websiteUrl}/#person` },
+			about: { "@id": personId },
+			mainEntity: { "@id": personId },
 		},
-		{ ...personSchema, "@id": `${websiteUrl}/#person` },
+		personSchema,
 	],
 };
 ---
 
-<Layout>
+<Layout jsonLd={ldJson}>
 	<section class="hero" aria-labelledby="hero-title">
 		<div class="hero-kicker">
 			<span>Portfolio / 2026</span><span class="kicker-rule" aria-hidden="true"></span><span
@@ -172,8 +173,6 @@ const ldJson = {
 		<EducationSection education={education} certifications={certifications} />
 		<ContactSection email={identity.email} />
 	</div>
-
-	<script type="application/ld+json" is:inline set:html={JSON.stringify(ldJson)} />
 </Layout>
 
 <style>

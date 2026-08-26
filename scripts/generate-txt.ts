@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { resumeData } from "../src/data/resume.ts";
-import { applyVariant } from "../src/data/variants.ts";
+import { applyVariant, type ResumeVariant } from "../src/data/variants.ts";
 import { certificationLine, dateRange, educationLine, orderedExperience, skillLine } from "../src/domain/present.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,19 +10,14 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
 const downloadsDir = path.join(projectRoot, "dist", "downloads");
 
-export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief" = "ats"): string {
+export function generatePlainTextResume(variantKey: ResumeVariant = "ats"): string {
 	const data = applyVariant(resumeData, variantKey);
 	const { identity, experience, skills, education, certifications, projects, documentTitle, activeSummary } = data;
 
 	const lines: string[] = [];
 
-	const hr = "=".repeat(72);
-	const subHr = "-".repeat(72);
-
-	// Header
-	lines.push(hr);
-	lines.push(`${identity.name.toUpperCase()} — ${documentTitle.toUpperCase()}`);
-	lines.push(hr);
+	// Header — plain ASCII by construction; the em/en dashes below are normalized at the end.
+	lines.push(`${identity.name} — ${documentTitle}`);
 	lines.push(`Location: ${identity.location}`);
 	lines.push(`Email:    ${identity.email}`);
 	if (identity.phone) lines.push(`Phone:    ${identity.phone}`);
@@ -35,13 +30,11 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 
 	// Summary
 	lines.push("SUMMARY");
-	lines.push(subHr);
 	lines.push(activeSummary);
 	lines.push("");
 
 	// Technical Skills
 	lines.push("TECHNICAL SKILLS");
-	lines.push(subHr);
 	for (const cat of skills) {
 		lines.push(`${cat.name}: ${skillLine(cat)}`);
 	}
@@ -49,7 +42,6 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 
 	// Experience
 	lines.push("EXPERIENCE");
-	lines.push(subHr);
 	for (const exp of orderedExperience(experience)) {
 		const dates = dateRange(exp.startDate, exp.endDate);
 		lines.push(`${exp.role} | ${exp.company} | ${exp.location}`);
@@ -67,7 +59,6 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 	// Projects
 	if (projects.length > 0) {
 		lines.push("SELECTED PROJECTS");
-		lines.push(subHr);
 		for (const proj of projects) {
 			lines.push(`${proj.title} — ${proj.role}`);
 			if (proj.liveUrl) lines.push(`Live: ${proj.liveUrl}`);
@@ -83,7 +74,6 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 
 	// Education
 	lines.push("EDUCATION");
-	lines.push(subHr);
 	for (const edu of education) {
 		const display = educationLine(edu);
 		lines.push(display.heading);
@@ -95,7 +85,6 @@ export function generatePlainTextResume(variantKey: "ats" | "fullstack" | "brief
 	// Certifications
 	if (certifications && certifications.length > 0) {
 		lines.push("CERTIFICATIONS");
-		lines.push(subHr);
 		for (const cert of certifications) {
 			const display = certificationLine(cert);
 			lines.push(`${display.heading} (${display.date})`);
