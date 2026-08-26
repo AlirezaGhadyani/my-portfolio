@@ -45,27 +45,6 @@
 	</span>
 </button>
 
-<script is:inline>
-	(function () {
-		document.querySelectorAll("[data-theme-toggle]").forEach((themeButton) => {
-			if (themeButton.dataset.themeBound) return;
-			themeButton.dataset.themeBound = "true";
-			themeButton.addEventListener("click", () => {
-				const root = document.documentElement;
-				const current = root.getAttribute("data-theme") || "dark";
-				const next = current === "dark" ? "light" : "dark";
-				root.setAttribute("data-theme", next);
-				themeButton.setAttribute("aria-label", `Switch to ${next === "dark" ? "dark" : "light"} color theme`);
-				try {
-					localStorage.setItem("theme", next);
-				} catch {
-					/* ignore preference-persistence failure */
-				}
-			});
-		});
-	})();
-</script>
-
 <style>
 	.theme-toggle {
 		display: inline-flex;

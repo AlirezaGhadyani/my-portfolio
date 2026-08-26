@@ -91,6 +91,95 @@ const ogImage = image ? new URL(image, siteUrl).href : `${siteUrl}/og-image.svg`
 			<slot />
 		</main>
 		<SiteFooter />
+
+		<script is:inline define:vars={{ defaultPalette: themeConfig.defaultPalette }}>
+			(function () {
+				document.querySelectorAll("[data-theme-toggle]").forEach((themeButton) => {
+					if (themeButton.dataset.themeBound) return;
+					themeButton.dataset.themeBound = "true";
+					themeButton.addEventListener("click", () => {
+						const root = document.documentElement;
+						const current = root.getAttribute("data-theme") || "dark";
+						const next = current === "dark" ? "light" : "dark";
+						root.setAttribute("data-theme", next);
+						themeButton.setAttribute("aria-label", `Switch to ${next === "dark" ? "dark" : "light"} color theme`);
+						try {
+							localStorage.setItem("theme", next);
+						} catch {
+							/* ignore preference-persistence failure */
+						}
+					});
+				});
+			})();
+			(function () {
+				document.querySelectorAll("[data-palette-selector]").forEach((selector) => {
+					if (selector.dataset.paletteBound) return;
+					selector.dataset.paletteBound = "true";
+					const trigger = selector.querySelector("[data-palette-trigger]");
+					const menu = selector.querySelector("[data-palette-menu]");
+					const options = Array.from(selector.querySelectorAll("[data-palette-option]"));
+					if (!trigger || !menu) return;
+					const close = () => {
+						menu.hidden = true;
+						trigger.setAttribute("aria-expanded", "false");
+					};
+					const sync = () => {
+						const active = document.documentElement.getAttribute("data-palette");
+						options.forEach((option) =>
+							option.setAttribute("aria-selected", String(option.getAttribute("data-palette-option") === active)),
+						);
+					};
+					trigger.addEventListener("click", () => {
+						menu.hidden = !menu.hidden;
+						trigger.setAttribute("aria-expanded", String(!menu.hidden));
+						if (!menu.hidden) sync();
+					});
+					options.forEach((option) =>
+						option.addEventListener("click", () => {
+							const id = option.getAttribute("data-palette-option");
+							if (!id) return;
+							document.documentElement.setAttribute("data-palette", id);
+							try {
+								localStorage.setItem("palette", id);
+							} catch {
+								/* preference persistence is optional */
+							}
+							document.dispatchEvent(new CustomEvent("palettechange"));
+							sync();
+							close();
+							trigger.focus();
+						}),
+					);
+					selector.querySelector("[data-palette-reset]")?.addEventListener("click", () => {
+						document.documentElement.setAttribute("data-palette", defaultPalette);
+						try {
+							localStorage.removeItem("palette");
+						} catch {
+							/* preference persistence is optional */
+						}
+						document.dispatchEvent(new CustomEvent("palettechange"));
+						sync();
+						close();
+					});
+					document.addEventListener("palettechange", sync);
+					document.addEventListener("keydown", (event) => {
+						if (event.key === "Escape" && !menu.hidden) {
+							close();
+							trigger.focus();
+						}
+						if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !menu.hidden) {
+							event.preventDefault();
+							const current = options.indexOf(document.activeElement);
+							options[(current + (event.key === "ArrowDown" ? 1 : options.length - 1)) % options.length]?.focus();
+						}
+					});
+					document.addEventListener("click", (event) => {
+						if (!selector.contains(event.target)) close();
+					});
+					sync();
+				});
+			})();
+		</script>
 	</body>
 </html>
 
