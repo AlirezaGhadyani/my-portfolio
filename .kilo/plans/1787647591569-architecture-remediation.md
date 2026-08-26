@@ -854,7 +854,7 @@ colour or radius literal outside the print page; visual diff reviewed in both th
 
 ## Phase 4 — Performance & Accessibility
 
-### [ ] T4.1 — De-duplicate the twice-emitted inline scripts `[independent]`
+### [x] T4.1 — De-duplicate the twice-emitted inline scripts `[independent]`
 
 **Problem.** `SiteHeader.astro` renders `<PaletteSelector>` and `<ThemeToggle>` twice — once in
 `.header-actions` (`:45-46`) and once in the mobile drawer (`:69-70`). Astro does not deduplicate
@@ -873,7 +873,7 @@ Toggle theme and palette from both desktop and mobile controls.
 
 ---
 
-### [ ] T4.2 — Fix contact-form accessibility `[independent]`
+### [x] T4.2 — Fix contact-form accessibility `[independent]`
 
 **Problem, in `src/components/ContactSection.astro`:**
 
@@ -899,7 +899,7 @@ announced and focus lands on the first invalid field. Add an axe spec in T4.6.
 
 ---
 
-### [ ] T4.3 — Fix the theme toggle `[independent]`
+### [x] T4.3 — Fix the theme toggle `[independent]`
 
 **Problem, in `src/components/ThemeToggle.astro`:**
 
@@ -919,7 +919,7 @@ CSS-only mechanism and drop it). Delete the duplicate rule.
 
 ---
 
-### [ ] T4.4 — Rebuild the palette popup on valid ARIA `[independent]`
+### [x] T4.4 — Rebuild the palette popup on valid ARIA `[independent]`
 
 **Problem, in `src/components/PaletteSelector.astro`:**
 
@@ -942,7 +942,7 @@ the trigger. Axe reports no ARIA violations.
 
 ---
 
-### [ ] T4.5 — Remaining accessibility fixes `[independent]`
+### [x] T4.5 — Remaining accessibility fixes `[independent]`
 
 | Issue                                                                            | Location                                          | Fix                                                      |
 | -------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
@@ -959,7 +959,7 @@ the trigger. Axe reports no ARIA violations.
 
 ---
 
-### [ ] T4.6 — Adopt `@playwright/test` with a minimal suite `[independent]`
+### [x] T4.6 — Adopt `@playwright/test` with a minimal suite `[independent]`
 
 **Problem.** Playwright is installed but used **only** as a PDF printer. There are no rendering,
 interaction, or accessibility tests — `docs/phase-status.md` claims "Vitest + Playwright" for
@@ -979,7 +979,7 @@ only** — do not build a large suite for presentation code, and do not snapshot
 
 ---
 
-### [ ] T4.7 — Performance and output-quality fixes `[independent]`
+### [x] T4.7 — Performance and output-quality fixes `[independent]`
 
 | Issue                                                                                                                                           | Location                                 | Fix                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------- |
