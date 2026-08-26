@@ -81,7 +81,22 @@ async function launchBrowser(): Promise<Browser> {
 		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
 	};
 
-	return chromium.launch(options);
+	try {
+		return await chromium.launch(options);
+	} catch (err) {
+		if (playwrightChannelUnavailable(err)) {
+			// Bundled Chromium not installed (e.g. download geo-blocked). Fall back to the
+			// system Chrome channel rather than failing the whole pipeline. The page-count
+			// assert in assertPdfPageCount() still enforces determinism regardless of engine.
+			console.warn("[pdf] Bundled Chromium unavailable, using system 'chrome' channel:", err);
+			return await chromium.launch({ ...options, channel: "chrome" });
+		}
+		throw err;
+	}
+}
+
+function playwrightChannelUnavailable(err: unknown): boolean {
+	return err instanceof Error && /Executable doesn't exist|browserType\.launch/i.test(err.message);
 }
 
 export async function generatePdfs(): Promise<void> {
